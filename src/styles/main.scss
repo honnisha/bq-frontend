@@ -7,7 +7,6 @@ html, body, #app {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    background-color: #412c16;
     background-image: url("./assets/bindingdark.png");
 }
 body {
@@ -25,5 +24,69 @@ body {
     padding: 15px;
 }
 .section-tabs > .el-tabs__header {
-    width: 120px;
+    width: 100px;
+}
+.dialogs-tabs .el-tabs__item {
+    height: 20px;
+    line-height: 20px;
+}
+
+.menu-buttons {
+    height: 30px;
+}
+.menu-button {
+    min-height: 20px;
+    height: 20px;
+    line-height: 2px;
+}
+
+.yaml-editor {
+    font-family: 'Courier New', monospace;
+}
+.yaml-editor > .el-textarea__inner {
+    color: black;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.setting-header,.setting-value, .field-editor > .el-input > .el-input__inner {
+    font-family: 'Courier New', monospace;
+    color: black!important;
+    line-height: 14px;
+    font-size: 12px;
+    display: inline-block;
+}
+.setting-header {
+    margin-top: 1px;
+    overflow: hidden;
+    height: 15px;
+}
+.setting-value {
+    margin-top: 1px;
+    vertical-align: top;
+    padding-left: 5px;
+}
+.setting-value:hover {
+    background-color: #eff4ff;
+    cursor: pointer;
+}
+.setting-section {
+    vertical-align: middle;
+    min-height: 15px;
+}
+.field-editor {
+    height: 15px;
+}
+.field-editor > .el-input {
+    line-height: 15px;
+    height: 15px;
+    padding-left: 5px;
+    width: 70vw;
+    top: -3px;
+}
+.field-editor > .el-input > .el-input__inner {
+    line-height: 15px;
+    height: 15px;
+    padding: 2px 0px 0px 0px;
+    background-color: #d9e2f77a;
 }

@@ -9,7 +9,9 @@
   "dependencies": {
     "element-plus": "^1.0.2-beta.58",
     "js-yaml": "^4.1.0",
-    "vue": "^3.0.5"
+    "vue": "^3.0.5",
+    "vue-click-outside": "^1.1.0",
+    "yaml": "2.0.0-7"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.5",

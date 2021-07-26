@@ -1,10 +1,10 @@
 <template>
-  {{ initData }}
+  {{ modelValue }}
 </template>
 
 <script>
 export default {
-  props: ['initData'],
+  props: ['modelValue'],
   data() {
     return {
     }
