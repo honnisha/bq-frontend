@@ -12,8 +12,11 @@ html, body, #app {
 body {
     margin: 0px;
 }
+h4 {
+    margin: 10px;
+}
 .el-header {
-    background-color: rgb(65, 44, 22);
+    background-color: #656565;
     background-image: url("./assets/blacktwill.png");
     border-bottom: 1px solid black;
 }
@@ -42,18 +45,21 @@ body {
 
 .yaml-editor {
     font-family: 'Courier New', monospace;
-}
-.yaml-editor > .el-textarea__inner {
-    color: black;
-    font-size: 12px;
-    line-height: 14px;
+
+    .el-textarea__inner {
+        color: black;
+        font-size: 12px;
+        line-height: 14px;
+    }
 }
 
-.setting-header,.setting-value, .field-editor > .el-input > .el-input__inner {
+.setting-header,.setting-value, .field-editor > .el-input > .el-input__inner, .dialogs-section {
     font-family: 'Courier New', monospace;
     color: black!important;
     line-height: 14px;
     font-size: 12px;
+}
+.setting-header,.setting-value, .field-editor > .el-input > .el-input__inner {
     display: inline-block;
 }
 .setting-header {
@@ -76,17 +82,45 @@ body {
 }
 .field-editor {
     height: 15px;
-}
-.field-editor > .el-input {
-    line-height: 15px;
-    height: 15px;
-    padding-left: 5px;
-    width: 70vw;
-    top: -3px;
+
+    .el-input {
+        line-height: 15px;
+        height: 15px;
+        padding-left: 5px;
+        width: 70vw;
+        top: -3px;
+    }
 }
 .field-editor > .el-input > .el-input__inner {
     line-height: 15px;
     height: 15px;
     padding: 2px 0px 0px 0px;
     background-color: #d9e2f77a;
+}
+
+.dialogs-section {
+    border-radius: 4px;
+    background-color: #e0f0ff;
+    padding: 5px;
+    align-items: baseline!important;
+
+    .dialog-card {
+        width: 350px;
+
+        .el-card__header {
+            padding: 5px;
+
+            .dialog-header {
+                font-weight: bold;
+            }
+        }
+        .el-card__body {
+            padding: 5px;
+        }
+    }
+}
+.dialog-setting-section {
+    .setting-header {
+        padding: 0px 2px;
+    }
 }

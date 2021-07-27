@@ -9,7 +9,7 @@
       <div class="dialogs-tabs">
         <el-tabs tab-position="left" v-model="dialogSelected">
           <el-tab-pane :label="name" :name="name" v-for="(dialogInfo, name) in sectionInfo.conversations">
-            <dialogue v-model="sectionInfo.conversations[name]"/>
+            <dialogueSection v-model="sectionInfo.conversations[name]"/>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -43,13 +43,13 @@
 </template>
 
 <script>
-import dialogue from "./dialogue.vue";
+import dialogueSection from "./sections/dialogueSection.vue";
 import simpleSection from "./sections/simpleSection.vue";
 import yamlEditor from "./sections/yamlEditor.vue";
 
 export default {
   components: {
-    dialogue,
+    dialogueSection,
     simpleSection,
     yamlEditor,
   },
