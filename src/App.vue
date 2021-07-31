@@ -3,16 +3,48 @@
     <input
       type="file"
       style="display: none"
-      ref="fileInput"
+      ref="arciveFileInput"
       accept=".zip,"
-      @change="onFilePicked"
+      @change="onFileArchivePicked"
+    />
+    <input
+      type="file"
+      style="display: none"
+      ref="jsonFileInput"
+      accept=".json,"
+      @change="onFileJsonPicked"
     />
 
     <header class="el-header header-section">
-      <el-button size="mini" @click="openArchive">Open Project zip</el-button>
 
-      <el-button size="mini">Save Project as zip</el-button>
-      <el-button size="mini" @click="openNewTabDialog">New section</el-button>
+      <el-dropdown size="small">
+        <el-button size="mini" class="header-buttons">
+          Open<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="openArchive">Open Project zip</el-dropdown-item>
+            <el-dropdown-item @click="openJson">Open Project json</el-dropdown-item>
+            
+            <el-dropdown-item @click="openLocalStorage(index)" v-for="index in 5" :key="index" :divided="index === 1">Open Project from local slot {{ index }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+
+      <el-dropdown size="small">
+        <el-button size="mini" class="header-buttons">
+          Save<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="saveAsJson">Save Project as json</el-dropdown-item>
+
+            <el-dropdown-item @click="saveLocalStorage(index)" v-for="index in 5" :key="index" :divided="index === 1">Save Project to local slot {{ index }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+
+      <el-button size="mini" @click="openNewTabDialog" class="header-buttons">New section</el-button>
     </header>
 
     <el-dialog
@@ -39,7 +71,7 @@
         :label="name"
         :name="name"
       >
-        <questSection :section-info="sectionInfo" />
+        <questSection :section-info="sectionInfo" :project-data="projectData" />
       </el-tab-pane>
 
     </el-tabs>
@@ -61,7 +93,6 @@ export default {
   data() {
     return {
       projectData: {},
-      sections: [],
       sectionSelected: null,
       dialogAddSectionVisible: false,
       newTabName: null,
@@ -75,9 +106,8 @@ export default {
         return
       }
 
-      this.sections.push({
-        name: this.newTabName,
-      })
+      this.projectData[this.newTabName] = {}
+
       this.sectionSelected = this.newTabName
       this.newTabName = null
       this.dialogAddSectionVisible = false
@@ -87,17 +117,68 @@ export default {
       this.newTabName = ''
       this.dialogAddSectionVisible = true
     },
-    removeTab() {
-      
+    removeTab(tab) {
+      this.$confirm(`Delete section ${tab}?`, 'Confirm', {
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        delete this.projectData[tab]
+        this.$message({
+          type: 'success',
+          message: `Tab ${tab} deleted`
+        });
+      })
     },
     openArchive() {
-      this.$refs.fileInput.click()
+      this.$refs.arciveFileInput.click()
     },
-    async onFilePicked(event) {
+    async onFileArchivePicked(event) {
       const files = event.target.files
       this.projectData = {}
       await loadArchive(files[0], this.projectData)
-    }
-  },
+    },
+    openJson() {
+      this.$refs.jsonFileInput.click()
+    },
+    async onFileJsonPicked(event) {
+      const files = event.target.files
+      this.projectData = {}
+
+      self = this
+      var fileReader = new FileReader()
+      fileReader.onload = function() {
+        self.projectData = JSON.parse(fileReader.result)
+      }
+      fileReader.readAsText(files[0])
+    },
+    saveAsJson() {
+      const data = JSON.stringify(this.projectData)
+      const blob = new Blob([data], {type: 'text/plain'})
+      const eElelent = document.createEvent('MouseEvents')
+      const aElement = document.createElement('a')
+
+      const date = JSON.stringify(new Date());
+      aElement.download = `questdata${date}.json`
+
+      aElement.href = window.URL.createObjectURL(blob)
+      aElement.dataset.downloadurl = ['text/json', aElement.download, aElement.href].join(':')
+      eElelent.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+      aElement.dispatchEvent(eElelent)
+    },
+    openLocalStorage(index) {
+      const data = JSON.parse(localStorage.getItem(`projects_${index}`))
+      if (!data) {
+        this.$message({message: `Project slot ${index} emty`, type: 'info'})
+      } else {
+        this.projectData = data
+        this.$message({message: `Project loaded from ${index} slot`, type: 'success'})
+      }
+    },
+    saveLocalStorage(index) {
+      localStorage.setItem(`projects_${index}`, JSON.stringify(this.projectData));
+      this.$message({message: `Project saved to ${index} slot`, type: 'success'})
+    },
+  }
 }
 </script>

@@ -5,6 +5,8 @@ async function loadConversationsConfig(ymlData) {
   return ymlData
 }
 
+const subSections = ['conversations', 'menus']
+
 async function loadModule(section, arryBytes) {
   const nameSplit = section.name.split('/')
   let sectionData = {
@@ -12,7 +14,7 @@ async function loadModule(section, arryBytes) {
     fileType: nameSplit[1].replace('.yml', ''),
     data: {},
   }
-  if (sectionData.fileType === 'conversations') {
+  if (subSections.indexOf(sectionData.fileType) >= 0) {
     sectionData.conversation = nameSplit[2].replace('.yml', '')
   }
 
@@ -28,7 +30,7 @@ async function loadModule(section, arryBytes) {
         sectionData.data = yamlConfig
       }
     } catch (e) {
-      console.log(`Section "${section.name}" error: ${e}`)
+      console.error(`Section "${section.name}" error: ${e}`)
     }
   }
   return sectionData
@@ -50,7 +52,7 @@ export async function loadArchive(file, projectData) {
 
               if (!projectData[sectionData.section]) projectData[sectionData.section] = {}
 
-              if (sectionData.fileType === 'conversations') {
+              if (subSections.indexOf(sectionData.fileType) >= 0) {
                 if (!projectData[sectionData.section][sectionData.fileType]) projectData[sectionData.section][sectionData.fileType] = {}
 
                 projectData[sectionData.section][sectionData.fileType][sectionData.conversation] = sectionData.data

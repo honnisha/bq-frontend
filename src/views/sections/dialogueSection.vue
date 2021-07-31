@@ -5,60 +5,17 @@
       <el-button size="mini" @click="changeToYaml" class="menu-button">Yaml editor</el-button>
     </div>
 
-    <h4>NPC_options:</h4>
-    <el-space wrap class="dialogs-section">
-      <el-card class="dialog-card" v-for="(dialogInfo, dialogKey) in modelValue.NPC_options" :key="dialogKey">
+    <div class="dialog-options-section" v-for="section in ['NPC_options', 'player_options']">
+      <div class="menu-buttons">
+        <div class="dialog-title">{{ section }}</div><el-button size="mini" @click="addDialogOption(section)" class="menu-button">Add dialog option</el-button>
+      </div>
 
-        <template #header>
-          <div class="dialog-header">{{ dialogKey }}</div>
+      <el-space wrap class="dialogs-section">
+        <template v-for="(dialogInfo, dialogKey) in localValue[section]" :key="dialogKey">
+          <dialogOption v-model="localValue[section][dialogKey]" :section="section" :dialogKey="dialogKey" :project-data="projectData"/>
         </template>
-
-        <el-row class="dialog-setting-section">
-          <el-col :span="1">
-            <el-tooltip class="item" effect="dark" content="Text" placement="left">
-              <el-tag type="info" class="setting-header"><i class="el-icon-chat-line-round"></i></el-tag>
-            </el-tooltip>
-          </el-col>
-          <el-col :span="23">
-            <div class="setting-value">{{ dialogInfo.text }}</div>
-          </el-col>
-        </el-row>
-
-        <el-row class="dialog-setting-section">
-          <el-col :span="1">
-            <el-tooltip class="item" effect="dark" content="Conditions" placement="left">
-              <el-tag type="info" class="setting-header"><i class="el-icon-unlock"></i></el-tag>
-            </el-tooltip>
-          </el-col>
-          <el-col :span="23">
-            <div class="setting-value">{{ dialogInfo.conditions }}</div>
-          </el-col>
-        </el-row>
-
-        <el-row class="dialog-setting-section">
-          <el-col :span="1">
-            <el-tooltip class="item" effect="dark" content="Events" placement="left">
-              <el-tag type="info" class="setting-header"><i class="el-icon-magic-stick"></i></el-tag>
-            </el-tooltip>
-          </el-col>
-          <el-col :span="23">
-            <div class="setting-value">{{ dialogInfo.event }}</div>
-          </el-col>
-        </el-row>
-
-        <el-row class="dialog-setting-section">
-          <el-col :span="1">
-            <el-tooltip class="item" effect="dark" content="Pointers" placement="left">
-              <el-tag type="info" class="setting-header"><i class="el-icon-guide"></i></el-tag>
-            </el-tooltip>
-          </el-col>
-          <el-col :span="23">
-            <div class="setting-value">{{ dialogInfo.pointers }}</div>
-          </el-col>
-        </el-row>
-      </el-card>
-      
-    </el-space>
+      </el-space>
+    </div>
   </div>
   
   <div class="yaml-editor-section" v-else>
@@ -76,10 +33,14 @@
 </template>
 
 <script>
+import dialogOption from "../fields/dialogOption.vue"
 import yaml from  'js-yaml'
 
 export default {
-  props: ['modelValue'],
+  components: {
+    dialogOption,
+  },
+  props: ['modelValue', 'projectData'],
   data() {
     return {
       yamlEdit: false,
@@ -105,6 +66,52 @@ export default {
       this.localValue = yaml.load(this.yamlText)
       this.yamlText = null
       this.yamlEdit = false
+    },
+    addDialogOption(section) {
+      this.$prompt('Please dialog name', 'Dialog', {
+        confirmButtonText: 'Create',
+        cancelButtonText: 'Cancel',
+        inputPattern: /^[a-zA-Z0-9_]+$/,
+        inputErrorMessage: 'Already exists or bad name (use only a-z A-Z 0-9 and _)',
+        inputValidator: value => !this.localValue[section][value],
+      }).then(({ value }) => {
+        this.localValue[section][value] = { text: null }
+
+        this.$message({
+          type: 'success',
+          message: `Dialog ${value} created`
+        })
+      })
+    },
+    renameDialog(section, dialogKey) {
+      this.$prompt('Enter new name', 'Dialog', {
+        confirmButtonText: 'Rename',
+        cancelButtonText: 'Cancel',
+        inputPattern: /^[a-zA-Z0-9_]+$/,
+        inputErrorMessage: 'Already exists or bad name (use only a-z A-Z 0-9 and _)',
+        inputValidator: value => !this.localValue[section][value],
+        inputValue: dialogKey,
+      }).then(({ value }) => {
+        this.localValue[section][value] = this.localValue[section][dialogKey]
+        delete this.localValue[section][dialogKey]
+
+        this.$message({
+          type: 'success',
+          message: `Dialog ${dialogKey} renamed to ${value}`
+        })
+      })
+    },
+    deleteDialog(section, dialogKey) {
+      this.$confirm(`Delete ${dialogKey} from ${section}?`, 'Delete', {
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+      }).then(() => {
+        delete this.localValue[section][dialogKey]
+        this.$message({
+          type: 'success',
+          message: `Dialog ${dialogKey} deleted`
+        })
+      })
     },
   }
 }

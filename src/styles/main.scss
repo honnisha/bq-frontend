@@ -34,6 +34,10 @@ h4 {
     line-height: 20px;
 }
 
+.header-buttons {
+    margin-right: 10px;
+}
+
 .menu-buttons {
     height: 30px;
 }
@@ -103,8 +107,11 @@ h4 {
     background-color: #e0f0ff;
     padding: 5px;
     align-items: baseline!important;
+    width: 100%;
+    overflow: visible;
 
     .dialog-card {
+        overflow: visible;
         width: 350px;
 
         .el-card__header {
@@ -112,6 +119,7 @@ h4 {
 
             .dialog-header {
                 font-weight: bold;
+                display: inline-block;
             }
         }
         .el-card__body {
@@ -123,4 +131,100 @@ h4 {
     .setting-header {
         padding: 0px 2px;
     }
+}
+
+.autocomplete {
+    margin: 0px 0px 0px 5px;
+    border-bottom: 1px solid #d4d4d4;
+}
+.multiselect-tag {
+    height: 13px;
+    background: #578fc7;
+}
+.section-conditions .multiselect-tag {
+    background: #c79f57;
+}
+.section-event .multiselect-tag {
+    background: #ab57c7;
+}
+.section-pointers .multiselect-tag {
+    background: #5789c7;
+}
+:root {
+    --ms-font-size: 10px;
+    --ms-line-height: 1px;
+    --ms-bg: #FFFFFF;
+    --ms-bg-disabled: #F3F4F6;
+    --ms-border-color: #D1D5DB;
+    --ms-border-width: 0px;
+    --ms-radius: 0px;
+    --ms-py: 1px;
+    --ms-px: 0px;
+    --ms-ring-width: 0px;
+    --ms-ring-color: #10B98130;
+    --ms-placeholder-color: #9CA3AF;
+    --ms-max-height: 100px;
+
+    --ms-spinner-color: #10B981;
+    --ms-caret-color: #999999;
+    --ms-clear-color: #999999;
+    --ms-clear-color-hover: #000000;
+    
+    --ms-tag-font-size: 12px;
+    --ms-tag-line-height: 0px;
+    --ms-tag-font-weight: normal;
+    --ms-tag-bg: #10B981;
+    --ms-tag-bg-disabled: #9CA3AF;
+    --ms-tag-color: #FFFFFF;
+    --ms-tag-color-disabled: #FFFFFF;
+    --ms-tag-radius: 2px;
+    --ms-tag-py: 1px;
+    --ms-tag-px: 1px;
+    --ms-tag-my: 1px;
+    --ms-tag-mx: 1px;
+
+    --ms-tag-remove-radius: 4px;
+    --ms-tag-remove-py: 1px;
+    --ms-tag-remove-px: 1px;
+    --ms-tag-remove-my: 1px;
+    --ms-tag-remove-mx: 1px;
+
+    --ms-dropdown-bg: #FFFFFF;
+    --ms-dropdown-border-color: #D1D5DB;
+    --ms-dropdown-border-width: 1px;
+    --ms-dropdown-radius: 2px;
+
+    --ms-option-font-size: 12px;
+    --ms-option-line-height: 15px;
+    --ms-option-bg-pointed: #FFFFFF;
+    --ms-option-bg-selected: #10B981;
+    --ms-option-bg-disabled: #FFFFFF;
+    --ms-option-bg-selected-pointed: #26C08E;
+    --ms-option-bg-selected-disabled: #FFFFFF;
+    --ms-option-color-pointed: #1F2937;
+    --ms-option-color-selected: #FFFFFF;
+    --ms-option-color-disabled: #D1D5DB;
+    --ms-option-color-selected-pointed: #FFFFFF;
+    --ms-option-color-selected-disabled: #D1FAE5;
+    --ms-option-py: 1px;
+    --ms-option-px: 1px;
+
+    --ms-empty-color: #4B5563;
+}
+
+.dialog-title {
+    font-size: 16px;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 10px;
+}
+.el-card__header .setting-header {
+    vertical-align: bottom;
+    padding: 0px 2px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.dialog-options-section {
+    overflow: visible;
+    margin-bottom: 20px;
 }

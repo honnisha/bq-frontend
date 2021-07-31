@@ -22,7 +22,7 @@
     <el-input
       class="yaml-editor"
       type="textarea"
-      :autosize="{ minRows: 20, maxRows: 60}"
+      :autosize="{ minRows: 20, maxRows: 50}"
       v-model="yamlText"
     />
   </div>

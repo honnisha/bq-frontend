@@ -1,0 +1,18 @@
+first: first_greeting,regular_greeting
+NPC_options:
+  first_greeting:
+    text: Hi there, traveler!
+    condition: '!has_met_miner'
+    event: meet_miner
+    pointers: hello,bye 
+  regular_greeting:
+    text: Hi %player%!
+    pointers: hello,bye
+  weather:
+    text: Nice weather.
+player_options:
+  hello:
+    text: Hello!
+    pointer: weather
+  bye:
+    text: I need to go, sorry.
