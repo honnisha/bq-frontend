@@ -113,7 +113,6 @@ h4 {
     .dialog-card {
         overflow: visible;
         width: 350px;
-
         .el-card__header {
             padding: 5px;
 
@@ -141,14 +140,26 @@ h4 {
     height: 13px;
     background: #578fc7;
 }
-.section-conditions .multiselect-tag {
-    background: #c79f57;
+
+.section-lang {
+    .el-tag {
+        background: #57c760;
+    }
 }
-.section-event .multiselect-tag {
-    background: #ab57c7;
+.section-conditions {
+    .multiselect-tag,.el-tag {
+        background: #c79f57;
+    }
 }
-.section-pointers .multiselect-tag {
-    background: #5789c7;
+.section-event {
+    .multiselect-tag,.el-tag {
+        background: #ab57c7;
+    }
+} 
+.section-pointers {
+    .multiselect-tag,.el-tag {
+        background: #5789c7;
+    }
 }
 :root {
     --ms-font-size: 10px;
