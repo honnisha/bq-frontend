@@ -11,8 +11,16 @@
       </div>
 
       <el-space wrap class="dialogs-section">
-        <template v-for="(dialogInfo, dialogKey) in localValue[section]" :key="dialogKey">
-          <dialogOption v-model="localValue[section][dialogKey]" :section="section" :dialogKey="dialogKey" :project-data="projectData"/>
+        <template v-for="(ignore, dialogKey) in dialogSectionInfo[section]" :key="dialogKey">
+          <dialogOption
+            v-model="dialogSectionInfo[section][dialogKey]"
+            :section="section"
+            :dialogKey="dialogKey"
+            :project-data="projectData"
+            :dialog-section-info="dialogSectionInfo"
+            @delete="deleteDialog"
+            @rename="renameDialog"
+          />
         </template>
       </el-space>
     </div>
@@ -48,7 +56,7 @@ export default {
     }
   },
   computed: {
-    localValue: {
+    dialogSectionInfo: {
       get() {
         return this.modelValue
       },
@@ -59,11 +67,11 @@ export default {
   },
   methods: {
     changeToYaml() {
-      this.yamlText = yaml.dump(this.localValue, {lineWidth: -1})
+      this.yamlText = yaml.dump(this.dialogSectionInfo, {lineWidth: -1})
       this.yamlEdit = true
     },
     changeToEditor() {
-      this.localValue = yaml.load(this.yamlText)
+      this.dialogSectionInfo = yaml.load(this.yamlText)
       this.yamlText = null
       this.yamlEdit = false
     },
@@ -73,9 +81,9 @@ export default {
         cancelButtonText: 'Cancel',
         inputPattern: /^[a-zA-Z0-9_]+$/,
         inputErrorMessage: 'Already exists or bad name (use only a-z A-Z 0-9 and _)',
-        inputValidator: value => !this.localValue[section][value],
+        inputValidator: value => !this.dialogSectionInfo[section][value],
       }).then(({ value }) => {
-        this.localValue[section][value] = { text: null }
+        this.dialogSectionInfo[section][value] = { text: null }
 
         this.$message({
           type: 'success',
@@ -83,34 +91,20 @@ export default {
         })
       })
     },
-    renameDialog(section, dialogKey) {
-      this.$prompt('Enter new name', 'Dialog', {
-        confirmButtonText: 'Rename',
-        cancelButtonText: 'Cancel',
-        inputPattern: /^[a-zA-Z0-9_]+$/,
-        inputErrorMessage: 'Already exists or bad name (use only a-z A-Z 0-9 and _)',
-        inputValidator: value => !this.localValue[section][value],
-        inputValue: dialogKey,
-      }).then(({ value }) => {
-        this.localValue[section][value] = this.localValue[section][dialogKey]
-        delete this.localValue[section][dialogKey]
+    renameDialog(section, dialogKey, newKey) {
+      this.dialogSectionInfo[section][newKey] = this.dialogSectionInfo[section][dialogKey]
+      delete this.dialogSectionInfo[section][dialogKey]
 
-        this.$message({
-          type: 'success',
-          message: `Dialog ${dialogKey} renamed to ${value}`
-        })
+      this.$message({
+        type: 'success',
+        message: `Dialog ${dialogKey} renamed to ${newKey}`
       })
     },
     deleteDialog(section, dialogKey) {
-      this.$confirm(`Delete ${dialogKey} from ${section}?`, 'Delete', {
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel',
-      }).then(() => {
-        delete this.localValue[section][dialogKey]
-        this.$message({
-          type: 'success',
-          message: `Dialog ${dialogKey} deleted`
-        })
+      delete this.dialogSectionInfo[section][dialogKey]
+      this.$message({
+        type: 'success',
+        message: `Dialog ${dialogKey} deleted`
       })
     },
   }

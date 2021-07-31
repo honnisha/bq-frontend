@@ -61,7 +61,7 @@ export default {
   components: {
     tagComplete,
   },
-  props: ['modelValue', 'dialogKey', 'activeKey', 'projectData'],
+  props: ['modelValue', 'dialogKey', 'activeKey', 'projectData', 'section', 'dialogSectionInfo'],
   data() {
     return {
     }
@@ -81,16 +81,28 @@ export default {
         this.$emit('update:modelValue', value)
       }
     },
-    localActiveKey: {
-      get() {
-        return this.activeKey
-      },
-      set(value) {
-        this.$emit('update:activeKey', value)
-      }
-    },
   },
   methods: {
+    renameDialog(section, dialogKey) {
+      this.$prompt('Enter new name', 'Dialog', {
+        confirmButtonText: 'Rename',
+        cancelButtonText: 'Cancel',
+        inputPattern: /^[a-zA-Z0-9_]+$/,
+        inputErrorMessage: 'Already exists or bad name (use only a-z A-Z 0-9 and _)',
+        inputValidator: value => !this.dialogSectionInfo[section][value],
+        inputValue: dialogKey,
+      }).then(({ value }) => {
+        this.$emit('rename', section, dialogKey, value)
+      })
+    },
+    deleteDialog(section, dialogKey) {
+      this.$confirm(`Delete ${dialogKey} from ${section}?`, 'Delete', {
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+      }).then(() => {
+        this.$emit('delete', section, dialogKey)
+      })
+    },
   }
 }
 </script>
