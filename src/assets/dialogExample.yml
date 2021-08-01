@@ -1,18 +1,229 @@
-first: first_greeting,regular_greeting
-NPC_options:
-  first_greeting:
-    text: Hi there, traveler!
-    condition: '!has_met_miner'
-    event: meet_miner
-    pointers: hello,bye 
-  regular_greeting:
-    text: Hi %player%!
-    pointers: hello,bye
-  weather:
-    text: Nice weather.
-player_options:
-  hello:
-    text: Hello!
-    pointer: weather
-  bye:
-    text: I need to go, sorry.
+conversations:
+  gregory:
+    quester:
+      en: 'Gregory'
+      ru: 'Грегори'
+    first: message_start
+    stop: 'false' 
+
+    NPC_options:
+
+      message_start:
+        text: 
+          ru: 'Да?'
+        pointers: option_el_start,option_el_done, option_golem_start,option_golem_done ,option_bye
+
+      # el
+      message_el_start:
+        text: 
+          ru: 'Здравствуй путник! Мое имя Грегори, Грегори Д`Вагнер, этот мир я увидел тридцать восемь зим назад. Когда-то давно, я тоже искал приключения, и жил опираясь только на миг настоящего, даже не задумываясь о будущем, считая, что в этом заключается мое счастье, быть свободным словно ветер и смотреть, как по ночному небу робко пробегают первые всполохи рассвета, пробиваясь сквозь сияние звезд. Что-то у меня в горле пересохло.. Я с удовольствием продолжу историю если ты принесёшь бутылочку эля.\n\n&6Необходимый уровень 5\n\n&2Награда:\n✦ $mag_training_exp$ опыта\n✦ $mag_training_money$ монет'
+          en: 'Hello traveler! My name is Gregory, Gregory Dwagner, I saw this world thirty-eight winters ago. Once upon a time, I was also looking for adventures, and I lived relying only on the moment of the present, not even thinking about the future, believing that this is my happiness, to be free like the wind and watch the first flashes of dawn timidly run through the night sky, breaking through the radiance of the stars. Something in my throat is dry.. Ill be happy to continue the story if you bring a bottle of ale.\n\n&6Require level 5\n\n&2Rewards:\n✦ $mag_training_exp$ опыта\n✦ $mag_training_money$ coins'
+        pointers: option_el_yes,option_no
+      message_el_yes:
+        text: 
+          ru: 'Ты сможешь найти меня тут.'
+        event: event_el_start
+        pointers: option_ok
+      message_el_done:
+        text: 'Хороший эль.. О чем это я, так я считал до того решающего заказа на логово орков, где повстречал ее. Она не просто бегала, она буквально порхала вокруг целой толпы громил, кувыркаясь, приседая и осыпая чудовищ смертельными ударами своего кинжала. С этого задания и началась наша новая жизнь. Она была такая же, свободная и прекрасная, как лепестки сакуры на ветру, неуловима и свежа, словно теплый весенний ветерок в лесу.. Выпей со мной!'
+        event: event_el_paid
+        pointers: option_ok
+
+      # golem
+      message_golem_start:
+        text: 
+          ru: 'В какой-то момент ей надоела жизнь на дороге и мы купили себе небольшой дом и мы хотели мирно жить.. Но меня манила свобода, и я, ослепленный ей, снова взял заказ, на пещерного голема. Будь проклят тот день, когда я решился на это.. Моя прекрасная Мэри естественно отправилась со мной, но там было слишком опасно. Она.. умерла прямо на моих глазах, а я ничего не мог сделать и сам еле спасся и был покалечен. Слепой идиот, слишком любивший свободу..'
+        pointers: option_golem_start_1
+      message_golem_start_1:
+        text: 
+          ru: 'Так, свобода, о которой я так мечтал, стала для меня вечным пустым и холодным одиночеством.. Выбирай свои ценности правильно, не повторяй моих ошибок.'
+        pointers: option_golem_yes,option_no
+      message_golem_yes:
+        text: 
+          ru: 'Если ты уверен, что хочешь этим заняться. Я отдам тебе всю награду.'
+        event: event_golem_start
+        pointers: option_ok
+      message_golem_done:
+        text: 
+          ru: 'Невероятно! Вот, возьми всю награду.'
+        pointers: option_golem_paid1,option_golem_paid2
+
+    player_options:
+
+      option_el_start:
+        text: 
+          ru: '$quest_prefix$Здравствуй'
+        conditions: '!cond_el_started'
+        pointers: message_el_start
+      option_el_yes:
+        text: 
+          ru: '$quest_yes_prefix$Хорошо, я принесу.'
+        pointers: message_el_yes
+      option_el_done:
+        text: 
+          ru: '$quest_done_prefix$Вот бутылочка'
+        conditions: 'cond_el_done,!cond_el_paid'
+        pointers: message_el_done
+
+      option_golem_start:
+        text: 
+          ru: '$quest_prefix$Так что было дальше?'
+        conditions: '!cond_golem_started,cond_el_paid'
+        pointers: message_golem_start
+      option_golem_start_1:
+        text: 
+          ru: '$quest_prefix$Почему?'
+        pointers: message_golem_start_1
+      option_golem_yes:
+        text: 
+          ru: '$quest_yes_prefix$Возможно я смогу тебе помочь с заданием?'
+        pointers: message_golem_yes
+      option_golem_done:
+        text: 
+          ru: '$quest_done_prefix$Я убил голема!'
+        conditions: 'cond_golem_done,!cond_golem_paid'
+        pointers: message_golem_done
+
+      option_golem_paid1:
+        text: 
+          ru: '$quest_done_prefix$Не надо. Тебе эти деньги теперь нужны больше.'
+        event: event_golem_paid_exp
+      option_golem_paid2:
+        text: 
+          ru: '$quest_done_prefix$Да, давай. Спасибо!'
+        event: event_golem_paid_money
+
+      option_no:
+        text:
+          ru: '$quest_no_prefix$Мне некогда'
+        pointers: message_start
+
+      option_ok:
+        text:
+          ru: 'Хорошо'
+        pointers: message_start
+
+      option_bye:
+        text:
+          ru: '{oak_door}До встречи'
+
+events:
+  event_el_start: folder event_el_s2,event_el_s3,event_el_s4
+  event_el_s2: journal add j_el_started
+  event_el_s3: tag add tag_el_started
+  event_el_s4: notify &2Вы начали квест &a$el_name$ category:start_quest
+
+  event_el_done: folder event_el_d1,event_el_d2,event_el_d3,event_el_d4,event_el_d5
+  event_el_d1: journal delete j_el_started
+  event_el_d2: journal add j_el_done
+  event_el_d3: tag add tag_el_done
+  event_el_d4: money -50 notify
+  event_el_d5: give el_item notify
+
+  event_el_paid: folder event_el_p1,event_el_p2,event_el_p3,event_el_p5,event_el_p6
+  event_el_p1: journal delete j_el_done
+  event_el_p2: tag add tag_el_paid
+  event_el_p3: run ^command mmocore admin exp give %player% main $el_exp$ ^notify &eВы получили &6$el_exp$ &eопыта category:reward
+  event_el_p5: notify &2Вы закончили квест &a$el_name$ category:end_quest
+  event_el_p6: take el_item notify
+
+journal:
+  j_el_started:
+    ru: 'Грегори обещал продолжить свой рассказ если я принесу ему бутылочку эля.'
+  j_el_done:
+    ru: 'Я раздобыл эль, я могу отнести его Грегори.'
+
+  j_golem_started:
+    ru: 'Грегори указал на пещеру, мне надо убить там пещерного голема.'
+  j_golem_done:
+    ru: 'Я убил пещерного голема, я могу рассказать об этом Грегори.'
+
+main:
+  variables:
+    quest_prefix: '{book}&a[Квест]&e '
+    quest_done_prefix: '{enchanted_book}&2[Завершение квеста]&e '
+    quest_yes_prefix: '{book}&a[Принять]&e '
+    quest_no_prefix: '{barrier}&c[Отмена]&e '
+    quest_exit: '{oak_door}&7[Выход]&e '
+    gui_smith: '{anvil}&7[Ковка]&e '
+
+  npcs:
+    '70': gregory
+
+  compass:
+    cave_golem:
+      name:
+        ru: 'Пещерный голем'
+      location: -932;77;-510;world_rpg
+      item: compass_button
+
+objectives:
+  obj_golem: mmobkill cave_golem amount:1 notify events:event_golem_done
+
+custom:
+  notifications:
+    start_quest:
+      io: advancement
+      frame: task
+      icon: book
+      sound: entity.experience_orb.pickup
+    get_item:
+      frame: task
+      io: advancement
+      sound: entity.experience_orb.pickup
+    task_done:
+      frame: task
+      io: advancement
+      sound: entity.experience_orb.pickup
+    reward:
+      io: chat
+    chat:
+      io: chat
+
+  npc_holograms:
+    check_interval: 100
+    quest_avalible_gregory:
+      lines:
+        - 'item:default.quest_avalible'
+      vector: '0;3.2;0'
+      npcs:
+        - 70
+      conditions: 'cond_quest_avalible_gregory,!cond_quest_progress_gregory,!cond_quest_done_gregory'
+    quest_progress_gregory:
+      lines:
+        - 'item:default.quest_progress'
+      vector: '0;3.2;0'
+      npcs:
+        - 70
+      conditions: 'cond_quest_progress_gregory,!cond_quest_done_gregory'
+    quest_done_gregory:
+      lines:
+        - 'item:default.quest_done'
+      vector: '0;3.2;0'
+      npcs:
+        - 70
+      conditions: 'cond_quest_done_gregory'
+
+conditions:
+  cond_quest_avalible_gregory: or cond_gregory_el_icon1,cond_gregory_golem_icon1
+  cond_quest_progress_gregory: or cond_gregory_el_icon2,cond_gregory_golem_icon2
+  cond_quest_done_gregory: or cond_gregory_el_icon3,cond_gregory_golem_icon3
+
+  cond_gregory_el_icon1: and !cond_el_started
+  cond_gregory_el_icon2: and cond_el_started,!cond_el_done
+  cond_gregory_el_icon3: and cond_el_done,!cond_el_paid
+
+  cond_gregory_golem_icon1: and !cond_golem_started,cond_el_paid
+  cond_gregory_golem_icon2: and cond_golem_started,!cond_golem_done
+  cond_gregory_golem_icon3: and cond_golem_done,!cond_golem_paid
+
+  cond_el_started: tag tag_el_started
+  cond_el_done: tag tag_el_done
+  cond_el_paid: tag tag_el_paid
+
+  cond_golem_started: tag tag_golem_started
+  cond_golem_done: tag tag_golem_done
+  cond_golem_paid: tag tag_golem_paid
+  cond_50_coins: money 50
+
+items:

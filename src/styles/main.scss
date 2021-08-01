@@ -7,7 +7,6 @@ html, body, #app {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    background-image: url("./assets/bindingdark.png");
 }
 body {
     margin: 0px;
@@ -16,11 +15,11 @@ h4 {
     margin: 10px;
 }
 .el-header {
-    background-color: #656565;
+    background-color: #505050;
     background-image: url("./assets/blacktwill.png");
     border-bottom: 1px solid black;
 }
-.create-section-dialog > .el-dialog__body {
+.dialog > .el-dialog__body {
     padding: 15px;
 }
 .header-section {
@@ -130,6 +129,14 @@ h4 {
     .setting-header {
         padding: 0px 2px;
     }
+    .setting-value {
+        margin-left: 5px;
+        background-color: #f5f5ff;
+    }
+    .setting-value:hover {
+        background-color: #e1e1ff;
+        cursor: pointer;
+    }
 }
 
 .autocomplete {
@@ -143,22 +150,22 @@ h4 {
 
 .section-lang {
     .el-tag {
-        background: #57c760;
+        background: #7ebd83;
     }
 }
 .section-conditions {
     .multiselect-tag,.el-tag {
-        background: #c79f57;
+        background: #cca764;
     }
 }
 .section-event {
     .multiselect-tag,.el-tag {
-        background: #ab57c7;
+        background: #b675cc;
     }
 } 
 .section-pointers {
     .multiselect-tag,.el-tag {
-        background: #5789c7;
+        background: #6f97c5;
     }
 }
 :root {
@@ -238,4 +245,44 @@ h4 {
 .dialog-options-section {
     overflow: visible;
     margin-bottom: 20px;
+}
+
+.lang-header {
+    margin-left: 5px;
+    .el-icon-plus {
+        cursor: pointer;
+    }
+}
+.section-lang {
+    margin-bottom: 4px;
+}
+.lang-editor {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    .el-textarea__inner {
+        color: black!important;
+        padding: 0px;
+        line-height: 14px!important;
+        background-color: #f9f9f9;
+    }
+}
+.lang-slug {
+    margin-left: 5px;
+}
+.lang-input {
+    width: 70px;
+}
+.lang-delete {
+    margin-left: 5px;
+    cursor: pointer;
+}
+.language-popover {
+    padding: 5px;
+    .el-button {
+        margin-left: 5px;
+    }
+}
+
+.dialog-section {
+    background-color: #edf6ff;
 }

@@ -1,0 +1,42 @@
+open: Открыть
+open-zip: Открыть zip
+open-json: Открыть json
+open-slot: Открыть сохранённый слот
+save-json: Сохранить в json
+save: Сохранить
+save-slot: Сохранить в слот
+new-section: Новый раздел
+settings: Настройки
+bq-doc: Документация BetonQuest
+rpgmenu-doc: Документация RPGMenu
+quest-name: Введите название раздела квестов
+quest-example: Добавить пример квеста?
+menu-example: Добавить пример меню?
+cancel: Отмена
+create: Создать
+language: Язык
+language-restart: Применяется только при перезапуске
+error-title-name-empty: Заголовок раздела не может быть пустым
+create-section: Создание раздела
+add-dialog-section: Добавить раздел диалога
+dialogs: Диалоги
+add-menu: Добавить меню
+menus: Меню
+events: События
+objectives: Задания
+conditions: Условия
+items: Предметы
+main: Главное
+journal: Журнал
+custom: Разное
+create-dialog: Создание диалога
+provide-name: Введите название
+empty-title: Заголовок не может быть пустым
+delete-section: Удалить раздел {tab}?
+confirm: Подтвердить
+delete: Удалить
+tab-deleted: Раздел <b>{tab}</b> удалён
+dialog-exists: Диалог {newName} уже существует
+dialog-section-created: Раздел диалогов <b>{newName}</b> создан
+menu-section-exists: Меню {newName} уже существует
+menu-section-created: Раздел меню <b>{newName}</b> создан

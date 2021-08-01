@@ -1,13 +1,14 @@
 <template>
 
-  <div class="view-editor-section" v-if="!yamlEdit">
+  <div class="view-editor-section dialog-section" v-if="!yamlEdit">
     <div class="menu-buttons">
       <el-button size="mini" @click="changeToYaml" class="menu-button">Yaml editor</el-button>
     </div>
 
     <div class="dialog-options-section" v-for="section in ['NPC_options', 'player_options']">
       <div class="menu-buttons">
-        <div class="dialog-title">{{ section }}</div><el-button size="mini" @click="addDialogOption(section)" class="menu-button">Add dialog option</el-button>
+        <div class="dialog-title">{{ section }}</div>
+        <el-button size="mini" @click="addDialogOption(section)" class="menu-button" type="success">Add dialog option</el-button>
       </div>
 
       <el-space wrap class="dialogs-section">
@@ -82,12 +83,15 @@ export default {
         inputPattern: /^[a-zA-Z0-9_]+$/,
         inputErrorMessage: 'Already exists or bad name (use only a-z A-Z 0-9 and _)',
         inputValidator: value => !this.dialogSectionInfo[section][value],
+        closeOnClickModal: false,
       }).then(({ value }) => {
+        console.log(section)
         this.dialogSectionInfo[section][value] = { text: null }
 
         this.$message({
           type: 'success',
-          message: `Dialog ${value} created`
+          dangerouslyUseHTMLString: true,
+          message: `Dialog <b>${value}</b> created`
         })
       })
     },
@@ -97,14 +101,16 @@ export default {
 
       this.$message({
         type: 'success',
-        message: `Dialog ${dialogKey} renamed to ${newKey}`
+        dangerouslyUseHTMLString: true,
+        message: `Dialog <b>${dialogKey}</b> renamed to ${newKey}`
       })
     },
     deleteDialog(section, dialogKey) {
       delete this.dialogSectionInfo[section][dialogKey]
       this.$message({
         type: 'success',
-        message: `Dialog ${dialogKey} deleted`
+        dangerouslyUseHTMLString: true,
+        message: `Dialog <b>${dialogKey}</b> deleted`
       })
     },
   }

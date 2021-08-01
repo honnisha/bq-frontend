@@ -19,59 +19,88 @@
 
       <el-dropdown size="small">
         <el-button size="mini" class="header-buttons">
-          Open<i class="el-icon-arrow-down el-icon--right"></i>
+          {{ $t('open') }}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="openArchive">Open Project zip</el-dropdown-item>
-            <el-dropdown-item @click="openJson">Open Project json</el-dropdown-item>
+            <el-dropdown-item @click="openArchive">{{ $t('open-zip') }}</el-dropdown-item>
+            <el-dropdown-item @click="openJson">{{ $t('open-json') }}</el-dropdown-item>
             
-            <el-dropdown-item @click="openLocalStorage(index)" v-for="index in 5" :key="index" :divided="index === 1">Open Project from local slot {{ index }}</el-dropdown-item>
+            <el-dropdown-item @click="openLocalStorage(index)" v-for="index in 5" :key="index" :divided="index === 1">{{ $t('open-slot') }} {{ index }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
 
       <el-dropdown size="small">
         <el-button size="mini" class="header-buttons">
-          Save<i class="el-icon-arrow-down el-icon--right"></i>
+          {{ $t('save') }}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="saveAsJson">Save Project as json</el-dropdown-item>
+            <el-dropdown-item @click="saveAsJson">{{ $t('save-json') }}</el-dropdown-item>
 
-            <el-dropdown-item @click="saveLocalStorage(index)" v-for="index in 5" :key="index" :divided="index === 1">Save Project to local slot {{ index }}</el-dropdown-item>
+            <el-dropdown-item @click="saveLocalStorage(index)" v-for="index in 5" :key="index" :divided="index === 1">{{ $t('save-slot') }} {{ index }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
 
-      <el-button size="mini" @click="openNewTabDialog" class="header-buttons">New section</el-button>
+      <el-button size="mini" @click="openNewTabDialog" class="header-buttons">{{ $t('new-section') }}</el-button>
+      <el-button size="mini" @click="openSettingsVisible = true" class="header-buttons">{{ $t('settings') }}</el-button>
+      <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://docs.betonquest.org/" class="header-buttons">{{ $t('bq-doc') }}</el-link>
+      <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://github.com/BetonQuest/RPGMenu/wiki/" class="header-buttons">{{ $t('rpgmenu-doc') }}</el-link>
     </header>
 
     <el-dialog
-      title="Create section"
+      :title="$t('create-section')"
       v-model="dialogAddSectionVisible"
       width="30%"
-      custom-class="create-section-dialog"
+      custom-class="dialog create-section"
     >
       <el-alert v-if="newTabNameError" :title="newTabNameError" type="error"/>
-      <span>Provide quest section name</span>
-      <el-input placeholder="Quest section name" v-model="newTabName"></el-input>
+      <span>{{ $t('quest-name') }}</span>
+      <el-input v-model="newTabName"></el-input><br/><br/>
+      <el-checkbox v-model="inclideDialogExample">{{ $t('quest-example') }}</el-checkbox><br/>
+      <el-checkbox v-model="inclideMenuExample">{{ $t('menu-example') }}</el-checkbox><br/>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogAddSectionVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="addTab">Confirm</el-button>
+          <el-button @click="dialogAddSectionVisible = false">{{ $t('cancel') }}</el-button>
+          <el-button type="primary" @click="addTab">{{ $t('create') }}</el-button>
         </span>
       </template>
     </el-dialog>
 
-    <el-tabs v-model="sectionSelected" type="border-card" closable @tab-remove="removeTab">
+    <el-dialog
+      :title="$t('settings')"
+      v-model="openSettingsVisible"
+      width="30%"
+      custom-class="dialog setting-dialog"
+    >
+      {{ $t('') }}:
+      <el-select v-model="settings.language">
+        <el-option
+          v-for="lang in avaliableLanguages"
+          :key="lang"
+          :label="lang"
+          :value="lang">
+        </el-option>
+      </el-select>
+      <div class="help-text">{{ $t('language-restart') }}</div>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="closeAndSaveSettings">{{ $t('save') }}</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <el-tabs v-model="settings.language" type="border-card" closable @tab-remove="removeTab">
       <el-tab-pane
         v-for="(sectionInfo, name) in projectData"
         :key="name"
         :label="name"
         :name="name"
       >
-        <questSection :section-info="sectionInfo" :project-data="projectData" />
+        <questSection v-model="projectData[name]" :project-data="projectData" />
       </el-tab-pane>
 
     </el-tabs>
@@ -83,8 +112,13 @@
 </style>
 
 <script>
+import yaml from 'js-yaml'
 import { loadArchive } from './utils/archiveLoader.js'
 import questSection from "./views/questSection.vue";
+import { useI18n } from "vue3-i18n";
+
+import dialogExample from './assets/dialogExample.yml?raw'
+import menuExample from './assets/menuExample.yml?raw'
 
 export default {
   components: {
@@ -97,16 +131,64 @@ export default {
       dialogAddSectionVisible: false,
       newTabName: null,
       newTabNameError: null,
+      inclideDialogExample: false,
+      inclideMenuExample: false,
+      openSettingsVisible: false,
+      settings: {
+        language: 'ru',
+      },
+      avaliableLanguages: ['en', 'ru'],
     }
   },
+  created() {
+    this.readSettings()
+    const i18n = useI18n()
+    i18n.setLocale(this.settings.language)
+  },
   methods: {
+    closeAndSaveSettings() {
+      this.openSettingsVisible = false
+      this.saveSettings()
+    },
+    saveSettings() {
+      localStorage.setItem('settings', JSON.stringify(this.settings));
+    },
+    readSettings() {
+      const settings = JSON.parse(localStorage.getItem('settings'))
+      if (settings) this.settings = settings
+    },
     addTab() {
       if (this.newTabName.length <= 0) {
-        this.newTabNameError = 'Section title cannot be empty'
+        this.newTabNameError = this.$t('error-title-name-empty')
         return
       }
 
       this.projectData[this.newTabName] = {}
+
+      if (this.inclideDialogExample) {
+        const dialogExampleData = yaml.load(dialogExample)
+        this.projectData[this.newTabName]['conversations'] = dialogExampleData.conversations
+        this.projectData[this.newTabName]['conditions'] = dialogExampleData.conditions
+        this.projectData[this.newTabName]['custom'] = dialogExampleData.custom
+        this.projectData[this.newTabName]['events'] = dialogExampleData.events
+        this.projectData[this.newTabName]['items'] = dialogExampleData.items
+        this.projectData[this.newTabName]['journal'] = dialogExampleData.journal
+        this.projectData[this.newTabName]['main'] = dialogExampleData.main
+        this.projectData[this.newTabName]['objectives'] = dialogExampleData.objectives
+      }
+      this.inclideDialogExample = false
+
+      if (this.inclideMenuExample) {
+        const menuExampleData = yaml.load(menuExample)
+        this.projectData[this.newTabName]['menus'] = menuExampleData
+      }
+      this.inclideMenuExample = false
+
+      this.$message({
+        dangerouslyUseHTMLString: true,
+        message: `Section <b>${this.newTabName}</b> created!`,
+        type: 'success'
+      })
 
       this.sectionSelected = this.newTabName
       this.newTabName = null
@@ -118,9 +200,9 @@ export default {
       this.dialogAddSectionVisible = true
     },
     removeTab(tab) {
-      this.$confirm(`Delete section ${tab}?`, 'Confirm', {
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel',
+      this.$confirm(this.$t('delete-section').replace('{tab}', tab), this.$t('confirm'), {
+        confirmButtonText: this.$t('delete'),
+        cancelButtonText: this.$t('cancel'),
         type: 'warning'
       }).then(() => {
         delete this.projectData[tab]
@@ -172,12 +254,20 @@ export default {
         this.$message({message: `Project slot ${index} emty`, type: 'info'})
       } else {
         this.projectData = data
-        this.$message({message: `Project loaded from ${index} slot`, type: 'success'})
+        this.$message({
+          dangerouslyUseHTMLString: true,
+          message: `Project loaded from <b>${index}</b> slot`,
+          type: 'success'
+        })
       }
     },
     saveLocalStorage(index) {
       localStorage.setItem(`projects_${index}`, JSON.stringify(this.projectData));
-      this.$message({message: `Project saved to ${index} slot`, type: 'success'})
+      this.$message({
+        dangerouslyUseHTMLString: true,
+        message: `Project saved to <b>${index}</b> slot`,
+        type: 'success'
+      })
     },
   }
 }

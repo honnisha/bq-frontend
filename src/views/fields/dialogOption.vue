@@ -14,7 +14,7 @@
         </el-tooltip>
       </el-col>
       <el-col :span="23">
-        <div class="setting-value">{{ localValue.text }}</div>
+        <langField v-model="dialogInfo.text" />
       </el-col>
     </el-row>
 
@@ -25,7 +25,7 @@
         </el-tooltip>
       </el-col>
       <el-col :span="23">
-        <tagComplete type="conditions" v-model="localValue.conditions" :project-data="projectData"/>
+        <tagComplete type="conditions" v-model="dialogInfo.conditions" :section="section" :project-data="projectData"/>
       </el-col>
     </el-row>
 
@@ -36,7 +36,7 @@
         </el-tooltip>
       </el-col>
       <el-col :span="23">
-        <tagComplete type="events" v-model="localValue.events" :project-data="projectData"/>
+        <tagComplete type="events" v-model="dialogInfo.events" :section="section" :project-data="projectData"/>
       </el-col>
     </el-row>
 
@@ -47,7 +47,7 @@
         </el-tooltip>
       </el-col>
       <el-col :span="23">
-        <tagComplete type="pointers" v-model="localValue.pointers" :project-data="projectData"/>
+        <tagComplete type="pointers" v-model="dialogInfo.pointers" :section="section" :project-data="projectData"/>
       </el-col>
     </el-row>
   </el-card>
@@ -55,10 +55,12 @@
 
 <script>
 import tagComplete from "../fields/tagComplete.vue"
+import langField from "../fields/langField.vue"
 
 export default {
   components: {
     tagComplete,
+    langField,
   },
   props: ['modelValue', 'dialogKey', 'activeKey', 'projectData', 'section', 'dialogSectionInfo'],
   data() {
@@ -66,21 +68,21 @@ export default {
     }
   },
   created() {
-    if (this.localValue.event) {
-      this.localValue.events = this.localValue.event
-      delete this.localValue['event']
+    if (this.dialogInfo.event) {
+      this.dialogInfo.events = this.dialogInfo.event
+      delete this.dialogInfo['event']
     }
-    if (this.localValue.condition) {
-      this.localValue.conditions = this.localValue.condition
-      delete this.localValue['condition']
+    if (this.dialogInfo.condition) {
+      this.dialogInfo.conditions = this.dialogInfo.condition
+      delete this.dialogInfo['condition']
     }
-    if (this.localValue.pointer) {
-      this.localValue.pointers = this.localValue.pointer
-      delete this.localValue['pointer']
+    if (this.dialogInfo.pointer) {
+      this.dialogInfo.pointers = this.dialogInfo.pointer
+      delete this.dialogInfo['pointer']
     }
   },
   computed: {
-    localValue: {
+    dialogInfo: {
       get() {
         return this.modelValue
       },

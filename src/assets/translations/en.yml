@@ -1,0 +1,42 @@
+open: Open
+open-zip: Open Project zip
+open-json: Open Project json
+open-slot: Open Project from local slot
+save-json: Save Project as json
+save: Save
+save-slot: Save Project to local slot
+new-section: New section
+settings: Settings
+bq-doc: BetonQuest documentation
+rpgmenu-doc: RPGMenu documentation
+quest-name: Provide quest section name
+quest-example: Include dialog example
+menu-example: Include menu example
+cancel: Cancel
+create: Create
+language: Language
+language-restart: Applied only with restart
+error-title-name-empty: Section title cannot be empty
+create-section: Create section
+add-dialog-section: Add dialog section
+dialogs: Dialogs
+add-menu: Add menu
+menus: Меню
+events: Events
+conditions: Conditions
+objectives: Objectives
+items: Items
+main: Main
+journal: Journal
+custom: Custom
+create-dialog: Create dialog
+provide-name: Provide name
+empty-title: Title cannot be empty
+delete-section: Delete section {tab}?
+confirm: Confirm
+delete: Delete
+tab-deleted: Tab <b>{tab}</b> deleted
+dialog-exists: Dialog {newName} already exisis
+dialog-section-created: Dialog section <b>{newName}</b> created
+menu-section-exists: Menu {newName} already exisis
+menu-section-created: Menu section <b>{newName}</b> created
