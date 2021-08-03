@@ -1,4 +1,4 @@
-Ganga RTS
+BetonQuest interface
 =======
 live: http://194.147.90.36/bq-editor/
 
@@ -11,4 +11,4 @@ npm run dev
 
 Screenshots
 =======
-<div align="center"><img src="https://gitlab.com/ganagsh/ganga-rts/-/raw/master/Screenshots/001.png"/></div>
+<div align="center"><img src="https://github.com/honnisha/bq-frontend/blob/master/screenshots/1.png?raw=true"/></div>
