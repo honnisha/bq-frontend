@@ -10,7 +10,9 @@
     "@sipec/vue3-tags-input": "^3.0.4",
     "@vueform/multiselect": "^2.1.0",
     "element-plus": "^1.0.2-beta.58",
+    "file-saver": "^2.0.5",
     "js-yaml": "^4.1.0",
+    "jszip": "^3.7.0",
     "vue": "^3.0.5",
     "vue-click-outside": "^1.1.0",
     "vue-i18n": "^8.25.0",
@@ -26,6 +28,7 @@
     "sass": "^1.36.0",
     "sass-loader": "^12.1.0",
     "vite": "^2.4.3",
-    "vite-plugin-style-import": "^1.0.1"
+    "vite-plugin-style-import": "^1.0.1",
+    "vite-svg-loader": "^2.1.1"
   }
 }

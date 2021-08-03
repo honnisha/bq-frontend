@@ -8,7 +8,7 @@
     <div class="quester-name">
       <div class="dialog-title">{{ $t('quester-name') }}</div>
       <el-card class="quester-lang">
-        <langField v-model="dialogSectionInfo.quester" />
+        <langField v-model="dialogSectionInfo.quester" :span-left="10" :span-right="14"/>
       </el-card>
     </div>
     

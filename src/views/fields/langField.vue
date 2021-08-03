@@ -28,13 +28,13 @@
   </div>
 
   <el-row class="dialog-setting-section section-lang" v-for="(text, slug) in localValue">
-    <el-col :span="2">
+    <el-col :span="spanLeft || 2">
 
       <el-tag type="info" class="setting-header lang-slug" @click="addLang">{{ slug }}</el-tag>
       <el-tag type="info" class="setting-header lang-delete" @click="delLang(slug)"><i class="el-icon-delete"/></el-tag>
 
     </el-col>
-    <el-col :span="22">
+    <el-col :span="spanRight || 22">
       <el-input
         class="lang-editor"
         type="textarea"
@@ -49,7 +49,7 @@
 <script>
 
 export default {
-  props: ['modelValue'],
+  props: ['modelValue', 'spanLeft', 'spanRight'],
   data() {
     return {
       languagesAvailable: [],

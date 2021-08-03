@@ -2,7 +2,7 @@ open: Open
 open-zip: Open Project zip
 open-json: Open Project json
 open-slot: Open Project from local slot
-save-json: Save Project as json
+save-json: Export as json
 save: Save
 save-slot: Save Project to local slot
 new-section: New section
@@ -15,13 +15,12 @@ menu-example: Include menu example
 cancel: Cancel
 create: Create
 language: Language
-language-restart: Applied only with restart
 error-title-name-empty: Section title cannot be empty
 create-section: Create section
 add-dialog-section: Add dialog section
 dialogs: Dialogs
 add-menu: Add menu
-menus: Меню
+menus: Menu
 events: Events
 conditions: Conditions
 objectives: Objectives
@@ -59,3 +58,5 @@ delete-key: Delete {key}?
 new-setting: New setting
 quester-name: Quester name
 new-setting-key: Enter new setting key
+save-zip: Export as zip
+data-is-empty: Data is empty

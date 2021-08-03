@@ -37,6 +37,7 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
+            <el-dropdown-item @click="saveAsZip">{{ $t('save-zip') }}</el-dropdown-item>
             <el-dropdown-item @click="saveAsJson">{{ $t('save-json') }}</el-dropdown-item>
 
             <el-dropdown-item @click="saveLocalStorage(index)" v-for="index in 5" :key="index" :divided="index === 1">{{ $t('save-slot') }} {{ index }}</el-dropdown-item>
@@ -45,9 +46,24 @@
       </el-dropdown>
 
       <el-button size="mini" @click="openNewTabDialog" class="header-buttons" icon="el-icon-folder-add">{{ $t('new-section') }}</el-button>
-      <el-button size="mini" @click="openSettingsVisible = true" class="header-buttons" icon="el-icon-setting">{{ $t('settings') }}</el-button>
+      <!-- <el-button size="mini" @click="openSettingsVisible = true" class="header-buttons" icon="el-icon-setting">{{ $t('settings') }}</el-button> -->
       <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://docs.betonquest.org/" class="header-buttons">{{ $t('bq-doc') }}</el-link>
       <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://github.com/BetonQuest/RPGMenu/wiki/" class="header-buttons">{{ $t('rpgmenu-doc') }}</el-link>
+
+      <div class="right-header">
+
+  <el-dropdown>
+  <span class="el-dropdown-link">
+    <component class="lang-icon" :is="avaliableLanguages[settings.language]"></component>
+  </span>
+  <template #dropdown>
+    <el-dropdown-menu>
+      <el-dropdown-item class="lang-option" @click="changeLang(langSlug)" v-for="(flagIcon, langSlug) in avaliableLanguages"><component class="lang-icon" :is="flagIcon"></component></el-dropdown-item>
+    </el-dropdown-menu>
+  </template>
+  </el-dropdown>
+        
+      </div>
     </header>
 
     <el-dialog
@@ -76,15 +92,6 @@
       custom-class="dialog setting-dialog"
     >
       {{ $t('language') }}:
-      <el-select v-model="settings.language">
-        <el-option
-          v-for="lang in avaliableLanguages"
-          :key="lang"
-          :label="lang"
-          :value="lang">
-        </el-option>
-      </el-select>
-      <div class="help-text">{{ $t('language-restart') }}</div>
 
       <template #footer>
         <span class="dialog-footer">
@@ -114,15 +121,21 @@
 <script>
 import yaml from 'js-yaml'
 import { loadArchive } from './utils/archiveLoader.js'
+import { saveArchive } from './utils/archiveSaver.js'
 import questSection from "./views/questSection.vue";
 import { useI18n } from "vue3-i18n";
 
 import dialogExample from './assets/dialogExample.yml?raw'
 import menuExample from './assets/menuExample.yml?raw'
 
+import ruFlag from "./assets/lang-icons/ru.svg";
+import enFlag from "./assets/lang-icons/en.svg";
+
 export default {
   components: {
     questSection,
+    ruFlag,
+    enFlag
   },
   data() {
     return {
@@ -137,7 +150,10 @@ export default {
       settings: {
         language: 'ru',
       },
-      avaliableLanguages: ['en', 'ru'],
+      avaliableLanguages: {
+        en: enFlag,
+        ru: ruFlag,
+      },
     }
   },
   created() {
@@ -146,6 +162,11 @@ export default {
     i18n.setLocale(this.settings.language)
   },
   methods: {
+    changeLang(langSlug) {
+      this.settings.language = langSlug
+      this.saveSettings()
+      document.location.reload()
+    },
     closeAndSaveSettings() {
       this.openSettingsVisible = false
       this.saveSettings()
@@ -237,12 +258,25 @@ export default {
     saveAsJson() {
       const data = JSON.stringify(this.projectData)
       const blob = new Blob([data], {type: 'text/plain'})
-      const eElelent = document.createEvent('MouseEvents')
-      const aElement = document.createElement('a')
 
       const date = JSON.stringify(new Date());
-      aElement.download = `questdata${date}.json`
-
+      this.downloadBlob(blob, `bq${date}.json`)
+    },
+    saveAsZip() {
+      if (!this.projectData) {
+        this.$message({
+          dangerouslyUseHTMLString: true,
+          message: this.$t('data-is-empty'),
+          type: 'info'
+        })
+        return
+      }
+      saveArchive(this.projectData)
+    },
+    downloadBlob(blob, fileName) {
+      const eElelent = document.createEvent('MouseEvents')
+      const aElement = document.createElement('a')
+      aElement.download = fileName
       aElement.href = window.URL.createObjectURL(blob)
       aElement.dataset.downloadurl = ['text/json', aElement.download, aElement.href].join(':')
       eElelent.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)

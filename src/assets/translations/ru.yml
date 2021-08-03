@@ -2,7 +2,7 @@ open: Открыть
 open-zip: Открыть zip
 open-json: Открыть json
 open-slot: Открыть сохранённый слот
-save-json: Сохранить в json
+save-json: Экспорт в json
 save: Сохранить
 save-slot: Сохранить в слот
 new-section: Новый раздел
@@ -15,7 +15,6 @@ menu-example: Добавить пример меню?
 cancel: Отмена
 create: Создать
 language: Язык
-language-restart: Применяется только при перезапуске
 error-title-name-empty: Заголовок раздела не может быть пустым
 create-section: Создание раздела
 add-dialog-section: Добавить раздел диалога
@@ -59,3 +58,5 @@ delete-key: Удалить {key}?
 new-setting: Добавить запись
 quester-name: Имя квестодателя
 new-setting-key: Введите название
+save-zip: Экспорт в zip архив
+data-is-empty: Нет данных для сохранения

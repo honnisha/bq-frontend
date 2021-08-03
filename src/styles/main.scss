@@ -234,7 +234,7 @@ h4 {
     font-size: 16px;
     font-weight: 600;
     display: inline-block;
-    margin: 0px 0px 10px 10px;
+    margin: 0px 10px 10px 10px;
 }
 .el-card__header .setting-header {
     vertical-align: bottom;
@@ -301,8 +301,27 @@ h4 {
 }
 .quester-lang {
     margin: 5px 0px 0px 5px;
-    width: 350px;
+    width: 100%;
     .el-card__body {
         padding: 5px;
     }
+    .section-lang {
+        width: 250px;
+        display: inline-block;
+    }
+    .lang-editor {
+        margin-left: 5px;
+    }
+}
+
+.lang-icon {
+    width: 25px;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-top: 5px;
+}
+.right-header {
+    display: inline-block;
+    float: right;
+    padding-right: 20px;
 }

@@ -1,5 +1,5 @@
-import './archives/uncompress.js'
 import yaml from  'js-yaml'
+import JSZip from 'jszip'
 
 async function loadConversationsConfig(ymlData) {
   return ymlData
@@ -7,65 +7,52 @@ async function loadConversationsConfig(ymlData) {
 
 const subSections = ['conversations', 'menus']
 
-async function loadModule(section, arryBytes) {
-  const nameSplit = section.name.split('/')
+function loadModule(sectionName, content) {
+  const nameSplit = sectionName.split('/')
   let sectionData = {
     section: nameSplit[0],
     fileType: nameSplit[1].replace('.yml', ''),
     data: {},
   }
   if (subSections.indexOf(sectionData.fileType) >= 0) {
-    sectionData.conversation = nameSplit[2].replace('.yml', '')
+    sectionData.subsection = nameSplit[2].replace('.yml', '')
   }
 
-  if (arryBytes) {
-    const blobData = new Blob([arryBytes])
-    const text = await new Response(blobData).text()
-
+  if (content) {
     try {
-      const yamlConfig = yaml.load(text)
-      if (sectionData.fileType === 'conversations') {
-        sectionData.data = await loadConversationsConfig(yamlConfig)
-      } else {
-        sectionData.data = yamlConfig
-      }
+      const yamlConfig = yaml.load(content)
+      sectionData.data = yamlConfig
     } catch (e) {
-      console.error(`Section "${section.name}" error: ${e}`)
+      console.error(`Section "${sectionName}" error: ${e}`)
     }
   }
   return sectionData
 }
 
-export async function loadArchive(file, projectData) {
+export function loadArchive(file, projectData) {
+  var dateBefore = new Date();
+  JSZip.loadAsync(file).then(function(zip) {
+    zip.forEach(function (relativePath, zipEntry) {
+      if (!zipEntry.dir) {
 
-  console.log(`Load zip archive format...`)
-  loadArchiveFormats(['zip'], function() {
-    console.log(`Uncompressing ${file.name}...`)
-    archiveOpenFile(file, null, async function(archive, err) {
-      if (archive) {
+        zipEntry.async("text").then(function (content) {
 
-	await archive.entries.forEach(async function(section) {
-	  if (section.is_file) {
-            await section.readData(async function(arryBytes, err) {
+          let sectionData = loadModule(zipEntry.name, content)
 
-              let sectionData = await loadModule(section, arryBytes)
+          if (!projectData[sectionData.section]) projectData[sectionData.section] = {}
 
-              if (!projectData[sectionData.section]) projectData[sectionData.section] = {}
+          if (subSections.indexOf(sectionData.fileType) >= 0) {
+            if (!projectData[sectionData.section][sectionData.fileType]) projectData[sectionData.section][sectionData.fileType] = {}
 
-              if (subSections.indexOf(sectionData.fileType) >= 0) {
-                if (!projectData[sectionData.section][sectionData.fileType]) projectData[sectionData.section][sectionData.fileType] = {}
-
-                projectData[sectionData.section][sectionData.fileType][sectionData.conversation] = sectionData.data
-              } else {
-                projectData[sectionData.section][sectionData.fileType] = sectionData.data
-              }
-            })
+            projectData[sectionData.section][sectionData.fileType][sectionData.subsection] = sectionData.data
+          } else {
+            projectData[sectionData.section][sectionData.fileType] = sectionData.data
           }
-	})
-      } else {
-        console.error(`Zip unpack "${file.name}" error: ${err}`)
+        })
       }
-      archiveClose(archive);
     })
+
+  }, function (e) {
+    console.error(`Error reading ${f.name}: ${e.message}`)
   })
 }
