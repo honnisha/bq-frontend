@@ -105,9 +105,9 @@ export default {
       })
     },
     deleteDialog(section, dialogKey) {
-      this.$confirm(`Delete ${dialogKey} from ${section}?`, 'Delete', {
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel',
+      this.$confirm(this.$t('delete-section-key').replace('{section}', section).replace('{dialogKey}', dialogKey), this.$t('delete'), {
+        confirmButtonText: this.$t('delete'),
+        cancelButtonText: this.$t('cancel'),
       }).then(() => {
         this.$emit('delete', section, dialogKey)
       })

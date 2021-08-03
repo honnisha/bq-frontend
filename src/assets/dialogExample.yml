@@ -11,13 +11,13 @@ conversations:
       message_start:
         text: 
           ru: 'Да?'
+          en: 'Yes?'
         pointers: option_el_start,option_el_done, option_golem_start,option_golem_done ,option_bye
 
       # el
       message_el_start:
         text: 
           ru: 'Здравствуй путник! Мое имя Грегори, Грегори Д`Вагнер, этот мир я увидел тридцать восемь зим назад. Когда-то давно, я тоже искал приключения, и жил опираясь только на миг настоящего, даже не задумываясь о будущем, считая, что в этом заключается мое счастье, быть свободным словно ветер и смотреть, как по ночному небу робко пробегают первые всполохи рассвета, пробиваясь сквозь сияние звезд. Что-то у меня в горле пересохло.. Я с удовольствием продолжу историю если ты принесёшь бутылочку эля.\n\n&6Необходимый уровень 5\n\n&2Награда:\n✦ $mag_training_exp$ опыта\n✦ $mag_training_money$ монет'
-          en: 'Hello traveler! My name is Gregory, Gregory Dwagner, I saw this world thirty-eight winters ago. Once upon a time, I was also looking for adventures, and I lived relying only on the moment of the present, not even thinking about the future, believing that this is my happiness, to be free like the wind and watch the first flashes of dawn timidly run through the night sky, breaking through the radiance of the stars. Something in my throat is dry.. Ill be happy to continue the story if you bring a bottle of ale.\n\n&6Require level 5\n\n&2Rewards:\n✦ $mag_training_exp$ опыта\n✦ $mag_training_money$ coins'
         pointers: option_el_yes,option_no
       message_el_yes:
         text: 
@@ -126,6 +126,30 @@ events:
   event_el_p3: run ^command mmocore admin exp give %player% main $el_exp$ ^notify &eВы получили &6$el_exp$ &eопыта category:reward
   event_el_p5: notify &2Вы закончили квест &a$el_name$ category:end_quest
   event_el_p6: take el_item notify
+
+  event_golem_start: folder event_golem_s2,event_golem_s3,event_golem_s4,event_golem_s5,event_golem_s6
+  event_golem_s2: journal add j_golem_started
+  event_golem_s3: tag add tag_golem_started
+  event_golem_s4: notify &2Вы начали квест &a$golem_name$ category:start_quest
+  event_golem_s5: objective start obj_golem
+  event_golem_s6: compass add cave_golem
+
+  event_golem_done: folder event_golem_d1,event_golem_d2,event_golem_d3
+  event_golem_d1: journal delete j_golem_started
+  event_golem_d2: journal add j_golem_done
+  event_golem_d3: tag add tag_golem_done
+
+  event_golem_paid: folder event_golem_p1,event_golem_p2,event_golem_p5,event_golem_p6
+  event_golem_p1: journal delete j_golem_done
+  event_golem_p2: tag add tag_golem_paid
+  event_golem_p5: notify &2Вы закончили квест &a$golem_name$ category:end_quest
+  event_golem_p6: compass del cave_golem
+
+  event_golem_paid_money: folder event_golem_paid,event_golem_pm
+  event_golem_pm: money $golem_money$ notify
+
+  event_golem_paid_exp: folder event_golem_paid,event_golem_pexp
+  event_golem_pexp: run ^command mmocore admin exp give %player% main $golem_exp$ ^notify &eВы получили &6$golem_exp$ &eопыта category:reward
 
 journal:
   j_el_started:

@@ -2,7 +2,8 @@
 
   <div class="view-editor-section" v-if="!yamlEdit">
     <div class="menu-buttons">
-      <el-button size="mini" @click="changeToYaml" class="menu-button">Yaml editor</el-button>
+      <el-button size="mini" @click="changeToYaml" class="menu-button">{{ this.$t('yaml-editor') }}</el-button>
+      <el-button size="mini" @click="newSetting" class="menu-button" type="success" icon="el-icon-plus" plain>{{ $t('new-setting') }}</el-button>
     </div>
 
     <template v-for="(item, key) in localValue">
@@ -10,13 +11,14 @@
         v-model="localValue[key]"
         :value-key="key"
         v-model:activeKey="activeKey"
+        @delete="deleteSetting"
       />
     </template>
   </div>
   
   <div class="yaml-editor-section" v-else>
     <div class="menu-buttons">
-      <el-button size="mini" @click="changeToEditor" class="menu-button">Save and return visual editor</el-button>
+      <el-button size="mini" @click="changeToEditor" class="menu-button">{{ this.$t('save-and-return') }}</el-button>
     </div>
 
     <el-input
@@ -64,6 +66,20 @@ export default {
       this.localValue = yaml.load(this.yamlText)
       this.yamlText = null
       this.yamlEdit = false
+    },
+    deleteSetting(valueKey) {
+      delete this.localValue[valueKey]
+    },
+    newSetting() {
+      this.$prompt(this.$t('new-setting-key'), this.$t('create'), {
+        confirmButtonText: this.$t('create'),
+        cancelButtonText: this.$t('cancel'),
+        inputPattern: /^[a-zA-Z0-9_]+$/,
+        inputErrorMessage: this.$t('dialog-exists-regex'),
+        inputValidator: value => !this.localValue[value],
+      }).then(({ value }) => {
+        this.localValue[value] = ''
+      })
     },
   }
 }

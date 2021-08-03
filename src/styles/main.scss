@@ -181,7 +181,7 @@ h4 {
     --ms-ring-width: 0px;
     --ms-ring-color: #10B98130;
     --ms-placeholder-color: #9CA3AF;
-    --ms-max-height: 100px;
+    --ms-max-height: 500px;
 
     --ms-spinner-color: #10B981;
     --ms-caret-color: #999999;
@@ -234,7 +234,7 @@ h4 {
     font-size: 16px;
     font-weight: 600;
     display: inline-block;
-    margin-right: 10px;
+    margin: 0px 0px 10px 10px;
 }
 .el-card__header .setting-header {
     vertical-align: bottom;
@@ -285,4 +285,24 @@ h4 {
 
 .dialog-section {
     background-color: #edf6ff;
+}
+.el-button--mini {
+    padding: 0px 8px;
+}
+.setting-section {
+    .delete-button {
+        padding: 0px 1px;
+        margin-right: 3px;
+        cursor: pointer;
+    }
+}
+.quester-name {
+    padding-bottom: 20px;
+}
+.quester-lang {
+    margin: 5px 0px 0px 5px;
+    width: 350px;
+    .el-card__body {
+        padding: 5px;
+    }
 }

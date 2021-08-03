@@ -2,13 +2,20 @@
 
   <div class="view-editor-section dialog-section" v-if="!yamlEdit">
     <div class="menu-buttons">
-      <el-button size="mini" @click="changeToYaml" class="menu-button">Yaml editor</el-button>
+      <el-button size="mini" @click="changeToYaml" class="menu-button">{{ $t('yaml-editor') }}</el-button>
     </div>
 
+    <div class="quester-name">
+      <div class="dialog-title">{{ $t('quester-name') }}</div>
+      <el-card class="quester-lang">
+        <langField v-model="dialogSectionInfo.quester" />
+      </el-card>
+    </div>
+    
     <div class="dialog-options-section" v-for="section in ['NPC_options', 'player_options']">
       <div class="menu-buttons">
-        <div class="dialog-title">{{ section }}</div>
-        <el-button size="mini" @click="addDialogOption(section)" class="menu-button" type="success">Add dialog option</el-button>
+        <div class="dialog-title">{{ $t(section) }}</div>
+        <el-button size="mini" @click="addDialogOption(section)" class="menu-button" type="success" plain icon="el-icon-chat-line-round">{{ $t('add-dialog') }}</el-button>
       </div>
 
       <el-space wrap class="dialogs-section">
@@ -29,7 +36,7 @@
   
   <div class="yaml-editor-section" v-else>
     <div class="menu-buttons">
-      <el-button size="mini" @click="changeToEditor" class="menu-button">Save and return visual editor</el-button>
+      <el-button size="mini" @click="changeToEditor" class="menu-button">{{ $t('save-and-return') }}</el-button>
     </div>
 
     <el-input
@@ -43,11 +50,13 @@
 
 <script>
 import dialogOption from "../fields/dialogOption.vue"
+import langField from "../fields/langField.vue"
 import yaml from  'js-yaml'
 
 export default {
   components: {
     dialogOption,
+    langField,
   },
   props: ['modelValue', 'projectData'],
   data() {
@@ -77,21 +86,22 @@ export default {
       this.yamlEdit = false
     },
     addDialogOption(section) {
-      this.$prompt('Please dialog name', 'Dialog', {
-        confirmButtonText: 'Create',
-        cancelButtonText: 'Cancel',
+      this.$prompt(this.$t('enter-dialog-name'), this.$t('dialog-window-title'), {
+        confirmButtonText: this.$t('create'),
+        cancelButtonText: this.$t('cancel'),
         inputPattern: /^[a-zA-Z0-9_]+$/,
-        inputErrorMessage: 'Already exists or bad name (use only a-z A-Z 0-9 and _)',
+        inputErrorMessage: this.$t('dialog-exists-regex'),
         inputValidator: value => !this.dialogSectionInfo[section][value],
         closeOnClickModal: false,
       }).then(({ value }) => {
-        console.log(section)
-        this.dialogSectionInfo[section][value] = { text: null }
+        const lang = { text: {} }
+        lang.text[this.$root.settings.language] = ''
+        this.dialogSectionInfo[section][value] = lang
 
         this.$message({
           type: 'success',
           dangerouslyUseHTMLString: true,
-          message: `Dialog <b>${value}</b> created`
+          message: this.$t('dialog-created').replace('{value}', value),
         })
       })
     },
@@ -102,7 +112,7 @@ export default {
       this.$message({
         type: 'success',
         dangerouslyUseHTMLString: true,
-        message: `Dialog <b>${dialogKey}</b> renamed to ${newKey}`
+        message: this.$t('dialog-created').replace('{dialogKey}', dialogKey).replace('{newKey}', newKey),
       })
     },
     deleteDialog(section, dialogKey) {
@@ -110,7 +120,7 @@ export default {
       this.$message({
         type: 'success',
         dangerouslyUseHTMLString: true,
-        message: `Dialog <b>${dialogKey}</b> deleted`
+        message: this.$t('dialog-deleted').replace('{dialogKey}', dialogKey),
       })
     },
   }

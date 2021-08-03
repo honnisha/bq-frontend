@@ -3,12 +3,12 @@
 
     <el-tab-pane :label="$t('dialogs')">
       <div class="menu-buttons">
-        <el-button size="mini" @click="openNew('dialog')" class="menu-button">{{ $t('add-dialog-section') }}</el-button>
+        <el-button size="mini" @click="openNew('dialog')" class="menu-button" icon="el-icon-plus">{{ $t('add-dialog-section') }}</el-button>
       </div>
 
       <div class="dialogs-tabs">
         <el-tabs tab-position="left" v-model="dialogSelected">
-          <el-tab-pane :label="name" :name="name" v-for="(dialogInfo, name) in sectionInfo.conversations">
+          <el-tab-pane :label="name" :name="name" v-for="(dialogInfo, name) in sectionInfo.conversations" :key="name">
             <template v-if="dialogSelected === name">
               <dialogSection v-model="sectionInfo.conversations[name]" :project-data="projectData"/>
             </template>
@@ -24,7 +24,7 @@
 
       <div class="dialogs-tabs">
         <el-tabs tab-position="left" v-model="menuSelected">
-          <el-tab-pane :label="name" :name="name" v-for="(menuInfo, name) in sectionInfo.menus">
+          <el-tab-pane :label="name" :name="name" v-for="(menuInfo, name) in sectionInfo.menus" :key="name">
             <yamlEditor v-model="sectionInfo.menus[name]"/>
           </el-tab-pane>
         </el-tabs>
@@ -41,14 +41,14 @@
   </el-tabs>
 
   <el-dialog
-    :title="$t('create-dialog')"
+    :title="$t('create-subsection')"
     v-model="addVisible"
     width="30%"
     custom-class="create-section-dialog"
     :close-on-click-modal="false"
   >
     <el-alert v-if="newNameError" :title="newNameError" type="error"/>
-    <span>{{ $t('create-dialog') }}</span>
+    <span>{{ $t('dialog-section-name') }}</span>
     <el-input v-model="newName"></el-input>
     <template #footer>
       <span class="dialog-footer">

@@ -29,7 +29,8 @@ items: Items
 main: Main
 journal: Journal
 custom: Custom
-create-dialog: Create dialog
+create-subsection: Create section
+dialog-section-name: Enter section name
 provide-name: Provide name
 empty-title: Title cannot be empty
 delete-section: Delete section {tab}?
@@ -40,3 +41,21 @@ dialog-exists: Dialog {newName} already exisis
 dialog-section-created: Dialog section <b>{newName}</b> created
 menu-section-exists: Menu {newName} already exisis
 menu-section-created: Menu section <b>{newName}</b> created
+yaml-editor: Yaml editor
+add-dialog: Add dialog option
+save-and-return: Save and return visual editor
+enter-dialog-name: Provide dialog name
+dialog-window-title: New dialog
+dialog-exists-regex: Already exists or bad name (use only a-z A-Z 0-9 and _)
+dialog-created: Dialog <b>{value}</b> created
+dialog-renamed: Dialog <b>{dialogKey}</b> renamed to <b>{newKey}</b>
+dialog-deleted: Dialog <b>{dialogKey}</b> deleted
+NPC_options: NPC options
+player_options: Player options
+no-options: No options found
+no-results: No results found
+delete-section-key: Delete {dialogKey} from {section}?
+delete-key: Delete {key}?
+new-setting: New setting
+quester-name: Quester name
+new-setting-key: Enter new setting key

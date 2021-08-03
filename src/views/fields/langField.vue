@@ -38,7 +38,7 @@
       <el-input
         class="lang-editor"
         type="textarea"
-        :autosize="{ minRows: 2, maxRows: 20}"
+        :autosize="{ minRows: 1, maxRows: 20}"
         v-model="localValue[slug]"
       />
       </el-col>

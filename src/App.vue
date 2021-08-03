@@ -18,7 +18,7 @@
     <header class="el-header header-section">
 
       <el-dropdown size="small">
-        <el-button size="mini" class="header-buttons">
+        <el-button size="mini" class="header-buttons" icon="el-icon-folder-opened">
           {{ $t('open') }}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <template #dropdown>
@@ -32,7 +32,7 @@
       </el-dropdown>
 
       <el-dropdown size="small">
-        <el-button size="mini" class="header-buttons">
+        <el-button size="mini" class="header-buttons" icon="el-icon-takeaway-box">
           {{ $t('save') }}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <template #dropdown>
@@ -44,8 +44,8 @@
         </template>
       </el-dropdown>
 
-      <el-button size="mini" @click="openNewTabDialog" class="header-buttons">{{ $t('new-section') }}</el-button>
-      <el-button size="mini" @click="openSettingsVisible = true" class="header-buttons">{{ $t('settings') }}</el-button>
+      <el-button size="mini" @click="openNewTabDialog" class="header-buttons" icon="el-icon-folder-add">{{ $t('new-section') }}</el-button>
+      <el-button size="mini" @click="openSettingsVisible = true" class="header-buttons" icon="el-icon-setting">{{ $t('settings') }}</el-button>
       <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://docs.betonquest.org/" class="header-buttons">{{ $t('bq-doc') }}</el-link>
       <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://github.com/BetonQuest/RPGMenu/wiki/" class="header-buttons">{{ $t('rpgmenu-doc') }}</el-link>
     </header>
@@ -75,7 +75,7 @@
       width="30%"
       custom-class="dialog setting-dialog"
     >
-      {{ $t('') }}:
+      {{ $t('language') }}:
       <el-select v-model="settings.language">
         <el-option
           v-for="lang in avaliableLanguages"
@@ -93,7 +93,7 @@
       </template>
     </el-dialog>
 
-    <el-tabs v-model="settings.language" type="border-card" closable @tab-remove="removeTab">
+    <el-tabs v-model="sectionSelected" type="border-card" closable @tab-remove="removeTab">
       <el-tab-pane
         v-for="(sectionInfo, name) in projectData"
         :key="name"
