@@ -4,10 +4,11 @@
     <el-tab-pane :label="$t('dialogs')">
       <div class="menu-buttons">
         <el-button size="mini" @click="openNew('dialog')" class="menu-button" icon="el-icon-plus">{{ $t('add-dialog-section') }}</el-button>
+        <el-button size="mini" @click="templateOpen" class="menu-button" icon="el-icon-document-add" type="primary" plain>{{ $t('template-create') }}</el-button>
       </div>
 
       <div class="dialogs-tabs">
-        <el-tabs tab-position="left" v-model="dialogSelected">
+        <el-tabs tab-position="left" v-model="dialogSelected" :closable="true" @tab-remove="removeDialogSection">
           <el-tab-pane :label="name" :name="name" v-for="(dialogInfo, name) in sectionInfo.conversations" :key="name">
             <template v-if="dialogSelected === name">
               <dialogSection v-model="sectionInfo.conversations[name]" :project-data="projectData"/>
@@ -57,13 +58,28 @@
       </span>
     </template>
   </el-dialog>
+
+  <el-dialog
+    :title="$t('template-dialog')"
+    v-model="templateDialogVisible"
+    width="80%"
+    custom-class="template-dialog"
+    :close-on-click-modal="false"
+  >
+    <el-tabs tab-position="left" v-if="templateDialogVisible" class="template-tabs">
+      <el-tab-pane :label="templateInfo.label" :key="templateInfo.label" v-for="templateInfo in templates"><component :is="templateInfo.template"/></el-tab-pane>
+    </el-tabs>
+  </el-dialog>
 </template>
 
 <script>
+import { shallowRef,  ref, computed } from 'vue'
 import yaml from 'js-yaml'
 import dialogSection from "./sections/dialogSection.vue";
 import simpleSection from "./sections/simpleSection.vue";
 import yamlEditor from "./sections/yamlEditor.vue";
+
+import mythickill from "./templates/mythickill.vue";
 
 export default {
   components: {
@@ -81,6 +97,10 @@ export default {
       menuSelected: null,
       newMode: null,
       sectionSelected: '',
+      templateDialogVisible: false,
+      templates: [
+        { label: this.$t('template-mythickill'), template: shallowRef(mythickill) },
+      ],
     }
   },
   computed: {
@@ -94,6 +114,12 @@ export default {
     },
   },
   methods: {
+    templateOpen() {
+      this.templateDialogVisible = true
+    },
+    createTemplate() {
+      this.templateDialogVisible = false
+    },
     removeDialogSection(tab) {
       this.$confirm(this.$t('delete-section').replace('{tab}', tab), this.$t('confirm'), {
         confirmButtonText: this.$t('delete'),
@@ -159,6 +185,19 @@ export default {
       this.addVisible = false
       this.newNameError = null
       this.newMode = null
+    },
+    removeDialogSection(section) {
+      this.$confirm(this.$t('delete-dialog-section'), this.$t('delete'), {
+        confirmButtonText: this.$t('delete'),
+        cancelButtonText: this.$t('cancel'),
+      }).then(() => {
+        delete this.sectionInfo.conversations[section]
+        this.$message({
+          type: 'success',
+          dangerouslyUseHTMLString: true,
+          message: this.$t('dialog-section-deleted').replace('{section}', section),
+        })
+      })
     },
     openNew(mode) {
       this.includeExample = false

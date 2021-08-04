@@ -45,7 +45,7 @@ add-dialog: Add dialog option
 save-and-return: Save and return visual editor
 enter-dialog-name: Provide dialog name
 dialog-window-title: New dialog
-dialog-exists-regex: Already exists or bad name (use only a-z A-Z 0-9 and _)
+exists-regex: Already exists or bad name (use only a-z A-Z 0-9 and _)
 dialog-created: Dialog <b>{value}</b> created
 dialog-renamed: Dialog <b>{dialogKey}</b> renamed to <b>{newKey}</b>
 dialog-deleted: Dialog <b>{dialogKey}</b> deleted
@@ -60,3 +60,8 @@ quester-name: Quester name
 new-setting-key: Enter new setting key
 save-zip: Export as zip
 data-is-empty: Data is empty
+template-create: Create with template
+template-dialog: Creation with template
+template-mythickill: Kill mythicmob
+delete-dialog-section: Delete dialog section
+dialog-section-deleted: Dialog section <b>{section}</b> deleted

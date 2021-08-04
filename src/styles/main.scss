@@ -28,9 +28,12 @@ h4 {
 .section-tabs > .el-tabs__header {
     width: 100px;
 }
-.dialogs-tabs .el-tabs__item {
-    height: 20px;
-    line-height: 20px;
+.dialogs-tabs {
+    .el-tabs__item {
+        height: 20px;
+        line-height: 20px;
+        padding: 0px 3px;
+    }
 }
 
 .header-buttons {
@@ -301,13 +304,18 @@ h4 {
 }
 .quester-lang {
     margin: 5px 0px 0px 5px;
-    width: 100%;
+    width: 95%;
+    .lang-header {
+        display: inline-block;
+        vertical-align: top;
+    }
     .el-card__body {
         padding: 5px;
     }
     .section-lang {
         width: 250px;
         display: inline-block;
+        margin-bottom: 0px; 
     }
     .lang-editor {
         margin-left: 5px;
@@ -324,4 +332,11 @@ h4 {
     display: inline-block;
     float: right;
     padding-right: 20px;
+}
+
+.template-tabs {
+    .el-tabs__item {
+        height: 20px;
+        line-height: 20px;   
+    }
 }

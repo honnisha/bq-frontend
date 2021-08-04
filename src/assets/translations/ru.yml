@@ -45,7 +45,7 @@ add-dialog: Добавить вариант диалога
 save-and-return: Сохранить и вернуться в визуальный редактор
 enter-dialog-name: Введите название диалога
 dialog-window-title: Новый диалог
-dialog-exists-regex: Диалог уже существует или не ошибка в названии (используйте a-z A-Z 0-9 и _)
+exists-regex: Уже существует или ошибка в названии (используйте a-z A-Z 0-9 и _)
 dialog-created: Диалог <b>{value}</b> создан
 dialog-renamed: Диалог <b>{dialogKey}</b> периименован <b>{newKey}</b>
 dialog-deleted: Диалог <b>{dialogKey}</b> удалён
@@ -60,3 +60,8 @@ quester-name: Имя квестодателя
 new-setting-key: Введите название
 save-zip: Экспорт в zip архив
 data-is-empty: Нет данных для сохранения
+template-create: Создать по шаблону
+template-dialog: Создание по шаблону
+template-mythickill: Убийство моба
+delete-dialog-section: Удаление раздела диалогов
+dialog-section-deleted: Раздел диалогов <b>{section}</b> удалён

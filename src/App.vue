@@ -52,16 +52,16 @@
 
       <div class="right-header">
 
-  <el-dropdown>
-  <span class="el-dropdown-link">
-    <component class="lang-icon" :is="avaliableLanguages[settings.language]"></component>
-  </span>
-  <template #dropdown>
-    <el-dropdown-menu>
-      <el-dropdown-item class="lang-option" @click="changeLang(langSlug)" v-for="(flagIcon, langSlug) in avaliableLanguages"><component class="lang-icon" :is="flagIcon"></component></el-dropdown-item>
-    </el-dropdown-menu>
-  </template>
-  </el-dropdown>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <component class="lang-icon" :is="avaliableLanguages[settings.language]"></component>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item class="lang-option" @click="changeLang(langSlug)" v-for="(flagIcon, langSlug) in avaliableLanguages"><component class="lang-icon" :is="flagIcon"></component></el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
         
       </div>
     </header>
@@ -181,6 +181,10 @@ export default {
     addTab() {
       if (this.newTabName.length <= 0) {
         this.newTabNameError = this.$t('error-title-name-empty')
+        return
+      }
+      if (this.projectData[this.newTabName] || !this.newTabName.match(/^[a-zA-Z0-9_]+$/)) {
+        this.newTabNameError = this.$t('exists-regex')
         return
       }
 

@@ -8,7 +8,7 @@
     <div class="quester-name">
       <div class="dialog-title">{{ $t('quester-name') }}</div>
       <el-card class="quester-lang">
-        <langField v-model="dialogSectionInfo.quester" :span-left="10" :span-right="14"/>
+        <langField v-model="dialogSectionInfo.quester" :span-left="10" :span-right="16"/>
       </el-card>
     </div>
     
@@ -90,7 +90,7 @@ export default {
         confirmButtonText: this.$t('create'),
         cancelButtonText: this.$t('cancel'),
         inputPattern: /^[a-zA-Z0-9_]+$/,
-        inputErrorMessage: this.$t('dialog-exists-regex'),
+        inputErrorMessage: this.$t('exists-regex'),
         inputValidator: value => !this.dialogSectionInfo[section][value],
         closeOnClickModal: false,
       }).then(({ value }) => {

@@ -75,7 +75,7 @@ export default {
         confirmButtonText: this.$t('create'),
         cancelButtonText: this.$t('cancel'),
         inputPattern: /^[a-zA-Z0-9_]+$/,
-        inputErrorMessage: this.$t('dialog-exists-regex'),
+        inputErrorMessage: this.$t('exists-regex'),
         inputValidator: value => !this.localValue[value],
       }).then(({ value }) => {
         this.localValue[value] = ''
