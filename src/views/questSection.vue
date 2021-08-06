@@ -67,7 +67,7 @@
     :close-on-click-modal="false"
   >
     <el-tabs tab-position="left" v-if="templateDialogVisible" class="template-tabs">
-      <el-tab-pane :label="templateInfo.label" :key="templateInfo.label" v-for="templateInfo in templates"><component :is="templateInfo.template"/></el-tab-pane>
+      <el-tab-pane :label="templateInfo.label" :key="templateInfo.label" v-for="templateInfo in templates"><component :is="templateInfo.template" v-model="sectionInfo"/></el-tab-pane>
     </el-tabs>
   </el-dialog>
 </template>
@@ -79,7 +79,7 @@ import dialogSection from "./sections/dialogSection.vue";
 import simpleSection from "./sections/simpleSection.vue";
 import yamlEditor from "./sections/yamlEditor.vue";
 
-import mythickill from "./templates/mythickill.vue";
+import objective from "./templates/objective.vue";
 
 export default {
   components: {
@@ -99,7 +99,7 @@ export default {
       sectionSelected: '',
       templateDialogVisible: false,
       templates: [
-        { label: this.$t('template-mythickill'), template: shallowRef(mythickill) },
+        { label: this.$t('template-objective'), template: shallowRef(objective) },
       ],
     }
   },

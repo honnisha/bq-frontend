@@ -45,7 +45,7 @@ add-dialog: Добавить вариант диалога
 save-and-return: Сохранить и вернуться в визуальный редактор
 enter-dialog-name: Введите название диалога
 dialog-window-title: Новый диалог
-exists-regex: Уже существует или ошибка в названии (используйте a-z A-Z 0-9 и _)
+exists-regex: Уже существует или ошибка в названии (используйте a-z 0-9 и _)
 dialog-created: Диалог <b>{value}</b> создан
 dialog-renamed: Диалог <b>{dialogKey}</b> периименован <b>{newKey}</b>
 dialog-deleted: Диалог <b>{dialogKey}</b> удалён
@@ -62,6 +62,25 @@ save-zip: Экспорт в zip архив
 data-is-empty: Нет данных для сохранения
 template-create: Создать по шаблону
 template-dialog: Создание по шаблону
-template-mythickill: Убийство моба
+template-objective: Шаблон простого задания
 delete-dialog-section: Удаление раздела диалогов
 dialog-section-deleted: Раздел диалогов <b>{section}</b> удалён
+diagram-editor: Редактор диаграм
+
+template-quest-name: Название квеста для системы
+template-quest-readable-name: Читаемое название квеста
+template-quest-NPC-option-1: Текст просмотра квеста
+template-quest-NPC-option-2: Текст после подтверждения
+template-quest-NPC-option-3: Благодарность от NPC
+template-quest-player-option-1: Вопрос к NPC
+template-quest-player-option-2: Соглашение выполнить квест
+template-quest-player-option-3: Сообщение об выполненном квесте
+template-quest-journal-start: Запись в журнале о задаче квеста
+template-quest-journal-done: Запись в журнале о завешении квеста
+template-quest-exp-reward: Размер опыта за выполнение
+template-quest-money-reward: Монеты за выполнение
+template-quest-level: Необходимый лвл для выполнения
+template-quest-select: NPC
+preview: Предпросмотр
+return-to-edit: Вернуться к редактированию
+apply: Применить

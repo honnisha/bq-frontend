@@ -74,7 +74,7 @@ export default {
       this.$prompt(this.$t('new-setting-key'), this.$t('create'), {
         confirmButtonText: this.$t('create'),
         cancelButtonText: this.$t('cancel'),
-        inputPattern: /^[a-zA-Z0-9_]+$/,
+        inputPattern: /^[a-z0-9_]+$/,
         inputErrorMessage: this.$t('exists-regex'),
         inputValidator: value => !this.localValue[value],
       }).then(({ value }) => {

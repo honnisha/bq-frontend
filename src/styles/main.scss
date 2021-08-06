@@ -259,7 +259,7 @@ h4 {
 .section-lang {
     margin-bottom: 4px;
 }
-.lang-editor {
+.small-editor {
     font-family: 'Courier New', monospace;
     font-size: 12px;
     .el-textarea__inner {
@@ -317,7 +317,7 @@ h4 {
         display: inline-block;
         margin-bottom: 0px; 
     }
-    .lang-editor {
+    .small-editor {
         margin-left: 5px;
     }
 }
@@ -339,4 +339,37 @@ h4 {
         height: 20px;
         line-height: 20px;   
     }
+}
+
+.template-dialog {
+    .template-setting {
+        margin-bottom: 10px;
+        height: auto;
+    }
+    .field-name {
+        display: inline-block;
+        width: 250px;
+    }
+    .field-editor {
+        width: auto;
+        display: inline-block;
+        .el-input {
+            vertical-align: sub;
+            width: 400px;
+        }
+        .el-input__inner {
+            line-height: 18px;
+            height: 18px;
+            padding: 5px;
+        }
+        .el-select {
+            vertical-align: sub;
+            .el-select__caret {
+                line-height: 18px;
+            }
+        }
+    }
+}
+.right-section {
+    float: right;
 }

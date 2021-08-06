@@ -1,8 +1,9 @@
 <template>
 
-  <div class="view-editor-section dialog-section" v-if="!yamlEdit">
+  <div class="view-editor-section dialog-section" v-if="!editMode">
     <div class="menu-buttons">
       <el-button size="mini" @click="changeToYaml" class="menu-button">{{ $t('yaml-editor') }}</el-button>
+      <el-button size="mini" @click="changeToDiagram" class="menu-button">{{ $t('diagram-editor') }}</el-button>
     </div>
 
     <div class="quester-name">
@@ -34,7 +35,7 @@
     </div>
   </div>
   
-  <div class="yaml-editor-section" v-else>
+  <div class="yaml-editor-section" v-else-if="editMode === 'yaml'">
     <div class="menu-buttons">
       <el-button size="mini" @click="changeToEditor" class="menu-button">{{ $t('save-and-return') }}</el-button>
     </div>
@@ -46,23 +47,31 @@
       v-model="yamlText"
     />
   </div>
+
+  <div class="yaml-editor-section" v-else-if="editMode === 'diagram'">
+    <diagramEdit :init-data="modelValue" />
+  </div>
+
 </template>
 
 <script>
 import dialogOption from "../fields/dialogOption.vue"
+import diagramEdit from "./diagramEdit.vue"
 import langField from "../fields/langField.vue"
 import yaml from  'js-yaml'
 
 export default {
   components: {
     dialogOption,
+    diagramEdit,
     langField,
   },
   props: ['modelValue', 'projectData'],
   data() {
     return {
-      yamlEdit: false,
+      editMode: null,
       yamlText: null,
+      diagramData: null,
     }
   },
   computed: {
@@ -76,20 +85,23 @@ export default {
     },
   },
   methods: {
+    changeToDiagram() {
+      this.editMode = 'diagram'
+    },
     changeToYaml() {
       this.yamlText = yaml.dump(this.dialogSectionInfo, {lineWidth: -1})
-      this.yamlEdit = true
+      this.editMode = 'yaml'
     },
     changeToEditor() {
       this.dialogSectionInfo = yaml.load(this.yamlText)
       this.yamlText = null
-      this.yamlEdit = false
+      this.editMode = null
     },
     addDialogOption(section) {
       this.$prompt(this.$t('enter-dialog-name'), this.$t('dialog-window-title'), {
         confirmButtonText: this.$t('create'),
         cancelButtonText: this.$t('cancel'),
-        inputPattern: /^[a-zA-Z0-9_]+$/,
+        inputPattern: /^[a-z0-9_]+$/,
         inputErrorMessage: this.$t('exists-regex'),
         inputValidator: value => !this.dialogSectionInfo[section][value],
         closeOnClickModal: false,

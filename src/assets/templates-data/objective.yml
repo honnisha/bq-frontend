@@ -1,0 +1,78 @@
+events:
+  NPC_options:
+    message_{questName}_start:
+      text:
+        {langSlug}: '{questNPCOption1}\n\n&6Необходимый уровень {requiedLevel}\n\n&2Награда:\n✦ ${questName}_exp$ опыта\n■ ${questName}_money$ монет&0---'
+      pointers: option_{questName}_yes, option_no
+    message_{questName}_yes:
+      text: 
+        {langSlug}: '{questNPCOption2}'
+      event: event_{questName}_start
+      pointers: option_ok
+    message_{questName}_done:
+      text: 
+        {langSlug}: '{questNPCOption3}'
+      event: event_{questName}_paid
+      pointers: option_ok
+
+  player_options:
+    option_{questName}_start:
+      text: 
+        {langSlug}: '$default.quest_prefix${questPlayerOption1}'
+      conditions: 'cond_stone_paid,!cond_{questName}_started'
+      pointers: message_{questName}_start
+    option_{questName}_yes:
+      text: 
+        {langSlug}: '$default.quest_yes_prefix${questPlayerOption2}'
+      conditions: 'cond_level_{requiedLevel}'
+      pointers: message_{questName}_yes
+    option_{questName}_done:
+      text:
+        {langSlug}: '$default.quest_done_prefix${questPlayerOption3}'
+      conditions: 'cond_{questName}_done,!cond_{questName}_paid'
+      pointers: message_{questName}_done
+
+events:
+  event_{questName}_start: folder event_{questName}_s1,event_{questName}_s2,event_{questName}_s3,event_{questName}_s4,event_{questName}_s5
+  event_{questName}_s1: journal add j_{questName}_started
+  event_{questName}_s2: tag add tag_{questName}_started
+  event_{questName}_s3: notify &2Вы начали квест &a${questName}_name$ category:start_quest
+  event_{questName}_s4: compass add {questName}
+  event_{questName}_s5: objective start obj_{questName}
+
+  event_{questName}_done: folder event_{questName}_d_1,event_{questName}_d_2,event_{questName}_d_3
+  event_{questName}_d_1: journal delete j_{questName}_started
+  event_{questName}_d_2: journal add j_{questName}_done
+  event_{questName}_d_3: tag add tag_{questName}_done
+
+  event_{questName}_paid: folder event_{questName}_p1,event_{questName}_p2,event_{questName}_p3,event_{questName}_p4,event_{questName}_p5,event_{questName}_p6,event_{questName}_p8
+  event_{questName}_p1: journal delete j_{questName}_done
+  event_{questName}_p2: tag add tag_{questName}_paid
+  event_{questName}_p3: run ^command mmocore admin exp give %player% main ${questName}_exp$ ^notify &eВы получили &6${questName}_exp$ &eопыта category:reward
+  event_{questName}_p4: money ${questName}_money$ notify
+  event_{questName}_p5: notify &2Вы закончили квест &a${questName}_name$ category:end_quest
+  event_{questName}_p6: take {questName}_item notify
+  event_{questName}_p8: compass del {questName}
+
+conditions:
+  cond_{questName}_icon1: and !cond_{questName}_started
+  cond_{questName}_icon2: and cond_{questName}_started,!cond_{questName}_done
+  cond_{questName}_icon3: and cond_{questName}_done,!cond_{questName}_paid
+
+  cond_{questName}_started: tag tag_{questName}_started
+  cond_{questName}_done: tag tag_{questName}_done
+  cond_{questName}_paid: tag tag_{questName}_paid
+
+journal:
+  j_{questName}_started:
+    {langSlug}: '{journalStart}'
+  j_{questName}_done:
+    {langSlug}: '{journalDone}'
+
+main:
+  {questName}_name: '{questReadableName}'
+  {questName}_exp: {expReward}
+  {questName}_money: {moneyReward}
+
+objectives:
+  obj_{questName}: mmobkill {mobName} amount:1 notify events:event_{questName}_done

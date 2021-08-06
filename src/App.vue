@@ -122,14 +122,14 @@
 import yaml from 'js-yaml'
 import { loadArchive } from './utils/archiveLoader.js'
 import { saveArchive } from './utils/archiveSaver.js'
-import questSection from "./views/questSection.vue";
+import questSection from "./views/questSection.vue"
 import { useI18n } from "vue3-i18n";
 
 import dialogExample from './assets/dialogExample.yml?raw'
 import menuExample from './assets/menuExample.yml?raw'
 
-import ruFlag from "./assets/lang-icons/ru.svg";
-import enFlag from "./assets/lang-icons/en.svg";
+import ruFlag from "./assets/lang-icons/ru.svg"
+import enFlag from "./assets/lang-icons/en.svg"
 
 export default {
   components: {
@@ -183,7 +183,7 @@ export default {
         this.newTabNameError = this.$t('error-title-name-empty')
         return
       }
-      if (this.projectData[this.newTabName] || !this.newTabName.match(/^[a-zA-Z0-9_]+$/)) {
+      if (this.projectData[this.newTabName] || !this.newTabName.match(/^[a-z0-9_]+$/)) {
         this.newTabNameError = this.$t('exists-regex')
         return
       }

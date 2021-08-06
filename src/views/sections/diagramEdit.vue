@@ -1,17 +1,18 @@
 <template>
-  123
+  <div class="diagram-editor">
+  </div>
 </template>
 
 <script>
 
 export default {
-  props: ['modelValue'],
+  props: ['initData'],
   data() {
     return {
     }
   },
   computed: {
-    localValue: {
+    questData: {
       get() {
         return this.modelValue
       },
