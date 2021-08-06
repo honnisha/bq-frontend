@@ -4,7 +4,7 @@ Online editor running on vue.
 
 Supported languages: russian, english
 
-live: http://194.147.90.36/bq-editor/
+live: https://honnisha.github.io/bq-frontend/
 
 Dev
 =======
