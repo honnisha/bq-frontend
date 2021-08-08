@@ -33,7 +33,7 @@
 
 <script>
 import yaml from  'js-yaml'
-import simpleField from "../fields/simpleField.vue";
+import simpleField from "../components/simpleField.vue";
 
 export default {
   components: {

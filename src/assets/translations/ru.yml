@@ -84,3 +84,10 @@ template-quest-select: NPC
 preview: Предпросмотр
 return-to-edit: Вернуться к редактированию
 apply: Применить
+mmobkill: Убийство моба
+mmomob-name: Название Mythic-моба
+amount: кол-во
+no-quester: Квестодатель не выбран
+template-applyed: Шаблон применён
+template-quest-compass-name: Название компаса
+template-quest-compass-location: Локация компаса

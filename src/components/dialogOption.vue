@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import tagComplete from "../fields/tagComplete.vue"
-import langField from "../fields/langField.vue"
+import tagComplete from "./tagComplete.vue"
+import langField from "./langField.vue"
 
 export default {
   components: {

@@ -107,7 +107,7 @@
         :label="name"
         :name="name"
       >
-        <questSection v-model="projectData[name]" :project-data="projectData" />
+        <subSection v-model="projectData[name]" :project-data="projectData" />
       </el-tab-pane>
 
     </el-tabs>
@@ -120,20 +120,20 @@
 
 <script>
 import yaml from 'js-yaml'
-import { loadArchive } from './utils/archiveLoader.js'
-import { saveArchive } from './utils/archiveSaver.js'
-import questSection from "./views/questSection.vue"
+import { loadArchive } from '../utils/archiveLoader.js'
+import { saveArchive } from '../utils/archiveSaver.js'
+import subSection from "../layout/subSection.vue"
 import { useI18n } from "vue3-i18n";
 
-import dialogExample from './assets/dialogExample.yml?raw'
-import menuExample from './assets/menuExample.yml?raw'
+import dialogExample from '../assets/dialogExample.yml?raw'
+import menuExample from '../assets/menuExample.yml?raw'
 
-import ruFlag from "./assets/lang-icons/ru.svg"
-import enFlag from "./assets/lang-icons/en.svg"
+import ruFlag from "../assets/lang-icons/ru.svg"
+import enFlag from "../assets/lang-icons/en.svg"
 
 export default {
   components: {
-    questSection,
+    subSection,
     ruFlag,
     enFlag
   },

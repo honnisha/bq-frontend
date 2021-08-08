@@ -84,3 +84,10 @@ template-quest-select: Quester
 preview: Preview
 return-to-edit: Return to editor
 apply: Apply
+mmobkill: Mythic mob kill
+mmomob-name: Mythicmob name
+amount: amount
+no-quester: Quester not selected
+template-applyed: Template applyed
+template-quest-compass-name: Compass name
+template-quest-compass-location: Compass location

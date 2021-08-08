@@ -55,9 +55,9 @@
 </template>
 
 <script>
-import dialogOption from "../fields/dialogOption.vue"
-import diagramEdit from "./diagramEdit.vue"
-import langField from "../fields/langField.vue"
+import dialogOption from "../components/dialogOption.vue"
+import diagramEdit from "./diagramView.vue"
+import langField from "../components/langField.vue"
 import yaml from  'js-yaml'
 
 export default {

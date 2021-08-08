@@ -11,7 +11,7 @@
         <el-tabs tab-position="left" v-model="dialogSelected" :closable="true" @tab-remove="removeDialogSection">
           <el-tab-pane :label="name" :name="name" v-for="(dialogInfo, name) in sectionInfo.conversations" :key="name">
             <template v-if="dialogSelected === name">
-              <dialogSection v-model="sectionInfo.conversations[name]" :project-data="projectData"/>
+              <conversation v-model="sectionInfo.conversations[name]" :project-data="projectData"/>
             </template>
           </el-tab-pane>
         </el-tabs>
@@ -67,7 +67,9 @@
     :close-on-click-modal="false"
   >
     <el-tabs tab-position="left" v-if="templateDialogVisible" class="template-tabs">
-      <el-tab-pane :label="templateInfo.label" :key="templateInfo.label" v-for="templateInfo in templates"><component :is="templateInfo.template" v-model="sectionInfo"/></el-tab-pane>
+      <el-tab-pane :label="templateInfo.label" :key="templateInfo.label" v-for="templateInfo in templates">
+        <component :is="templateInfo.template" v-model="sectionInfo" @close="closeTemplate" />
+      </el-tab-pane>
     </el-tabs>
   </el-dialog>
 </template>
@@ -75,15 +77,15 @@
 <script>
 import { shallowRef,  ref, computed } from 'vue'
 import yaml from 'js-yaml'
-import dialogSection from "./sections/dialogSection.vue";
-import simpleSection from "./sections/simpleSection.vue";
-import yamlEditor from "./sections/yamlEditor.vue";
+import conversation from "../views/conversation.vue";
+import simpleSection from "../views/simpleSection.vue";
+import yamlEditor from "../views/yamlSection.vue";
 
-import objective from "./templates/objective.vue";
+import objective from "../components/templates/objective.vue";
 
 export default {
   components: {
-    dialogSection,
+    conversation,
     simpleSection,
     yamlEditor,
   },
@@ -204,6 +206,9 @@ export default {
       this.newMode = mode
       this.newName = ''
       this.addVisible = true
+    },
+    closeTemplate() {
+      this.templateDialogVisible = false
     },
   }
 }

@@ -342,6 +342,10 @@ h4 {
 }
 
 .template-dialog {
+    margin-top: 10px!important;
+    .el-dialog__body {
+        padding: 10px;
+    }
     .template-setting {
         margin-bottom: 10px;
         height: auto;
@@ -372,4 +376,10 @@ h4 {
 }
 .right-section {
     float: right;
+}
+.template-tabs {
+    margin: 20px 0px;
+}
+.template-error {
+    margin-bottom: 20px;
 }
