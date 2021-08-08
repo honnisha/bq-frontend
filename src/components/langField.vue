@@ -1,40 +1,12 @@
 <template>
-  <div class="lang-header">
-    <el-popover
-      placement="bottom"
-      title="Input language"
-      trigger="click"
-      popper-class="language-popover"
-      ref="languagePopover"
-      :show-after="0"
-      :hide-after="0"
-    >
-      <template #reference>
-        <el-tag type="info" class="setting-header"><i class="el-icon-plus"></i></el-tag>
-      </template>
-      <el-input
-        v-model="newLang"
-        :maxlength="2"
-        :minlength="2"
-        size="mini"
-        class="lang-input"
-      >
-        <template #prefix>
-          <i class="el-icon-s-flag el-input__icon"></i>
-        </template>
-      </el-input>
-      <el-button type="primary" size="mini" @click="addLang">Add</el-button>
-    </el-popover>
-  </div>
 
   <el-row class="dialog-setting-section section-lang" v-for="(text, slug) in localValue">
-    <el-col :span="spanLeft || 2">
+    <el-col :span="spanLeft || 1">
 
-      <el-tag type="info" class="setting-header lang-slug" @click="addLang">{{ slug }}</el-tag>
-      <el-tag type="info" class="setting-header lang-delete" @click="delLang(slug)"><i class="el-icon-delete"/></el-tag>
+      <el-tag type="info" class="setting-header lang-delete" @click="delLang(slug)">{{ slug }}</el-tag>
 
     </el-col>
-    <el-col :span="spanRight || 22">
+    <el-col :span="spanRight || 23">
       <el-input
         class="small-editor"
         type="textarea"
@@ -52,8 +24,6 @@ export default {
   props: ['modelValue', 'spanLeft', 'spanRight'],
   data() {
     return {
-      languagesAvailable: [],
-      newLang: '',
     }
   },
   computed: {
@@ -74,19 +44,10 @@ export default {
     }
   },
   methods: {
-    addLang() {
-      if (this.newLang.length === 2) {
-        if (!this.localValue) this.localValue = {}
-
-        this.localValue[this.newLang] = ''
-        this.newLang = ''
-        this.$refs.languagePopover.hide()
-      }
-    },
     delLang(slug) {
-      this.$confirm(`Delete language ${slug}?`, 'Delete', {
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel',
+      this.$confirm(this.$t('delete-language').replace('{language}', slug), this.$t('delete'), {
+        confirmButtonText: this.$t('delete'),
+        cancelButtonText: this.$t('cancel'),
       }).then(() => {
         delete this.localValue[slug]
       })

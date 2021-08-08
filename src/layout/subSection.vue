@@ -9,9 +9,16 @@
 
       <div class="dialogs-tabs">
         <el-tabs tab-position="left" v-model="dialogSelected" :closable="true" @tab-remove="removeDialogSection" @tab-click="dialogSectionSelect">
-          <el-tab-pane :label="name" :name="name" v-for="(dialogInfo, name) in sectionInfo.conversations" :key="name">
-            <template v-if="loadedDialogsections[name]">
-              <conversation v-model="sectionInfo.conversations[name]" :project-data="projectData"/>
+          <el-tab-pane :label="dialogSectionName" :name="dialogSectionName" v-for="(_, dialogSectionName) in sectionInfo.conversations" :key="dialogSectionName">
+            <template v-if="loadedDialogsections[dialogSectionName]">
+
+              <conversation
+                v-model="sectionInfo.conversations[dialogSectionName]"
+                :dialog-section-name="dialogSectionName"
+                :project-data="projectData"
+                :sub-section-name="subSectionName"
+              />
+
             </template>
           </el-tab-pane>
         </el-tabs>
@@ -89,7 +96,7 @@ export default {
     simpleSection,
     yamlEditor,
   },
-  props: ['modelValue', 'projectData'],
+  props: ['modelValue', 'projectData', 'subSectionName'],
   data() {
     return {
       addVisible: false,
@@ -98,7 +105,7 @@ export default {
       dialogSelected: null,
       menuSelected: null,
       newMode: null,
-      sectionSelected: '',
+      sectionSelected: null,
       templateDialogVisible: false,
       templates: [
         { label: this.$t('template-objective'), template: shallowRef(objective) },
@@ -115,6 +122,20 @@ export default {
         this.$emit('update:modelValue', value)
       }
     },
+  },
+  created() {
+    if (this.sectionInfo.event) {
+      this.sectionInfo.events = this.sectionInfo.event
+      delete this.sectionInfo['event']
+    }
+    if (this.sectionInfo.condition) {
+      this.sectionInfo.conditions = this.sectionInfo.condition
+      delete this.sectionInfo['condition']
+    }
+    if (this.sectionInfo.pointer) {
+      this.sectionInfo.pointers = this.sectionInfo.pointer
+      delete this.sectionInfo['pointer']
+    }
   },
   methods: {
     templateOpen() {

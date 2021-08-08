@@ -107,7 +107,11 @@
         :label="name"
         :name="name"
       >
-        <subSection v-model="projectData[name]" :project-data="projectData" />
+        <subSection
+          v-model="projectData[name]"
+          :project-data="projectData"
+          :sub-section-name="name"
+        />
       </el-tab-pane>
 
     </el-tabs>

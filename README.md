@@ -24,4 +24,5 @@ Change log
 ```
 - 08.08.2021
 * Added the ability to create quests based on templates
+* Updated dialog options cards
 ```

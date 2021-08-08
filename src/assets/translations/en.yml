@@ -47,13 +47,13 @@ enter-dialog-name: Provide dialog name
 dialog-window-title: New dialog
 exists-regex: Already exists or bad name (use only a-z 0-9 and _)
 dialog-created: Dialog <b>{value}</b> created
-dialog-renamed: Dialog <b>{dialogKey}</b> renamed to <b>{newKey}</b>
+dialog-renamed: Dialog renamed from <b>{old}</b> to <b>{new}</b>
 dialog-deleted: Dialog <b>{dialogKey}</b> deleted
 NPC_options: NPC options
 player_options: Player options
 no-options: No options found
 no-results: No results found
-delete-section-key: Delete {dialogKey} from {section}?
+delete-section-key: Delete {name} from {from}?
 delete-key: Delete {key}?
 new-setting: New setting
 quester-name: Quester name
@@ -91,3 +91,10 @@ no-quester: Quester not selected
 template-applyed: Template applyed
 template-quest-compass-name: Compass name
 template-quest-compass-location: Compass location
+
+enter-new-name: Enter new name
+rename: Rename
+pointers: Conversation pointers
+delete-language: Delete text of language {language}?
+add-language: Add language
+add: Add

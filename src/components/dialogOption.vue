@@ -2,83 +2,77 @@
   <el-card class="dialog-card">
 
     <template #header>
-      <div class="dialog-header">{{ dialogKey }}</div>
-      <el-tag type="info" class="setting-header" @click="renameDialog(section, dialogKey)"><i class="el-icon-edit"></i></el-tag>
-      <el-tag type="info" class="setting-header" @click="deleteDialog(section, dialogKey)"><i class="el-icon-delete"></i></el-tag>
+      <div class="dialog-header">{{ dialogName }}</div>
+      <el-tag type="info" class="setting-header" @click="renameDialog()"><i class="el-icon-edit"></i></el-tag>
+      <el-tag type="info" class="setting-header" @click="deleteDialog()"><i class="el-icon-delete"></i></el-tag>
+      <langHeader @newLang="newLang" />
     </template>
 
     <el-row class="dialog-setting-section section-lang">
-      <el-col :span="1">
-        <el-tooltip class="item" effect="dark" content="Text" placement="left">
-          <el-tag type="info" class="setting-header"><i class="el-icon-chat-line-round"></i></el-tag>
-        </el-tooltip>
-      </el-col>
-      <el-col :span="23">
-        <langField v-model="dialogInfo.text" />
+      <el-col :span="24">
+        <langField ref="dialogLangs" v-model="dialogInfo.text" />
       </el-col>
     </el-row>
 
     <el-row class="dialog-setting-section section-conditions">
-      <el-col :span="1">
-        <el-tooltip class="item" effect="dark" content="Conditions" placement="left">
-          <el-tag type="info" class="setting-header"><i class="el-icon-unlock"></i></el-tag>
-        </el-tooltip>
-      </el-col>
-      <el-col :span="23">
-        <tagComplete type="conditions" v-model="dialogInfo.conditions" :section="section" :project-data="projectData"/>
+      <el-col :span="24">
+        <tagComplete
+          type="conditions"
+          v-model="dialogInfo.conditions"
+          :section-info="projectData[subSectionName]"
+          :dialog-type="dialogType"
+          :placeholder="$t('conditions')"
+        />
       </el-col>
     </el-row>
 
     <el-row class="dialog-setting-section section-event">
-      <el-col :span="1">
-        <el-tooltip class="item" effect="dark" content="Events" placement="left">
-          <el-tag type="info" class="setting-header"><i class="el-icon-magic-stick"></i></el-tag>
-        </el-tooltip>
-      </el-col>
-      <el-col :span="23">
-        <tagComplete type="events" v-model="dialogInfo.events" :section="section" :project-data="projectData"/>
+      <el-col :span="24">
+        <tagComplete
+          type="events"
+          v-model="dialogInfo.events"
+          :section-info="projectData[subSectionName]"
+          :dialog-type="dialogType"
+          :placeholder="$t('events')"
+        />
       </el-col>
     </el-row>
 
     <el-row class="dialog-setting-section section-pointers">
-      <el-col :span="1">
-        <el-tooltip class="item" effect="dark" content="Pointers" placement="left">
-          <el-tag type="info" class="setting-header"><i class="el-icon-guide"></i></el-tag>
-        </el-tooltip>
-      </el-col>
-      <el-col :span="23">
-        <tagComplete type="pointers" v-model="dialogInfo.pointers" :section="section" :project-data="projectData"/>
+      <el-col :span="24">
+        <tagComplete
+          type="pointers"
+          v-model="dialogInfo.pointers"
+          :section-info="projectData[subSectionName]"
+          :dialog-type="dialogType"
+          :placeholder="$t('pointers')"
+        />
       </el-col>
     </el-row>
+
   </el-card>
 </template>
 
 <script>
 import tagComplete from "./tagComplete.vue"
 import langField from "./langField.vue"
+import langHeader from "./langHeader.vue";
 
 export default {
   components: {
     tagComplete,
     langField,
+    langHeader,
   },
-  props: ['modelValue', 'dialogKey', 'activeKey', 'projectData', 'section', 'dialogSectionInfo'],
+  props: ['modelValue', 'dialogType', 'subSectionName', 'dialogName', 'projectData', 'dialogSectionName', 'dialogSectionInfo'],
   data() {
     return {
     }
   },
   created() {
-    if (this.dialogInfo.event) {
-      this.dialogInfo.events = this.dialogInfo.event
-      delete this.dialogInfo['event']
-    }
-    if (this.dialogInfo.condition) {
-      this.dialogInfo.conditions = this.dialogInfo.condition
-      delete this.dialogInfo['condition']
-    }
-    if (this.dialogInfo.pointer) {
-      this.dialogInfo.pointers = this.dialogInfo.pointer
-      delete this.dialogInfo['pointer']
+    if (this.dialogInfo === undefined) {
+      console.error(`dialogInfo is undefined in dialogOption; dialogType: ${this.dialogType} dialogName: ${this.dialogName}`)
+      return
     }
   },
   computed: {
@@ -92,26 +86,30 @@ export default {
     },
   },
   methods: {
-    renameDialog(section, dialogKey) {
-      this.$prompt('Enter new name', 'Dialog', {
+    renameDialog() {
+      this.$prompt(this.$t('enter-new-name'), this.$t('rename'), {
         confirmButtonText: 'Rename',
         cancelButtonText: 'Cancel',
         inputPattern: /^[a-zA-Z0-9_]+$/,
-        inputErrorMessage: 'Already exists or bad name (use only a-z A-Z 0-9 and _)',
-        inputValidator: value => !this.dialogSectionInfo[section][value],
-        inputValue: dialogKey,
+        inputErrorMessage: this.$t('exists-regex'),
+        inputValidator: value => !this.dialogSectionInfo[this.dialogType][value],
+        inputValue: this.dialogName,
       }).then(({ value }) => {
-        this.$emit('rename', section, dialogKey, value)
+        this.$emit('rename', this.dialogName, this.dialogType, value)
       })
     },
-    deleteDialog(section, dialogKey) {
-      this.$confirm(this.$t('delete-section-key').replace('{section}', section).replace('{dialogKey}', dialogKey), this.$t('delete'), {
+    deleteDialog() {
+      this.$confirm(this.$t('delete-section-key').replace('{name}', this.dialogName).replace('{from}', this.dialogSectionName), this.$t('delete'), {
         confirmButtonText: this.$t('delete'),
         cancelButtonText: this.$t('cancel'),
       }).then(() => {
-        this.$emit('delete', section, dialogKey)
+        this.$emit('delete', this.dialogType, this.dialogName)
       })
     },
+    newLang(langName) {
+      if (!this.dialogInfo.text) this.dialogInfo.text = {}
+      this.dialogInfo.text[langName] = ''
+    }
   }
 }
 </script>

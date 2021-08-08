@@ -47,13 +47,13 @@ enter-dialog-name: Введите название диалога
 dialog-window-title: Новый диалог
 exists-regex: Уже существует или ошибка в названии (используйте a-z 0-9 и _)
 dialog-created: Диалог <b>{value}</b> создан
-dialog-renamed: Диалог <b>{dialogKey}</b> периименован <b>{newKey}</b>
+dialog-renamed: Диалог <b>{old}</b> периименован <b>{new}</b>
 dialog-deleted: Диалог <b>{dialogKey}</b> удалён
 NPC_options: Варианты ответов NPC
 player_options: Варианты от игрока
 no-options: Нет вариантов
 no-results: Не найдено вариантов
-delete-section-key: Удалить {dialogKey} из раздела {section}?
+delete-section-key: Удалить {name} из раздела {from}?
 delete-key: Удалить {key}?
 new-setting: Добавить запись
 quester-name: Имя квестодателя
@@ -91,3 +91,10 @@ no-quester: Квестодатель не выбран
 template-applyed: Шаблон применён
 template-quest-compass-name: Название компаса
 template-quest-compass-location: Локация компаса
+
+enter-new-name: Введите новое имя
+rename: Переименование
+pointers: Ссылки на диалоги
+delete-language: Удалить текст языка {language}?
+add-language: Добавить язык
+add: Добавить

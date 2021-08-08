@@ -23,7 +23,8 @@ h4 {
     padding: 15px;
 }
 .header-section {
-    padding: 15px;
+    padding: 10px;
+    height: 50px;
 }
 .section-tabs > .el-tabs__header {
     width: 100px;
@@ -34,6 +35,10 @@ h4 {
         line-height: 20px;
         padding: 0px 3px;
     }
+    .el-tabs__item:last-child {
+        padding: 0px 3px;
+        padding-right: 3px!important;
+    }
 }
 
 .header-buttons {
@@ -41,7 +46,8 @@ h4 {
 }
 
 .menu-buttons {
-    height: 30px;
+    height: 20px;
+    padding: 5px;
 }
 .menu-button {
     min-height: 20px;
@@ -114,9 +120,9 @@ h4 {
 
     .dialog-card {
         overflow: visible;
-        width: 350px;
+        width: 330px;
         .el-card__header {
-            padding: 5px;
+            padding: 1px 5px;
 
             .dialog-header {
                 font-weight: bold;
@@ -124,8 +130,14 @@ h4 {
             }
         }
         .el-card__body {
-            padding: 5px;
+            padding: 1px;
         }
+    }
+}
+.quester-lang {
+    .setting-header {
+        vertical-align: top;
+        margin-right: 10px;
     }
 }
 .dialog-setting-section {
@@ -143,7 +155,7 @@ h4 {
 }
 
 .autocomplete {
-    margin: 0px 0px 0px 5px;
+    margin: 0px;
     border-bottom: 1px solid #d4d4d4;
 }
 .multiselect-tag {
@@ -152,8 +164,13 @@ h4 {
 }
 
 .section-lang {
+    margin-bottom: 1px;
     .el-tag {
         background: #7ebd83;
+    }
+    .small-editor {
+        margin-left: 10px;
+        width: 97%;
     }
 }
 .section-conditions {
@@ -232,12 +249,15 @@ h4 {
 
     --ms-empty-color: #4B5563;
 }
+.multiselect-dropdown {
+    max-height: 300px;
+}
 
 .dialog-title {
     font-size: 16px;
     font-weight: 600;
     display: inline-block;
-    margin: 0px 10px 10px 10px;
+    margin: 0px 10px;
 }
 .el-card__header .setting-header {
     vertical-align: bottom;
@@ -247,17 +267,13 @@ h4 {
 }
 .dialog-options-section {
     overflow: visible;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .lang-header {
-    margin-left: 5px;
     .el-icon-plus {
         cursor: pointer;
     }
-}
-.section-lang {
-    margin-bottom: 4px;
 }
 .small-editor {
     font-family: 'Courier New', monospace;
@@ -269,14 +285,10 @@ h4 {
         background-color: #f9f9f9;
     }
 }
-.lang-slug {
-    margin-left: 5px;
-}
 .lang-input {
     width: 70px;
 }
 .lang-delete {
-    margin-left: 5px;
     cursor: pointer;
 }
 .language-popover {
@@ -300,15 +312,17 @@ h4 {
     }
 }
 .quester-name {
-    padding-bottom: 20px;
+    padding: 10px 0px;
 }
 .quester-lang {
     margin: 5px 0px 0px 5px;
     width: 95%;
     height: 30px;
+
     .lang-header {
         display: inline-block;
         vertical-align: top;
+        margin-right: 10px;
     }
     .el-card__body {
         padding: 5px;
@@ -316,7 +330,7 @@ h4 {
     .section-lang {
         width: 250px;
         display: inline-block;
-        margin-bottom: 0px; 
+        margin-bottom: 0px;
     }
     .small-editor {
         margin-left: 5px;
@@ -383,4 +397,25 @@ h4 {
 }
 .template-error {
     margin-bottom: 20px;
+}
+.el-tabs__content {
+    padding: 5px!important;
+}
+.el-tabs__item {
+    padding: 5px 10px;
+    line-height: 30px;
+}
+.el-tabs__item:last-child {
+    padding: 5px 10px;
+    padding-right: 10px!important;
+}
+.el-tabs__item.is-left {
+    padding-left: 0px!important;
+}
+.el-tabs__header.is-left {
+    margin-right: 3px!important;
+}
+.el-space__item {
+    padding-bottom: 4px!important;
+    margin-right: 4px!important;
 }

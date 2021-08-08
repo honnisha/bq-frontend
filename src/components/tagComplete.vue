@@ -10,6 +10,8 @@
     :appendNewTag="true"
     :object="true"
     :options="async function(query) { return await getChoicesUpdate(query) }"
+    :placeholder="placeholder"
+    openDirection="top"
     @change="tagsChange"
     @open="openTags"
     ref="multiselect"
@@ -27,7 +29,7 @@ export default {
   components: {
     Multiselect,
   },
-  props: ['modelValue', 'placeholder', 'projectData', 'section', 'type'],
+  props: ['modelValue', 'placeholder', 'type', 'sectionInfo', 'dialogType'],
   data() {
     return {
       selectedTags: null,
@@ -37,6 +39,11 @@ export default {
   },
   mounted() {
     if (this.modelValue) this.selectedTags = this.modelValue.split(',').map(value => { return { value: value.trim(), label: value.trim() } })
+  },
+  created() {
+    if (this.sectionInfo === undefined) {
+      console.error(`sectionInfo in tagComplete is undefined; type: ${this.type}`)
+    }
   },
   methods: {
     openTags() {
@@ -52,40 +59,44 @@ export default {
       if (this.optionsLoaded) return
       this.optionsLoaded = true
 
-      for (const [sectionName, section] of Object.entries(this.projectData)) {
+      if (this.type === 'conditions') {
+        if (!this.sectionInfo.conditions) {
+          this.sectionInfo.conditions = {}
+          return
+        }
 
-        if (this.type === 'conditions') {
-          if (!section.conditions) section.conditions = {}
-          for (const [key, value] of Object.entries(section.conditions)) {
-            const valueWithPrefix = `${sectionName}.${key}`
-            this.options.push({value: valueWithPrefix, label: valueWithPrefix})
-          }
-        } else if (this.type === 'events') {
-          if (!section.events) section.events = {}
-          for (const [key, value] of Object.entries(section.events)) {
-            const valueWithPrefix = `${sectionName}.${key}`
-            this.options.push({value: valueWithPrefix, label: valueWithPrefix})
-          }
-        } else if (this.type === 'pointers') {
-          if (!section.conversations) section.conversations = { NPC_options: {}, player_options: {} }
+        for (const [key, value] of Object.entries(this.sectionInfo.conditions)) {
+          this.options.push({value: key, label: key})
+        }
+      } else if (this.type === 'events') {
+        if (!this.sectionInfo.events) {
+          this.sectionInfo.events = {}
+          return
+        }
 
-          if (section.conversations) {
-            for (const [dialogSectionkey, dialogSection] of Object.entries(section.conversations)) {
-              if (this.section === 'NPC_options') {
+        for (const [key, value] of Object.entries(this.sectionInfo.events)) {
+          this.options.push({value: key, label: key})
+        }
+      } else if (this.type === 'pointers') {
+        if (!this.sectionInfo.conversations) {
+          this.sectionInfo.conversations = { NPC_options: {}, player_options: {} }
+          return
+        }
 
-                for (const [dialogkey, dialogOption] of Object.entries(dialogSection.player_options)) {
-                  const valueWithPrefix = `${sectionName}.${dialogkey}`
-                  this.options.push({value: valueWithPrefix, label: valueWithPrefix})
-                }
+        if (this.sectionInfo.conversations) {
+          for (const [dialogSectionkey, dialogSection] of Object.entries(this.sectionInfo.conversations)) {
+            if (this.dialogType === 'NPC_options') {
 
-              } else if (this.section === 'player_options') {
-
-                for (const [dialogkey, dialogOption] of Object.entries(dialogSection.NPC_options)) {
-                  const valueWithPrefix = `${sectionName}.${dialogkey}`
-                  this.options.push({value: valueWithPrefix, label: valueWithPrefix})
-                }
-
+              for (const [dialogkey, dialogOption] of Object.entries(dialogSection.player_options)) {
+                this.options.push({value: dialogkey, label: dialogkey})
               }
+
+            } else if (this.dialogType === 'player_options') {
+
+              for (const [dialogkey, dialogOption] of Object.entries(dialogSection.NPC_options)) {
+                this.options.push({value: dialogkey, label: dialogkey})
+              }
+
             }
           }
         }
