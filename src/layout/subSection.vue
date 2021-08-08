@@ -8,9 +8,9 @@
       </div>
 
       <div class="dialogs-tabs">
-        <el-tabs tab-position="left" v-model="dialogSelected" :closable="true" @tab-remove="removeDialogSection">
+        <el-tabs tab-position="left" v-model="dialogSelected" :closable="true" @tab-remove="removeDialogSection" @tab-click="dialogSectionSelect">
           <el-tab-pane :label="name" :name="name" v-for="(dialogInfo, name) in sectionInfo.conversations" :key="name">
-            <template v-if="dialogSelected === name">
+            <template v-if="loadedDialogsections[name]">
               <conversation v-model="sectionInfo.conversations[name]" :project-data="projectData"/>
             </template>
           </el-tab-pane>
@@ -32,13 +32,13 @@
       </div>
     </el-tab-pane>
 
-    <el-tab-pane :label="$t('events')"><template v-if="sectionSelected === '2'"><simpleSection v-model="sectionInfo.events"/></template></el-tab-pane>
-    <el-tab-pane :label="$t('conditions')"><template v-if="sectionSelected === '3'"><simpleSection v-model="sectionInfo.conditions"/></template></el-tab-pane>
-    <el-tab-pane :label="$t('objectives')"><template v-if="sectionSelected === '4'"><simpleSection v-model="sectionInfo.objectives"/></template></el-tab-pane>
-    <el-tab-pane :label="$t('items')"><template v-if="sectionSelected === '5'"><simpleSection v-model="sectionInfo.items"/></template></el-tab-pane>
-    <el-tab-pane :label="$t('main')"><template v-if="sectionSelected === '6'"><yamlEditor v-model="sectionInfo.main"/></template></el-tab-pane>
-    <el-tab-pane :label="$t('journal')"><template v-if="sectionSelected === '7'"><yamlEditor v-model="sectionInfo.journal"/></template></el-tab-pane>
-    <el-tab-pane :label="$t('custom')"><template v-if="sectionSelected === '8'"><yamlEditor v-model="sectionInfo.custom"/></template></el-tab-pane>
+    <el-tab-pane :label="$t('events')"><simpleSection v-model="sectionInfo.events"/></el-tab-pane>
+    <el-tab-pane :label="$t('conditions')"><simpleSection v-model="sectionInfo.conditions"/></el-tab-pane>
+    <el-tab-pane :label="$t('objectives')"><simpleSection v-model="sectionInfo.objectives"/></el-tab-pane>
+    <el-tab-pane :label="$t('items')"><simpleSection v-model="sectionInfo.items"/></el-tab-pane>
+    <el-tab-pane :label="$t('main')"><yamlEditor v-model="sectionInfo.main"/></el-tab-pane>
+    <el-tab-pane :label="$t('journal')"><yamlEditor v-model="sectionInfo.journal"/></el-tab-pane>
+    <el-tab-pane :label="$t('custom')"><yamlEditor v-model="sectionInfo.custom"/></el-tab-pane>
   </el-tabs>
 
   <el-dialog
@@ -103,6 +103,7 @@ export default {
       templates: [
         { label: this.$t('template-objective'), template: shallowRef(objective) },
       ],
+      loadedDialogsections: {},
     }
   },
   computed: {
@@ -210,6 +211,9 @@ export default {
     closeTemplate() {
       this.templateDialogVisible = false
     },
+    dialogSectionSelect(tab, event) {
+      this.loadedDialogsections[tab.paneName] = true
+    }
   }
 }
 </script>

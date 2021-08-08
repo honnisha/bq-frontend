@@ -154,7 +154,7 @@ export default {
         questPlayerOption1: '$default.quest_prefix$Hi!',
         questNPCOption1: 'Hello, do the quest for the glory of example!',
         questPlayerOption2: '$default.quest_yes_prefix$Okay, I will.',
-        questNPCOption2: 'Go and did it!',
+        questNPCOption2: 'Go and do it!',
         questPlayerOption3: '$default.quest_done_prefix$I did what you told',
         questNPCOption3: 'Thank you!',
         journalStart: 'Started.',

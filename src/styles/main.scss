@@ -16,7 +16,7 @@ h4 {
 }
 .el-header {
     background-color: #505050;
-    background-image: url("./assets/blacktwill.png");
+    background-image: url("./src/assets/blacktwill.png");
     border-bottom: 1px solid black;
 }
 .dialog > .el-dialog__body {
@@ -305,6 +305,7 @@ h4 {
 .quester-lang {
     margin: 5px 0px 0px 5px;
     width: 95%;
+    height: 30px;
     .lang-header {
         display: inline-block;
         vertical-align: top;
