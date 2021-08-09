@@ -10,7 +10,7 @@
       <el-input
         class="small-editor"
         type="textarea"
-        :autosize="{ minRows: 1, maxRows: 20}"
+        :autosize="{ minRows: 1, maxRows: maxRows || 20}"
         v-model="localValue[slug]"
       />
       </el-col>
@@ -21,7 +21,7 @@
 <script>
 
 export default {
-  props: ['modelValue', 'spanLeft', 'spanRight'],
+  props: ['modelValue', 'spanLeft', 'spanRight', 'maxRows'],
   data() {
     return {
     }

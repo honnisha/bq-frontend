@@ -98,3 +98,7 @@ pointers: Ссылки на диалоги
 delete-language: Удалить текст языка {language}?
 add-language: Добавить язык
 add: Добавить
+first-option: Стартовый диалог
+select-option: Выберите вариант
+stop-option: Закрытие диалога только при завершении
+bq-mcmodels-tutorials: Туториалы BetonQuest на mcmodels.net

@@ -49,6 +49,7 @@
       <!-- <el-button size="mini" @click="openSettingsVisible = true" class="header-buttons" icon="el-icon-setting">{{ $t('settings') }}</el-button> -->
       <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://docs.betonquest.org/" class="header-buttons">{{ $t('bq-doc') }}</el-link>
       <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://github.com/BetonQuest/RPGMenu/wiki/" class="header-buttons">{{ $t('rpgmenu-doc') }}</el-link>
+      <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://mcmodels.net/how-to-tutorials/betonquest-tutorials/" class="header-buttons">{{ $t('bq-mcmodels-tutorials') }}</el-link>
 
       <div class="right-header">
 
@@ -100,12 +101,13 @@
       </template>
     </el-dialog>
 
-    <el-tabs v-model="sectionSelected" type="border-card" closable @tab-remove="removeTab">
+    <el-tabs class="sections-tabs" v-model="sectionSelected" type="border-card" closable @tab-remove="removeTab">
       <el-tab-pane
         v-for="(sectionInfo, name) in projectData"
         :key="name"
         :label="name"
         :name="name"
+        class="section-tab"
       >
         <subSection
           v-model="projectData[name]"

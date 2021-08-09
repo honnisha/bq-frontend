@@ -6,14 +6,32 @@
       <el-button size="mini" @click="changeToDiagram" class="menu-button">{{ $t('diagram-editor') }}</el-button>
     </div>
 
-    <div class="quester-name">
-      <div class="dialog-title">{{ $t('quester-name') }}</div>
-      <el-card class="quester-lang">
+    <el-card class="conversation-settings">
+      <div class="conversation-settings-sction">
+        <div class="conversation-setting-title">{{ $t('quester-name') }}:</div>
         <langHeader @newLang="newQuesterNameLang" />
-        <langField v-model="dialogSectionInfo.quester" :span-left="10" :span-right="14"/>
-      </el-card>
-    </div>
-    
+        <langField v-model="dialogSectionInfo.quester" :span-left="8" :span-right="20"/>
+      </div>
+      <div class="conversation-settings-separator"></div>
+
+      <div class="conversation-settings-sction">
+        <div class="conversation-setting-title">{{ $t('first-option') }}:</div>
+        <tagComplete
+          v-model="dialogSectionInfo.first"
+          type="pointers"
+          dialogType="player_options"
+          :section-info="projectData[subSectionName]"
+          :placeholder="$t('select-option')"
+          :max="1"
+        />
+      </div>
+
+      <div class="conversation-settings-sction">
+        <div class="conversation-setting-title">{{ $t('stop-option') }}:</div>
+        <el-checkbox v-model="dialogSectionInfo.stop"></el-checkbox><br/>
+      </div>
+    </el-card>
+
     <div class="dialog-options-section" v-for="dialogType in ['NPC_options', 'player_options']">
       <div class="menu-buttons">
         <div class="dialog-title">{{ $t(dialogType) }}</div>
@@ -37,7 +55,7 @@
       </el-space>
     </div>
   </div>
-  
+
   <div class="yaml-editor-section" v-else-if="editMode === 'yaml'">
     <div class="menu-buttons">
       <el-button size="mini" @click="changeToEditor" class="menu-button">{{ $t('save-and-return') }}</el-button>
@@ -62,6 +80,7 @@ import dialogOption from "../components/dialogOption.vue"
 import diagramEdit from "./diagramView.vue"
 import langField from "../components/langField.vue"
 import langHeader from "../components/langHeader.vue";
+import tagComplete from "../components/tagComplete.vue"
 import yaml from  'js-yaml'
 
 export default {
@@ -70,6 +89,7 @@ export default {
     diagramEdit,
     langField,
     langHeader,
+    tagComplete,
   },
   props: ['modelValue', 'projectData', 'dialogSectionName', 'subSectionName'],
   data() {

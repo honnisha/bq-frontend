@@ -123,20 +123,6 @@ export default {
       }
     },
   },
-  created() {
-    if (this.sectionInfo.event) {
-      this.sectionInfo.events = this.sectionInfo.event
-      delete this.sectionInfo['event']
-    }
-    if (this.sectionInfo.condition) {
-      this.sectionInfo.conditions = this.sectionInfo.condition
-      delete this.sectionInfo['condition']
-    }
-    if (this.sectionInfo.pointer) {
-      this.sectionInfo.pointers = this.sectionInfo.pointer
-      delete this.sectionInfo['pointer']
-    }
-  },
   methods: {
     templateOpen() {
       this.templateDialogVisible = true

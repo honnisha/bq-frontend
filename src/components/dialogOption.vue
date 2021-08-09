@@ -10,7 +10,7 @@
 
     <el-row class="dialog-setting-section section-lang">
       <el-col :span="24">
-        <langField ref="dialogLangs" v-model="dialogInfo.text" />
+        <langField ref="dialogLangs" v-model="dialogInfo.text" :max-rows="10" />
       </el-col>
     </el-row>
 
@@ -73,6 +73,18 @@ export default {
     if (this.dialogInfo === undefined) {
       console.error(`dialogInfo is undefined in dialogOption; dialogType: ${this.dialogType} dialogName: ${this.dialogName}`)
       return
+    }
+    if (this.dialogInfo.event) {
+      this.dialogInfo.events = this.dialogInfo.event
+      delete this.dialogInfo['event']
+    }
+    if (this.dialogInfo.condition) {
+      this.dialogInfo.conditions = this.dialogInfo.condition
+      delete this.dialogInfo['condition']
+    }
+    if (this.dialogInfo.pointer) {
+      this.dialogInfo.pointers = this.dialogInfo.pointer
+      delete this.dialogInfo['pointer']
     }
   },
   computed: {

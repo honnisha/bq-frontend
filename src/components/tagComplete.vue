@@ -11,6 +11,8 @@
     :object="true"
     :options="async function(query) { return await getChoicesUpdate(query) }"
     :placeholder="placeholder"
+    :max="max || -1"
+    :canClear="false"
     openDirection="top"
     @change="tagsChange"
     @open="openTags"
@@ -29,7 +31,7 @@ export default {
   components: {
     Multiselect,
   },
-  props: ['modelValue', 'placeholder', 'type', 'sectionInfo', 'dialogType'],
+  props: ['modelValue', 'placeholder', 'type', 'sectionInfo', 'dialogType', 'max'],
   data() {
     return {
       selectedTags: null,

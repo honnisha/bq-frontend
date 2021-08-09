@@ -98,3 +98,7 @@ pointers: Conversation pointers
 delete-language: Delete text of language {language}?
 add-language: Add language
 add: Add
+first-option: First dialog
+select-option: Select option
+stop-option: Lock player in dialog
+bq-mcmodels-tutorials: BetonQuest Tutorials on mcmodels.net
