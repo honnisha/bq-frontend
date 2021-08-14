@@ -1,0 +1,50 @@
+npc_holograms:
+  quest_avalible_{npcName}:
+    lines:
+      - item:default.quest_avalible
+    vector: 0;3.2;0
+    npcs:
+      - {npcID}
+    conditions: cond_quest_avalible_{npcName},!cond_quest_progress_{npcName},!cond_quest_done_{npcName}
+  quest_progress_{npcName}:
+    lines:
+      - item:default.quest_progress
+    vector: 0;3.2;0
+    npcs:
+      - {npcID}
+    conditions: cond_quest_progress_{npcName},!cond_quest_done_{npcName}
+  quest_done_{npcName}:
+    lines:
+      - item:default.quest_done
+    vector: 0;3.2;0
+    npcs:
+      - {npcID}
+    conditions: cond_quest_done_{npcName}
+
+conditions:
+  cond_quest_avalible_{npcName}: example
+  cond_quest_progress_{npcName}: example
+  cond_quest_done_{npcName}: example
+
+conversations:
+  quester:
+    {langSlug}: {npcName}
+  first: message_start
+  stop: 'false'
+  NPC_options:
+    message_start:
+      text:
+        {langSlug}: Привет.
+      pointers: option_bye
+  player_options:
+    option_ok:
+      text:
+        {langSlug}: Я понял
+      pointers: message_start
+    option_no:
+      text:
+        {langSlug}: $default.quest_no_prefix$Может позже.
+      pointers: message_start
+    option_bye:
+      text:
+        {langSlug}: $default.quest_exit$До свидания

@@ -1,6 +1,7 @@
 import JSZip from 'jszip'
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver'
 import yaml from  'js-yaml'
+import moment from 'moment'
 
 const subSections = ['conversations', 'menus']
 
@@ -28,7 +29,7 @@ export function saveArchive(projectData) {
   }
 
   zip.generateAsync({type:"blob"}).then(function (blob) {
-    const date = JSON.stringify(new Date());
+    const date = moment().format('YYYY-MM-DD-HH-MM');
     const fileName = `bq${date}.zip`
     saveAs(blob, fileName)
   }, function (err) {

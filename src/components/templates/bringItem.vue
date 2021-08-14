@@ -50,13 +50,17 @@
     <el-divider/>
 
     <el-row class="template-setting">
-      <el-col :span="6" class="field-name">{{ $t('template-quest-compass-name') }}:</el-col>
-      <el-col :span="18" class="field-editor"><el-input v-model="templateData.compassName"/></el-col>
+      <el-col :span="6" class="field-name">{{ $t('template-quest-item-setting') }}:</el-col>
+      <el-col :span="18">
+        <el-input class="small-editor" type="textarea" :autosize="{ minRows: 1, maxRows: 20}" v-model="templateData.itemSetting"/>
+      </el-col>
     </el-row>
 
     <el-row class="template-setting">
-      <el-col :span="6" class="field-name">{{ $t('template-quest-compass-location') }}:</el-col>
-      <el-col :span="18" class="field-editor"><el-input v-model="templateData.compassLocation"/></el-col>
+      <el-col :span="6" class="field-name">{{ $t('template-quest-item-objective') }}:</el-col>
+      <el-col :span="18">
+        <el-input class="small-editor" type="textarea" :autosize="{ minRows: 1, maxRows: 20}" v-model="templateData.itemObjective"/>
+      </el-col>
     </el-row>
     
     <el-divider/>
@@ -108,28 +112,6 @@
         <el-input class="small-editor" type="textarea" :autosize="{ minRows: 1, maxRows: 20}" v-model="templateData.journalStart"/>
       </el-col>
     </el-row>
-    <el-row class="template-setting">
-      <el-col :span="6" class="field-name">{{ $t('template-quest-journal-done') }}:</el-col>
-      <el-col :span="18">
-        <el-input class="small-editor" type="textarea" :autosize="{ minRows: 1, maxRows: 20}" v-model="templateData.journalDone"/>
-      </el-col>
-    </el-row>
-
-    <el-tabs type="border-card" class="template-tabs" v-model="objective">
-      <el-tab-pane :label="$t('mmobkill')" name="mmobkill">
-        mmobkill <el-input class="field-editor" style="width: 200px;" :placeholder="$t('mmomob-name')" v-model="templateData.mobName"/> amount:<el-input class="field-editor" style="width: 70px;" :placeholder="$t('amount')" v-model="templateData.mobAmount"/> notify events:event_{{templateData.questName}}_done
-      </el-tab-pane>
-    </el-tabs>
-
-    <el-divider/>
-
-    <el-row class="template-setting">
-      <el-checkbox v-model="templateData.addToFirst">{{ $t('template-add-to-first-message') }}</el-checkbox>
-    </el-row>
-
-    <el-row class="template-setting">
-      <el-checkbox v-model="templateData.addToHologram">{{ $t('template-add-to-hologram-conditions') }}</el-checkbox>
-    </el-row>
   
     <div class="right-section">
       <el-button type="success" @click="apply">{{ $t('apply') }}</el-button>
@@ -148,7 +130,7 @@
 <script>
 import yaml from 'js-yaml'
 
-import objective from '../../assets/templates-data/objective.yml?raw'
+import bringItem from '../../assets/templates-data/bringItem.yml?raw'
 
 export default {
   props: ['modelValue', 'subSectionName'],
@@ -156,8 +138,6 @@ export default {
     return {
       sectionInfo: null,
       templateData: {
-        addToFirst: true,
-        addToHologram: true,
         langSlug: this.$root.settings.language,
         questName: 'example',
         questReadableName: 'Example quest',
@@ -171,15 +151,11 @@ export default {
         questPlayerOption3: '$default.quest_done_prefix$I did what you told',
         questNPCOption3: 'Thank you!',
         journalStart: 'Started.',
-        journalDone: 'Done!',
-        mobName: 'wz1',
-        mobAmount: '1',
-        compassName: 'Target',
-        compassLocation: '100;66;100;world_rpg',
+        itemSetting: 'paper custom-model-data:330 name:&fItem_name lore:&7Item;&7description_space;&2Предмет_для_задания quest_items_unbreakable:true',
+        itemObjective: 'action right item_name loc:-100;64;-100;world_rpg',
       },
       preview: false,
       previewText: null,
-      objective: 'mmobkill',
       error: null,
     }
   },
@@ -206,12 +182,9 @@ export default {
       this.preview = false
     },
     getFormattedYaml() {
-      let result = objective
+      let result = bringItem
       for (const [key, value] of Object.entries(this.templateData)) {
         result = result.replaceAll(`{${key}}`, value || '')
-      }
-      if (this.objective == 'mmobkill') {
-        result = result.replaceAll('{objective}', `mmobkill ${this.templateData.mobName} amount:${this.templateData.mobAmount} notify events:event_${this.templateData.questName}_done`)
       }
       return result
     },
@@ -240,27 +213,10 @@ export default {
         this.sectionInfo.conditions = Object.assign({}, this.sectionInfo.conditions, objData.conditions)
         this.sectionInfo.journal = Object.assign({}, this.sectionInfo.journal, objData.journal)
         this.sectionInfo.objectives = Object.assign({}, this.sectionInfo.objectives, objData.objectives)
+        this.sectionInfo.items = Object.assign({}, this.sectionInfo.items, objData.items)
 
         if (!this.sectionInfo.main) this.sectionInfo.main = { variables: {}, npcs: {}, compass: {} }
         this.sectionInfo.main.variables = Object.assign({}, this.sectionInfo.main.variables, objData.main.variables)
-        this.sectionInfo.main.compass = Object.assign({}, this.sectionInfo.main.compass, objData.main.compass)
-
-        if (this.templateData.addToFirst) {
-          const first = this.sectionInfo.conversations[this.templateData.quester].first
-          if (first) {
-            let pointers = this.sectionInfo.conversations[this.templateData.quester].NPC_options[first].pointers
-            this.sectionInfo.conversations[this.templateData.quester].NPC_options[first].pointers = `option_${this.templateData.questName}_done,option_${this.templateData.questName}_start,${pointers}`
-          }
-        }
-
-        if (this.templateData.addToHologram) {
-          let avalible = this.sectionInfo.conditions[`cond_quest_avalible_${quester}`]
-          this.sectionInfo.conditions[`cond_quest_avalible_${quester}`] = `${avalible},cond_${this.templateData.questName}_icon1`
-          let progress = this.sectionInfo.conditions[`cond_quest_progress_${quester}`]
-          this.sectionInfo.conditions[`cond_quest_progress_${quester}`] = `${progress},cond_${this.templateData.questName}_icon2`
-          let done = this.sectionInfo.conditions[`cond_quest_done_${quester}`]
-          this.sectionInfo.conditions[`cond_quest_done_${quester}`] = `${done},cond_${this.templateData.questName}_icon3`
-        }
 
         this.$message({
           type: 'success',

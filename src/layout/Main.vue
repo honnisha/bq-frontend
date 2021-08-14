@@ -23,10 +23,11 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="openArchive">{{ $t('open-zip') }}</el-dropdown-item>
+            <el-dropdown-item @click="openArchive">{{ $t('open-zip') }} (ctrl-o)</el-dropdown-item>
             <el-dropdown-item @click="openJson">{{ $t('open-json') }}</el-dropdown-item>
             
-            <el-dropdown-item @click="openLocalStorage(index)" v-for="index in 5" :key="index" :divided="index === 1">{{ $t('open-slot') }} {{ index }}</el-dropdown-item>
+            <el-dropdown-item @click="openLocalStorage(0)" divided>{{ $t('open-slot') }} (ctrl-l){{ lastTimeUsedSlot(0) }}</el-dropdown-item>
+            <el-dropdown-item @click="openLocalStorage(index)" v-for="index in 5" :key="index">{{ $t('open-slot') }} {{ index }}{{ lastTimeUsedSlot(index) }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -37,10 +38,11 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="saveAsZip">{{ $t('save-zip') }}</el-dropdown-item>
+            <el-dropdown-item @click="saveAsZip">{{ $t('save-zip') }} (ctrl-e)</el-dropdown-item>
             <el-dropdown-item @click="saveAsJson">{{ $t('save-json') }}</el-dropdown-item>
 
-            <el-dropdown-item @click="saveLocalStorage(index)" v-for="index in 5" :key="index" :divided="index === 1">{{ $t('save-slot') }} {{ index }}</el-dropdown-item>
+            <el-dropdown-item @click="saveLocalStorage(0)" divided>{{ $t('save-slot') }} (ctrl-s){{ lastTimeUsedSlot(0) }}</el-dropdown-item>
+            <el-dropdown-item @click="saveLocalStorage(index)" v-for="index in 5" :key="index">{{ $t('save-slot') }} {{ index }}{{ lastTimeUsedSlot(index) }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -74,8 +76,12 @@
       custom-class="dialog create-section"
     >
       <el-alert v-if="newTabNameError" :title="newTabNameError" type="error"/>
-      <span>{{ $t('quest-name') }}</span>
-      <el-input v-model="newTabName"></el-input><br/><br/>
+
+      <div class="dialog-subsection">
+        <span>{{ $t('quest-name') }}</span>
+        <el-input v-model="newTabName"></el-input><br/><br/>
+      </div>
+
       <el-checkbox v-model="inclideDialogExample">{{ $t('quest-example') }}</el-checkbox><br/>
       <el-checkbox v-model="inclideMenuExample">{{ $t('menu-example') }}</el-checkbox><br/>
       <template #footer>
@@ -118,6 +124,11 @@
 
     </el-tabs>
   </section>
+
+  <el-backtop target=".el-header" :bottom="50">
+    <div class="to-top">UP</div>
+  </el-backtop>
+
 </template>
 
 <style lang="scss">
@@ -129,7 +140,8 @@ import yaml from 'js-yaml'
 import { loadArchive } from '../utils/archiveLoader.js'
 import { saveArchive } from '../utils/archiveSaver.js'
 import subSection from "../layout/subSection.vue"
-import { useI18n } from "vue3-i18n";
+import { useI18n } from "vue3-i18n"
+import moment from 'moment'
 
 import dialogExample from '../assets/dialogExample.yml?raw'
 import menuExample from '../assets/menuExample.yml?raw'
@@ -167,7 +179,28 @@ export default {
     const i18n = useI18n()
     i18n.setLocale(this.settings.language)
   },
+  mounted() {
+    document.addEventListener("keydown", this.keydown)
+  },
   methods: {
+    keydown(e) {
+      if (e.keyCode === 83 && e.ctrlKey) {
+        this.saveLocalStorage(0)
+        e.preventDefault()
+      }
+      else if (e.keyCode === 76 && e.ctrlKey) {
+        this.openLocalStorage(0)
+        e.preventDefault()
+      }
+      else if (e.keyCode === 69 && e.ctrlKey) {
+        this.saveAsZip()
+        e.preventDefault()
+      }
+      else if (e.keyCode === 79 && e.ctrlKey) {
+        this.openArchive()
+        e.preventDefault()
+      }
+    },
     changeLang(langSlug) {
       this.settings.language = langSlug
       this.saveSettings()
@@ -194,7 +227,10 @@ export default {
         return
       }
 
-      this.projectData[this.newTabName] = {}
+      this.projectData[this.newTabName] = {
+        custom: { npc_holograms: { check_interval: 100 } },
+        main: { variables: {}, npcs: {}, compass: {} },
+      }
 
       if (this.inclideDialogExample) {
         const dialogExampleData = yaml.load(dialogExample)
@@ -266,14 +302,23 @@ export default {
       fileReader.readAsText(files[0])
     },
     saveAsJson() {
+      if (Object.keys(this.projectData).length === 0) {
+        this.$message({
+          dangerouslyUseHTMLString: true,
+          message: this.$t('data-is-empty'),
+          type: 'info'
+        })
+        return
+      }
+
       const data = JSON.stringify(this.projectData)
       const blob = new Blob([data], {type: 'text/plain'})
 
       const date = JSON.stringify(new Date());
-      this.downloadBlob(blob, `bq${date}.json`)
+      this.downloadBlob(blob, `bq${moment().format('DD.MM.YYYY_HH:MM')}.json`)
     },
     saveAsZip() {
-      if (!this.projectData) {
+      if (Object.keys(this.projectData).length === 0) {
         this.$message({
           dangerouslyUseHTMLString: true,
           message: this.$t('data-is-empty'),
@@ -306,12 +351,28 @@ export default {
       }
     },
     saveLocalStorage(index) {
+      if (Object.keys(this.projectData).length === 0) {
+        this.$message({
+          dangerouslyUseHTMLString: true,
+          message: this.$t('data-is-empty'),
+          type: 'info'
+        })
+        return
+      }
+
       localStorage.setItem(`projects_${index}`, JSON.stringify(this.projectData));
+      localStorage.setItem(`projects_${index}_date`, moment().format('DD.MM.YYYY HH:MM'));
       this.$message({
         dangerouslyUseHTMLString: true,
         message: `Project saved to <b>${index}</b> slot`,
         type: 'success'
       })
+    },
+    lastTimeUsedSlot(index) {
+      const data = localStorage.getItem(`projects_${index}_date`)
+      if (data) {
+        return ` (${data})`
+      }
     },
   }
 }

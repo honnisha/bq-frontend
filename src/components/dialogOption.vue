@@ -20,6 +20,7 @@
           type="conditions"
           v-model="dialogInfo.conditions"
           :section-info="projectData[subSectionName]"
+          :dialog-section-name="dialogSectionName"
           :dialog-type="dialogType"
           :placeholder="$t('conditions')"
         />
@@ -32,6 +33,7 @@
           type="events"
           v-model="dialogInfo.events"
           :section-info="projectData[subSectionName]"
+          :dialog-section-name="dialogSectionName"
           :dialog-type="dialogType"
           :placeholder="$t('events')"
         />
@@ -44,6 +46,7 @@
           type="pointers"
           v-model="dialogInfo.pointers"
           :section-info="projectData[subSectionName]"
+          :dialog-section-name="dialogSectionName"
           :dialog-type="dialogType"
           :placeholder="$t('pointers')"
         />

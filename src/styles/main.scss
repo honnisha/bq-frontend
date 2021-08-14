@@ -41,6 +41,15 @@ h4 {
     }
 }
 
+.to-top {
+    height: 100%;
+    width: 100%;
+    background-color: #f2f5f6;
+    box-shadow: 0 0 6px rgba(0,0,0, .12);
+    text-align: center;
+    line-height: 40px;
+    color: #1989fa;
+}
 .header-buttons {
     margin-right: 10px;
 }
@@ -48,6 +57,8 @@ h4 {
 .menu-buttons {
     height: 20px;
     padding: 5px;
+    background-color: white;
+    border-bottom: 1px solid #dcdcdc;
 }
 .menu-button {
     min-height: 20px;
@@ -60,13 +71,10 @@ h4 {
 }
 
 .yaml-editor {
-    font-family: 'Courier New', monospace;
-
-    .el-textarea__inner {
-        color: black;
-        font-size: 12px;
-        line-height: 14px;
-    }
+    height: 88vh;
+}
+.yaml-conversation {
+    height: 80vh;
 }
 
 .setting-header,.setting-value, .field-editor > .el-input > .el-input__inner, .dialogs-section {
@@ -380,9 +388,13 @@ h4 {
         height: 20px;
         line-height: 20px;   
     }
+    .menu-buttons {
+        margin-bottom: 10px;
+    }
 }
 
 .template-dialog {
+    min-height: 400px;
     margin-top: 10px!important;
     .el-dialog__body {
         padding: 10px;
@@ -436,9 +448,10 @@ h4 {
 .el-tabs__content {
     padding: 5px!important;
 }
-.el-tabs__item {
+.el-tabs__item:not(.is-closable) {
     padding: 5px 10px;
     line-height: 30px;
+    padding-right: 10px!important;
 }
 .el-tabs__item.is-top {
     line-height: 10px;
@@ -461,3 +474,28 @@ h4 {
 .multiselect-caret {
     display: none;
 }
+
+.dialog-subsection {
+    margin-bottom: 20px;
+    .el-input {
+        height: 30px;
+    }
+    .el-input__inner {
+        height: 30px;
+    }
+}
+.sections-tabs > .el-tabs__header {
+    height: 25px;
+}
+.sections-tabs > .el-tabs__header > .el-tabs__nav-wrap {
+    height: 25px;
+}
+.el-select-dropdown__item {
+    height: 20px;
+    line-height: 20px;
+}
+.el-divider.el-divider--horizontal {
+    margin: 15px 0;
+}
+
+

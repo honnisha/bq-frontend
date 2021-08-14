@@ -102,3 +102,18 @@ first-option: First dialog
 select-option: Select option
 stop-option: Lock player in dialog
 bq-mcmodels-tutorials: BetonQuest Tutorials on mcmodels.net
+
+template-bring-item: Quest bring item
+template-quest-item-setting: Item setting
+template-quest-item-objective: Item recieve objective
+
+dialog-quester-npc-id: Enter id of npc (optional)
+
+template-move-to: Move from npc to npc
+template-quest-select-from: Quest giver NPC
+template-quest-select-to: Quest target NPC
+template-add-to-first-message: Add dialog option to first message?
+template-add-to-hologram-conditions: Add to hologram conditions?
+
+add-configs-hologram-and-conditions-for-npc: Add configs for holograms and conditions?
+id-only-numbers: ID can contain onlt digits

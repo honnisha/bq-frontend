@@ -1,19 +1,27 @@
 <template>
 
-  <el-input
+  <v-ace-editor
+    v-model:value="localValue"
+    lang="yaml"
+    theme="chrome"
     class="yaml-editor"
-    type="textarea"
-    :autosize="{ minRows: 20, maxRows: 50}"
-    v-model="localValue"
+    :printMargin="false"
+    :wrap="true"
   />
 
 </template>
 
 <script>
 import yaml from 'js-yaml'
+import ace from 'ace-builds';
+ace.config.set("basePath", "https://cdn.jsdelivr.net/npm/ace-builds/src-noconflict/")
+import { VAceEditor } from 'vue3-ace-editor'
 
 export default {
   props: ['modelValue'],
+  components: {
+    VAceEditor,
+  },
   data() {
     return {
     }

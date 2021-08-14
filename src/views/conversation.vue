@@ -1,10 +1,12 @@
 <template>
 
   <div class="view-editor-section dialog-section" v-if="!editMode">
-    <div class="menu-buttons">
-      <el-button size="mini" @click="changeToYaml" class="menu-button">{{ $t('yaml-editor') }}</el-button>
-      <el-button size="mini" @click="changeToDiagram" class="menu-button">{{ $t('diagram-editor') }}</el-button>
-    </div>
+    <el-affix :offset="0">
+      <div class="menu-buttons">
+        <el-button size="mini" @click="changeToYaml" class="menu-button">{{ $t('yaml-editor') }}</el-button>
+        <el-button size="mini" @click="changeToDiagram" class="menu-button">{{ $t('diagram-editor') }}</el-button>
+      </div>
+    </el-affix>
 
     <el-card class="conversation-settings">
       <div class="conversation-settings-sction">
@@ -21,6 +23,7 @@
           type="pointers"
           dialogType="player_options"
           :section-info="projectData[subSectionName]"
+          :dialog-section-name="dialogSectionName"
           :placeholder="$t('select-option')"
           :max="1"
         />
@@ -35,7 +38,7 @@
     <div class="dialog-options-section" v-for="dialogType in ['NPC_options', 'player_options']">
       <div class="menu-buttons">
         <div class="dialog-title">{{ $t(dialogType) }}</div>
-        <el-button size="mini" @click="addDialogOption()" class="menu-button" type="success" plain icon="el-icon-chat-line-round">{{ $t('add-dialog') }}</el-button>
+        <el-button size="mini" @click="addDialogOption(dialogType)" class="menu-button" type="success" plain icon="el-icon-chat-line-round">{{ $t('add-dialog') }}</el-button>
       </div>
 
       <el-space wrap class="dialogs-section">
@@ -57,15 +60,19 @@
   </div>
 
   <div class="yaml-editor-section" v-else-if="editMode === 'yaml'">
-    <div class="menu-buttons">
-      <el-button size="mini" @click="changeToEditor" class="menu-button">{{ $t('save-and-return') }}</el-button>
-    </div>
+    <el-affix :offset="0">
+      <div class="menu-buttons">
+        <el-button size="mini" @click="changeToEditor" class="menu-button">{{ $t('save-and-return') }}</el-button>
+      </div>
+    </el-affix>
 
-    <el-input
-      class="yaml-editor"
-      type="textarea"
-      :autosize="{ minRows: 20, maxRows: 60}"
-      v-model="yamlText"
+    <v-ace-editor
+      v-model:value="yamlText"
+      lang="yaml"
+      theme="chrome"
+      class="yaml-conversation yaml-editor"
+      :printMargin="false"
+      :wrap="true"
     />
   </div>
 
@@ -83,6 +90,10 @@ import langHeader from "../components/langHeader.vue";
 import tagComplete from "../components/tagComplete.vue"
 import yaml from  'js-yaml'
 
+import ace from 'ace-builds';
+ace.config.set("basePath", "https://cdn.jsdelivr.net/npm/ace-builds/src-noconflict/")
+import { VAceEditor } from 'vue3-ace-editor'
+
 export default {
   components: {
     dialogOption,
@@ -90,6 +101,7 @@ export default {
     langField,
     langHeader,
     tagComplete,
+    VAceEditor,
   },
   props: ['modelValue', 'projectData', 'dialogSectionName', 'subSectionName'],
   data() {
@@ -123,18 +135,22 @@ export default {
       this.yamlText = null
       this.editMode = null
     },
-    addDialogOption() {
+    addDialogOption(dialogType) {
+      let initString = 'message_'
+      if (dialogType === 'player_options') initString = 'option_'
+
       this.$prompt(this.$t('enter-dialog-name'), this.$t('dialog-window-title'), {
         confirmButtonText: this.$t('create'),
         cancelButtonText: this.$t('cancel'),
         inputPattern: /^[a-z0-9_]+$/,
         inputErrorMessage: this.$t('exists-regex'),
-        inputValidator: value => !this.dialogSectionInfo[this.dialogSectionName][value],
+        inputValidator: value => !this.dialogSectionInfo[dialogType][value],
         closeOnClickModal: false,
+        inputValue: initString,
       }).then(({ value }) => {
         const lang = { text: {} }
         lang.text[this.$root.settings.language] = ''
-        this.dialogSectionInfo[this.dialogSectionName][value] = lang
+        this.dialogSectionInfo[dialogType][value] = lang
 
         this.$message({
           type: 'success',

@@ -31,12 +31,11 @@ export default {
   components: {
     Multiselect,
   },
-  props: ['modelValue', 'placeholder', 'type', 'sectionInfo', 'dialogType', 'max'],
+  props: ['modelValue', 'placeholder', 'type', 'sectionInfo', 'dialogSectionName', 'dialogType', 'max'],
   data() {
     return {
       selectedTags: null,
       options: [],
-      optionsLoaded: false,
     }
   },
   mounted() {
@@ -49,17 +48,17 @@ export default {
   },
   methods: {
     openTags() {
-      this.updateOptions()
+      this.options = this.updateOptions()
     },
     tagsChange(tags) {
       this.$emit('update:modelValue', tags.map(value => value.value).join(","))
     },
     async getChoicesUpdate(searchString) {
+      this.options = this.updateOptions()
       return this.options
     },
     updateOptions() {
-      if (this.optionsLoaded) return
-      this.optionsLoaded = true
+      let options = []
 
       if (this.type === 'conditions') {
         if (!this.sectionInfo.conditions) {
@@ -68,7 +67,7 @@ export default {
         }
 
         for (const [key, value] of Object.entries(this.sectionInfo.conditions)) {
-          this.options.push({value: key, label: key})
+          options.push({value: key, label: key})
         }
       } else if (this.type === 'events') {
         if (!this.sectionInfo.events) {
@@ -77,7 +76,7 @@ export default {
         }
 
         for (const [key, value] of Object.entries(this.sectionInfo.events)) {
-          this.options.push({value: key, label: key})
+          options.push({value: key, label: key})
         }
       } else if (this.type === 'pointers') {
         if (!this.sectionInfo.conversations) {
@@ -86,23 +85,24 @@ export default {
         }
 
         if (this.sectionInfo.conversations) {
-          for (const [dialogSectionkey, dialogSection] of Object.entries(this.sectionInfo.conversations)) {
-            if (this.dialogType === 'NPC_options') {
+          const dialogSection = this.sectionInfo.conversations[this.dialogSectionName]
 
-              for (const [dialogkey, dialogOption] of Object.entries(dialogSection.player_options)) {
-                this.options.push({value: dialogkey, label: dialogkey})
-              }
+          if (this.dialogType === 'NPC_options') {
 
-            } else if (this.dialogType === 'player_options') {
-
-              for (const [dialogkey, dialogOption] of Object.entries(dialogSection.NPC_options)) {
-                this.options.push({value: dialogkey, label: dialogkey})
-              }
-
+            for (const [dialogkey, dialogOption] of Object.entries(dialogSection.player_options)) {
+              options.push({value: dialogkey, label: dialogkey})
             }
+
+          } else if (this.dialogType === 'player_options') {
+
+            for (const [dialogkey, dialogOption] of Object.entries(dialogSection.NPC_options)) {
+              options.push({value: dialogkey, label: dialogkey})
+            }
+
           }
         }
       }
+      return options
     },
   }
 }

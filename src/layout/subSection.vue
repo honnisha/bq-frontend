@@ -1,7 +1,7 @@
 <template>
   <el-tabs tab-position="left" v-model="sectionSelected" class="section-tabs" @tab-remove="removeDialogSection">
 
-    <el-tab-pane :label="$t('dialogs')">
+    <el-tab-pane :label="$t('dialogs')" name="dialogs">
       <div class="menu-buttons">
         <el-button size="mini" @click="openNew('dialog')" class="menu-button" icon="el-icon-plus">{{ $t('add-dialog-section') }}</el-button>
         <el-button size="mini" @click="templateOpen" class="menu-button" icon="el-icon-document-add" type="primary" plain>{{ $t('template-create') }}</el-button>
@@ -39,13 +39,13 @@
       </div>
     </el-tab-pane>
 
-    <el-tab-pane :label="$t('events')"><simpleSection v-model="sectionInfo.events"/></el-tab-pane>
-    <el-tab-pane :label="$t('conditions')"><simpleSection v-model="sectionInfo.conditions"/></el-tab-pane>
-    <el-tab-pane :label="$t('objectives')"><simpleSection v-model="sectionInfo.objectives"/></el-tab-pane>
-    <el-tab-pane :label="$t('items')"><simpleSection v-model="sectionInfo.items"/></el-tab-pane>
-    <el-tab-pane :label="$t('main')"><yamlEditor v-model="sectionInfo.main"/></el-tab-pane>
-    <el-tab-pane :label="$t('journal')"><yamlEditor v-model="sectionInfo.journal"/></el-tab-pane>
-    <el-tab-pane :label="$t('custom')"><yamlEditor v-model="sectionInfo.custom"/></el-tab-pane>
+    <el-tab-pane :label="$t('events')" name="events"><yamlEditor v-model="sectionInfo.events" v-if="sectionSelected === 'events'" /></el-tab-pane>
+    <el-tab-pane :label="$t('conditions')" name="conditions"><yamlEditor v-model="sectionInfo.conditions" v-if="sectionSelected === 'conditions'" /></el-tab-pane>
+    <el-tab-pane :label="$t('objectives')" name="objectives"><yamlEditor v-model="sectionInfo.objectives" v-if="sectionSelected === 'objectives'" /></el-tab-pane>
+    <el-tab-pane :label="$t('items')" name="items"><yamlEditor v-model="sectionInfo.items" v-if="sectionSelected === 'items'" /></el-tab-pane>
+    <el-tab-pane :label="$t('main')" name="main"><yamlEditor v-model="sectionInfo.main" v-if="sectionSelected === 'main'" /></el-tab-pane>
+    <el-tab-pane :label="$t('journal')" name="journal"><yamlEditor v-model="sectionInfo.journal" v-if="sectionSelected === 'journal'" /></el-tab-pane>
+    <el-tab-pane :label="$t('custom')" name="custom"><yamlEditor v-model="sectionInfo.custom" v-if="sectionSelected === 'custom'" /></el-tab-pane>
   </el-tabs>
 
   <el-dialog
@@ -56,8 +56,21 @@
     :close-on-click-modal="false"
   >
     <el-alert v-if="newNameError" :title="newNameError" type="error"/>
-    <span>{{ $t('dialog-section-name') }}</span>
-    <el-input v-model="newName"></el-input>
+
+    <div class="dialog-subsection">
+      <span>{{ $t('dialog-section-name') }}</span>
+      <el-input v-model="newName"></el-input>
+    </div>
+
+    <div class="dialog-subsection" v-if="newMode === 'dialog'">
+      <span>{{ $t('dialog-quester-npc-id') }}</span>
+      <el-input v-model="newNPCID"></el-input>
+    </div>
+
+    <div class="dialog-subsection" v-if="newMode === 'dialog'">
+      <el-checkbox v-model="newNPCholograms" :disabled="!newNPCID">{{ $t('add-configs-hologram-and-conditions-for-npc') }}</el-checkbox>
+    </div>
+
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="addVisible = false">{{ $t('cancel') }}</el-button>
@@ -73,9 +86,9 @@
     custom-class="template-dialog"
     :close-on-click-modal="false"
   >
-    <el-tabs tab-position="left" v-if="templateDialogVisible" class="template-tabs">
-      <el-tab-pane :label="templateInfo.label" :key="templateInfo.label" v-for="templateInfo in templates">
-        <component :is="templateInfo.template" v-model="sectionInfo" @close="closeTemplate" />
+    <el-tabs tab-position="left" v-if="templateDialogVisible" v-model="templateTabSelected" class="template-tabs">
+      <el-tab-pane :label="templateInfo.label" :name="templateInfo.label" :key="templateInfo.label" v-for="templateInfo in templates">
+        <component :is="templateInfo.template" v-model="projectData" :sub-section-name="subSectionName" @close="closeTemplate" :project-data="projectData" />
       </el-tab-pane>
     </el-tabs>
   </el-dialog>
@@ -89,6 +102,10 @@ import simpleSection from "../views/simpleSection.vue";
 import yamlEditor from "../views/yamlSection.vue";
 
 import objective from "../components/templates/objective.vue";
+import bringItem from "../components/templates/bringItem.vue";
+import moveTo from "../components/templates/moveTo.vue";
+
+import defaultConversation from '../assets/defaultConversation.yml?raw'
 
 export default {
   components: {
@@ -102,15 +119,20 @@ export default {
       addVisible: false,
       newNameError: null,
       newName: '',
+      newNPCID: null,
+      newNPCholograms: false,
       dialogSelected: null,
       menuSelected: null,
       newMode: null,
-      sectionSelected: null,
+      sectionSelected: 'dialogs',
       templateDialogVisible: false,
       templates: [
         { label: this.$t('template-objective'), template: shallowRef(objective) },
+        { label: this.$t('template-bring-item'), template: shallowRef(bringItem) },
+        { label: this.$t('template-move-to'), template: shallowRef(moveTo) },
       ],
       loadedDialogsections: {},
+      templateTabSelected: null,
     }
   },
   computed: {
@@ -159,12 +181,49 @@ export default {
           this.newNameError = this.$t('dialog-exists').replace('{newName}', this.newName)
           return
         }
-
-        this.sectionInfo.conversations[this.newName] = {
-          quester: this.newName,
-          NPC_options: {},
-          player_options: {},
+        if (!this.newName.match(/^[a-z0-9_]+$/)) {
+          this.newNameError = this.$t('exists-regex')
+          return
         }
+        if (this.newNPCID) {
+          if (!this.newNPCID.match(/^[0-9]+$/)) {
+            this.newNameError = this.$t('id-only-numbers')
+            return
+          }
+        }
+
+        let defaultConversationText = defaultConversation
+        defaultConversationText = defaultConversationText.replaceAll(
+          '{npcName}', this.newName
+        ).replaceAll(
+          '{npcID}', this.newNPCID
+        ).replaceAll(
+          '{langSlug}', this.$root.settings.language
+        )
+        const defaultConversation = yaml.load(newConfigHologramText)
+
+        this.sectionInfo.conversations[this.newName] = defaultConversation.conversations
+
+        if (this.newNPCID) {
+          this.sectionInfo.main.npcs[this.newNPCID] = this.newName
+
+          if (!this.sectionInfo.custom) this.sectionInfo.custom = { npc_holograms: { check_interval: 100 } }
+          if (this.newNPCholograms) {
+            this.sectionInfo.custom.npc_holograms = Object.assign(
+              {}, this.sectionInfo.custom.npc_holograms, defaultConversation.npc_holograms
+            )
+          }
+          if (this.newNPCholograms) {
+            this.sectionInfo.conditions = Object.assign(
+              {}, this.sectionInfo.conditions, defaultConversation.conditions
+            )
+          }
+          this.newNPCholograms = false
+
+        }
+        this.newNPCID = null
+
+        this.dialogSelected = this.newName
         this.$message({
           type: 'success',
           dangerouslyUseHTMLString: true,

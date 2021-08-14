@@ -1,10 +1,12 @@
 <template>
 
   <div class="view-editor-section" v-if="!yamlEdit">
-    <div class="menu-buttons">
-      <el-button size="mini" @click="changeToYaml" class="menu-button">{{ this.$t('yaml-editor') }}</el-button>
-      <el-button size="mini" @click="newSetting" class="menu-button" type="success" icon="el-icon-plus" plain>{{ $t('new-setting') }}</el-button>
-    </div>
+    <el-affix :offset="0">
+      <div class="menu-buttons">
+        <el-button size="mini" @click="changeToYaml" class="menu-button">{{ this.$t('yaml-editor') }}</el-button>
+        <el-button size="mini" @click="newSetting" class="menu-button" type="success" icon="el-icon-plus" plain>{{ $t('new-setting') }}</el-button>
+      </div>
+    </el-affix>
 
     <template v-for="(item, key) in localValue">
       <simpleField
@@ -17,9 +19,11 @@
   </div>
   
   <div class="yaml-editor-section" v-else>
-    <div class="menu-buttons">
+    <el-affix :offset="0">
+      <div class="menu-buttons">
       <el-button size="mini" @click="changeToEditor" class="menu-button">{{ this.$t('save-and-return') }}</el-button>
-    </div>
+      </div>
+    </el-affix>
 
     <el-input
       class="yaml-editor"

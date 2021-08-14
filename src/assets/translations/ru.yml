@@ -25,7 +25,7 @@ events: События
 objectives: Задания
 conditions: Условия
 items: Предметы
-main: Главное
+main: Основное
 journal: Журнал
 custom: Разное
 create-subsection: Создание раздела
@@ -102,3 +102,18 @@ first-option: Стартовый диалог
 select-option: Выберите вариант
 stop-option: Закрытие диалога только при завершении
 bq-mcmodels-tutorials: Туториалы BetonQuest на mcmodels.net
+
+template-bring-item: Задание принести предмет
+template-quest-item-setting: Настройка предмета
+template-quest-item-objective: Задание получения предмета
+
+dialog-quester-npc-id: Введите id npc квестера (не обязательно)
+
+template-move-to: Переходный квест между npc
+template-quest-select-from: Квестодатель NPC
+template-quest-select-to: NPC, которому сдавать квест
+template-add-to-first-message: Добавить ответы в первый вариант диалога?
+template-add-to-hologram-conditions: Добавить условия в настройки голограм?
+
+add-configs-hologram-and-conditions-for-npc: Добавить настройки для голограм и условий для них?
+id-only-numbers: ID может состоять только из чисел

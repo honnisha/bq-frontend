@@ -7,20 +7,34 @@
     <el-alert v-if="error" :title="error" class="template-error" type="error"/>
 
     <el-row class="template-setting">
-      <el-col :span="6" class="field-name">{{ $t('template-quest-select') }}:</el-col>
+      <el-col :span="6" class="field-name">{{ $t('template-quest-select-from') }}:</el-col>
       <el-col :span="18" class="field-editor">
-        
-        <el-select v-model="templateData.quester" placeholder=" ">
+        <el-select v-model="templateData.questerFrom" placeholder=" ">
           <el-option
-            v-for="(info, key) in sectionInfo.conversations"
-            :key="key"
-            :label="key"
-            :value="key">
-          </el-option>
+            v-for="data in questers"
+            :key="`from_${data.quester}`"
+            :label="`${data.sectionKey}.${data.quester}`"
+            :value="`${data.sectionKey}.${data.quester}`"
+          />
         </el-select>
-
       </el-col>
     </el-row>
+
+    <el-row class="template-setting">
+      <el-col :span="6" class="field-name">{{ $t('template-quest-select-to') }}:</el-col>
+      <el-col :span="18" class="field-editor">
+        <el-select v-model="templateData.questerTo" placeholder=" ">
+          <el-option
+            v-for="data in questers"
+            :key="`to_${data.quester}`"
+            :label="`${data.sectionKey}.${data.quester}`"
+            :value="`${data.sectionKey}.${data.quester}`"
+          />
+        </el-select>
+      </el-col>
+    </el-row>
+    
+    <el-divider/>
 
     <el-row class="template-setting">
       <el-col :span="6" class="field-name">{{ $t('template-quest-name') }}:</el-col>
@@ -86,7 +100,9 @@
         <el-input class="small-editor" type="textarea" :autosize="{ minRows: 1, maxRows: 20}" v-model="templateData.questNPCOption2"/>
       </el-col>
     </el-row>
-    
+
+    <el-divider/>
+
     <el-row class="template-setting">
       <el-col :span="6" class="field-name">{{ $t('template-quest-player-option-3') }}:</el-col>
       <el-col :span="18">
@@ -108,18 +124,6 @@
         <el-input class="small-editor" type="textarea" :autosize="{ minRows: 1, maxRows: 20}" v-model="templateData.journalStart"/>
       </el-col>
     </el-row>
-    <el-row class="template-setting">
-      <el-col :span="6" class="field-name">{{ $t('template-quest-journal-done') }}:</el-col>
-      <el-col :span="18">
-        <el-input class="small-editor" type="textarea" :autosize="{ minRows: 1, maxRows: 20}" v-model="templateData.journalDone"/>
-      </el-col>
-    </el-row>
-
-    <el-tabs type="border-card" class="template-tabs" v-model="objective">
-      <el-tab-pane :label="$t('mmobkill')" name="mmobkill">
-        mmobkill <el-input class="field-editor" style="width: 200px;" :placeholder="$t('mmomob-name')" v-model="templateData.mobName"/> amount:<el-input class="field-editor" style="width: 70px;" :placeholder="$t('amount')" v-model="templateData.mobAmount"/> notify events:event_{{templateData.questName}}_done
-      </el-tab-pane>
-    </el-tabs>
 
     <el-divider/>
 
@@ -148,7 +152,7 @@
 <script>
 import yaml from 'js-yaml'
 
-import objective from '../../assets/templates-data/objective.yml?raw'
+import moveTo from '../../assets/templates-data/moveTo.yml?raw'
 
 export default {
   props: ['modelValue', 'subSectionName'],
@@ -158,6 +162,8 @@ export default {
       templateData: {
         addToFirst: true,
         addToHologram: true,
+        questerFrom: null,
+        questerTo: null,
         langSlug: this.$root.settings.language,
         questName: 'example',
         questReadableName: 'Example quest',
@@ -171,16 +177,13 @@ export default {
         questPlayerOption3: '$default.quest_done_prefix$I did what you told',
         questNPCOption3: 'Thank you!',
         journalStart: 'Started.',
-        journalDone: 'Done!',
-        mobName: 'wz1',
-        mobAmount: '1',
         compassName: 'Target',
         compassLocation: '100;66;100;world_rpg',
       },
       preview: false,
       previewText: null,
-      objective: 'mmobkill',
       error: null,
+      questers: [],
     }
   },
   computed: {
@@ -194,6 +197,11 @@ export default {
     },
   },
   created() {
+    for (const [sectionKey, sectionData] of Object.entries(this.projectData)) {
+      for (const [quester, _] of Object.entries(sectionData.conversations)) {
+        this.questers.push({quester: quester , sectionKey: sectionKey})
+      }
+    }
     this.sectionInfo = this.projectData[this.subSectionName]
   },
   methods: {
@@ -206,60 +214,85 @@ export default {
       this.preview = false
     },
     getFormattedYaml() {
-      let result = objective
+      let result = moveTo
       for (const [key, value] of Object.entries(this.templateData)) {
         result = result.replaceAll(`{${key}}`, value || '')
       }
-      if (this.objective == 'mmobkill') {
-        result = result.replaceAll('{objective}', `mmobkill ${this.templateData.mobName} amount:${this.templateData.mobAmount} notify events:event_${this.templateData.questName}_done`)
+
+      if (this.templateData.questerFrom) {
+        let sectionQuesterFrom = this.templateData.questerFrom.split('.')[0]
+        result = result.replaceAll('{sectionQuesterFrom}', sectionQuesterFrom)
       }
+
       return result
     },
     apply() {
       try {
         this.error = null
 
-        if (!this.templateData.quester) {
+        if (!this.templateData.questerFrom || !this.templateData.questerTo) {
           this.error = this.$t('no-quester')
           return
         }
-        const objData = yaml.load(this.getFormattedYaml())
+        let questerFrom = this.templateData.questerFrom.split('.')[1]
+        let sectionQuesterFrom = this.templateData.questerFrom.split('.')[0]
 
-        this.sectionInfo.conversations[this.templateData.quester].NPC_options = Object.assign(
-          {},
-          this.sectionInfo.conversations[this.templateData.quester].NPC_options,
-          objData.conversations.NPC_options
+        let questerTo = this.templateData.questerTo.split('.')[1]
+        let sectionQuesterTo = this.templateData.questerTo.split('.')[0]
+
+        let objData = yaml.load(this.getFormattedYaml())
+
+        const fromSectionInfo = this.projectData[sectionQuesterFrom]
+        const toSectionInfo = this.projectData[sectionQuesterTo]
+
+        fromSectionInfo.conversations[questerFrom].NPC_options = Object.assign(
+          {}, fromSectionInfo.conversations[questerFrom].NPC_options,
+          objData.conversations.from.NPC_options
         )
-        this.sectionInfo.conversations[this.templateData.quester].player_options = Object.assign(
-          {},
-          this.sectionInfo.conversations[this.templateData.quester].player_options,
-          objData.conversations.player_options
+        fromSectionInfo.conversations[questerFrom].player_options = Object.assign(
+          {}, fromSectionInfo.conversations[questerFrom].player_options,
+          objData.conversations.from.player_options
         )
 
-        this.sectionInfo.events = Object.assign({}, this.sectionInfo.events, objData.events)
-        this.sectionInfo.conditions = Object.assign({}, this.sectionInfo.conditions, objData.conditions)
-        this.sectionInfo.journal = Object.assign({}, this.sectionInfo.journal, objData.journal)
-        this.sectionInfo.objectives = Object.assign({}, this.sectionInfo.objectives, objData.objectives)
+        toSectionInfo.conversations[questerTo].NPC_options = Object.assign(
+          {}, toSectionInfo.conversations[questerTo].NPC_options,
+          objData.conversations.to.NPC_options
+        )
+        toSectionInfo.conversations[questerTo].player_options = Object.assign(
+          {}, toSectionInfo.conversations[questerTo].player_options,
+          objData.conversations.to.player_options
+        )
 
-        if (!this.sectionInfo.main) this.sectionInfo.main = { variables: {}, npcs: {}, compass: {} }
-        this.sectionInfo.main.variables = Object.assign({}, this.sectionInfo.main.variables, objData.main.variables)
-        this.sectionInfo.main.compass = Object.assign({}, this.sectionInfo.main.compass, objData.main.compass)
+        fromSectionInfo.events = Object.assign({}, fromSectionInfo.events, objData.events)
+        fromSectionInfo.conditions = Object.assign({}, fromSectionInfo.conditions, objData.conditions)
+        fromSectionInfo.journal = Object.assign({}, fromSectionInfo.journal, objData.journal)
+
+        if (!fromSectionInfo.main) fromSectionInfo.main = { variables: {}, npcs: {}, compass: {} }
+        fromSectionInfo.main.variables = Object.assign({}, fromSectionInfo.main.variables, objData.main.variables)
+        fromSectionInfo.main.compass = Object.assign({}, fromSectionInfo.main.compass, objData.main.compass)
 
         if (this.templateData.addToFirst) {
-          const first = this.sectionInfo.conversations[this.templateData.quester].first
-          if (first) {
-            let pointers = this.sectionInfo.conversations[this.templateData.quester].NPC_options[first].pointers
-            this.sectionInfo.conversations[this.templateData.quester].NPC_options[first].pointers = `option_${this.templateData.questName}_done,option_${this.templateData.questName}_start,${pointers}`
+          const firstFrom = fromSectionInfo.conversations[questerFrom].first
+          if (firstFrom) {
+            let pointers = fromSectionInfo.conversations[questerFrom].NPC_options[firstFrom].pointers
+            fromSectionInfo.conversations[questerFrom].NPC_options[firstFrom].pointers = `option_${this.templateData.questName}_start,${pointers}`
+          }
+
+          const firstTo = toSectionInfo.conversations[questerTo].first
+          if (firstTo) {
+            let pointers = toSectionInfo.conversations[questerTo].NPC_options[firstTo].pointers
+            toSectionInfo.conversations[questerTo].NPC_options[firstTo].pointers = `option_${this.templateData.questName}_done,${pointers}`
           }
         }
 
         if (this.templateData.addToHologram) {
-          let avalible = this.sectionInfo.conditions[`cond_quest_avalible_${quester}`]
-          this.sectionInfo.conditions[`cond_quest_avalible_${quester}`] = `${avalible},cond_${this.templateData.questName}_icon1`
-          let progress = this.sectionInfo.conditions[`cond_quest_progress_${quester}`]
-          this.sectionInfo.conditions[`cond_quest_progress_${quester}`] = `${progress},cond_${this.templateData.questName}_icon2`
-          let done = this.sectionInfo.conditions[`cond_quest_done_${quester}`]
-          this.sectionInfo.conditions[`cond_quest_done_${quester}`] = `${done},cond_${this.templateData.questName}_icon3`
+          let avalible = fromSectionInfo.conditions[`cond_quest_avalible_${questerFrom}`]
+          fromSectionInfo.conditions[`cond_quest_avalible_${questerFrom}`] = `${avalible},cond_${this.templateData.questName}_icon1`
+
+          let progress = toSectionInfo.conditions[`cond_quest_progress_${questerTo}`]
+          toSectionInfo.conditions[`cond_quest_progress_${questerTo}`] = `${progress},{sectionQuesterFrom}.cond_${this.templateData.questName}_icon2`
+          let done = toSectionInfo.conditions[`cond_quest_done_${questerTo}`]
+          toSectionInfo.conditions[`cond_quest_done_${questerTo}`] = `${done},{sectionQuesterFrom}.cond_${this.templateData.questName}_icon3`
         }
 
         this.$message({
@@ -275,7 +308,7 @@ export default {
         }
         this.error = error
       }
-    }
+    },
   }
 }
 </script>

@@ -24,7 +24,7 @@ conversations:
     option_{questName}_yes:
       text: 
         {langSlug}: '{questPlayerOption2}'
-      conditions: 'default.cond_level_{requiedLevel}'
+      conditions: 'cond_level_{requiedLevel}'
       pointers: message_{questName}_yes
     option_{questName}_done:
       text:
@@ -33,53 +33,43 @@ conversations:
       pointers: message_{questName}_done
 
 events:
-  event_{questName}_start: folder event_{questName}_s1,event_{questName}_s2,event_{questName}_s3,event_{questName}_s4,event_{questName}_s5
+  event_{questName}_start: folder event_{questName}_s1,event_{questName}_s2,event_{questName}_s3
   event_{questName}_s1: journal add j_{questName}_started
   event_{questName}_s2: tag add tag_{questName}_started
   event_{questName}_s3: notify &2Вы начали квест &a${questName}_name$ category:start_quest
-  event_{questName}_s4: compass add compass_{questName}
-  event_{questName}_s5: objective start obj_{questName}
 
-  event_{questName}_done: folder event_{questName}_d_1,event_{questName}_d_2,event_{questName}_d_3
-  event_{questName}_d_1: journal delete j_{questName}_started
-  event_{questName}_d_2: journal add j_{questName}_done
-  event_{questName}_d_3: tag add tag_{questName}_done
+  event_{questName}_give_item: give item_{questName} notify
 
-  event_{questName}_paid: folder event_{questName}_p1,event_{questName}_p2,event_{questName}_p3,event_{questName}_p4,event_{questName}_p5,event_{questName}_p6,event_{questName}_p7
-  event_{questName}_p1: journal delete j_{questName}_done
+  event_{questName}_paid: folder event_{questName}_p1,event_{questName}_p2,event_{questName}_p3,event_{questName}_p4,event_{questName}_p5,event_{questName}_s6
+  event_{questName}_p1: journal delete j_{questName}_started
   event_{questName}_p2: tag add tag_{questName}_paid
   event_{questName}_p3: run ^command mmocore admin exp give %player% main ${questName}_exp$ ^notify &eВы получили &6${questName}_exp$ &eопыта category:reward
   event_{questName}_p4: money ${questName}_money$ notify
   event_{questName}_p5: notify &2Вы закончили квест &a${questName}_name$ category:end_quest
-  event_{questName}_p6: take {questName}_item notify
-  event_{questName}_p7: compass del compass_{questName}
+  event_{questName}_s6: take item_{questName} notify
 
 conditions:
-  cond_{questName}_icon1: and !cond_{questName}_started
-  cond_{questName}_icon2: and cond_{questName}_started,!cond_{questName}_done
+  cond_{questName}_icon1: and cond_level_{requiedLevel},!cond_{questName}_started
+  cond_{questName}_icon2: and cond_{questName}_started,!cond_{questName}_done,!cond_{questName}_paid
   cond_{questName}_icon3: and cond_{questName}_done,!cond_{questName}_paid
 
   cond_{questName}_started: tag tag_{questName}_started
-  cond_{questName}_done: tag tag_{questName}_done
+  cond_{questName}_item: item item_{questName}
+  cond_{questName}_done: and cond_{questName}_started,cond_{questName}_item
   cond_{questName}_paid: tag tag_{questName}_paid
+
+items:
+  item_{questName}: {itemSetting}
 
 journal:
   j_{questName}_started:
     {langSlug}: '{journalStart}'
-  j_{questName}_done:
-    {langSlug}: '{journalDone}'
 
 main:
   variables:
     {questName}_name: '{questReadableName}'
     {questName}_exp: {expReward}
     {questName}_money: {moneyReward}
-  compass:
-    compass_{questName}:
-      name:
-        ru: {compassName}
-      location: {compassLocation}
-      item: compass_button
 
 objectives:
-  obj_{questName}: {objective}
+  obj_{questName}: {itemObjective} events:event_{questName}_give_item range:2 global
