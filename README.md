@@ -25,6 +25,7 @@ Change log
 - 15.08.2021
 * Added yaml editor
 * Added new quest template
+* Added hotkeys
 
 - 08.08.2021
 * Added the ability to create quests based on templates
