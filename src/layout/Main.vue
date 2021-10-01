@@ -220,6 +220,7 @@ export default {
     },
     changeLang(langSlug) {
       this.settings.language = langSlug
+      this.saveSettings(this.settings)
       document.location.reload()
     },
     closeAndSaveSettings() {
