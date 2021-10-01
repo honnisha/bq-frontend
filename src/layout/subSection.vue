@@ -1,7 +1,10 @@
 <template>
   <el-tabs tab-position="left" v-model="sectionSelected" class="section-tabs" @tab-remove="removeDialogSection">
 
-    <el-tab-pane :label="$t('dialogs')" name="dialogs">
+    <el-tab-pane name="dialogs">
+      <template #label>
+        <span>{{ $t('dialogs') }} <i class="el-icon-chat-line-round"></i></span>
+      </template>
       <div class="menu-buttons">
         <el-button size="mini" @click="openNew('dialog')" class="menu-button" icon="el-icon-plus">{{ $t('add-dialog-section') }}</el-button>
         <el-button size="mini" @click="templateOpen" class="menu-button" icon="el-icon-document-add" type="primary" plain>{{ $t('template-create') }}</el-button>
@@ -25,7 +28,10 @@
       </div>
     </el-tab-pane>
 
-    <el-tab-pane :label="$t('menus')">
+    <el-tab-pane>
+      <template #label>
+        <span>{{ $t('menus') }} <i class="el-icon-s-grid"></i></span>
+      </template>
       <div class="menu-buttons">
         <el-button size="mini" @click="openNew('menu')" class="menu-button">{{ $t('add-menu') }}</el-button>
       </div>
@@ -39,13 +45,54 @@
       </div>
     </el-tab-pane>
 
-    <el-tab-pane :label="$t('events')" name="events"><yamlEditor v-model="sectionInfo.events" v-if="sectionSelected === 'events'" /></el-tab-pane>
-    <el-tab-pane :label="$t('conditions')" name="conditions"><yamlEditor v-model="sectionInfo.conditions" v-if="sectionSelected === 'conditions'" /></el-tab-pane>
-    <el-tab-pane :label="$t('objectives')" name="objectives"><yamlEditor v-model="sectionInfo.objectives" v-if="sectionSelected === 'objectives'" /></el-tab-pane>
-    <el-tab-pane :label="$t('items')" name="items"><yamlEditor v-model="sectionInfo.items" v-if="sectionSelected === 'items'" /></el-tab-pane>
-    <el-tab-pane :label="$t('main')" name="main"><yamlEditor v-model="sectionInfo.main" v-if="sectionSelected === 'main'" /></el-tab-pane>
-    <el-tab-pane :label="$t('journal')" name="journal"><yamlEditor v-model="sectionInfo.journal" v-if="sectionSelected === 'journal'" /></el-tab-pane>
-    <el-tab-pane :label="$t('custom')" name="custom"><yamlEditor v-model="sectionInfo.custom" v-if="sectionSelected === 'custom'" /></el-tab-pane>
+    <el-tab-pane name="main">
+      <template #label>
+        <span>{{ $t('main') }} <i class="el-icon-setting"></i></span>
+      </template>
+      <yamlEditor v-model="sectionInfo.main" v-if="sectionSelected === 'main'" />
+    </el-tab-pane>
+
+    <el-tab-pane name="events">
+      <template #label>
+        <span>{{ $t('events') }} <i class="el-icon-magic-stick"></i></span>
+      </template>
+      <yamlEditor v-model="sectionInfo.events" v-if="sectionSelected === 'events'" />
+    </el-tab-pane>
+
+    <el-tab-pane name="conditions">
+      <template #label>
+        <span>{{ $t('conditions') }} <i class="el-icon-lock"></i></span>
+      </template>
+      <yamlEditor v-model="sectionInfo.conditions" v-if="sectionSelected === 'conditions'" />
+    </el-tab-pane>
+
+    <el-tab-pane name="objectives">
+      <template #label>
+        <span>{{ $t('objectives') }} <i class="el-icon-document-checked"></i></span>
+      </template>
+      <yamlEditor v-model="sectionInfo.objectives" v-if="sectionSelected === 'objectives'" />
+    </el-tab-pane>
+
+    <el-tab-pane name="items">
+      <template #label>
+        <span>{{ $t('items') }} <i class="el-icon-shopping-bag-2"></i></span>
+      </template>
+      <yamlEditor v-model="sectionInfo.items" v-if="sectionSelected === 'items'" />
+    </el-tab-pane>
+
+    <el-tab-pane name="journal">
+      <template #label>
+        <span>{{ $t('journal') }} <i class="el-icon-tickets"></i></span>
+      </template>
+      <yamlEditor v-model="sectionInfo.journal" v-if="sectionSelected === 'journal'" />
+    </el-tab-pane>
+
+    <el-tab-pane name="custom">
+      <template #label>
+        <span>{{ $t('custom') }} <i class="el-icon-more-outline"></i></span>
+      </template>
+      <yamlEditor v-model="sectionInfo.custom" v-if="sectionSelected === 'custom'" />
+    </el-tab-pane>
   </el-tabs>
 
   <el-dialog

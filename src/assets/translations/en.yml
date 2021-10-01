@@ -117,3 +117,5 @@ template-add-to-hologram-conditions: Add to hologram conditions?
 
 add-configs-hologram-and-conditions-for-npc: Add configs for holograms and conditions?
 id-only-numbers: ID can contain onlt digits
+
+use-dark-theme: Use dark theme

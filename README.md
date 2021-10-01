@@ -22,6 +22,10 @@ Screenshots
 Change log
 =======
 ```
+- 1.10.2021
+* Fixed yaml edior
+* Added black theme
+
 - 15.08.2021
 * Added yaml editor
 * Added new quest template

@@ -19,7 +19,7 @@
     "vue-moment": "^4.1.0",
     "vue3-ace-editor": "^2.0.2",
     "vue3-i18n": "^1.0.1",
-    "yaml": "2.0.0-7"
+    "yaml": "^2.0.0-7"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.5",

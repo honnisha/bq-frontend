@@ -117,3 +117,5 @@ template-add-to-hologram-conditions: Добавить условия в наст
 
 add-configs-hologram-and-conditions-for-npc: Добавить настройки для голограм и условий для них?
 id-only-numbers: ID может состоять только из чисел
+
+use-dark-theme: Использовать тёмную тему

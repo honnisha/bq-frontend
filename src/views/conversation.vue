@@ -3,8 +3,8 @@
   <div class="view-editor-section dialog-section" v-if="!editMode">
     <el-affix :offset="0">
       <div class="menu-buttons">
-        <el-button size="mini" @click="changeToYaml" class="menu-button">{{ $t('yaml-editor') }}</el-button>
-        <el-button size="mini" @click="changeToDiagram" class="menu-button">{{ $t('diagram-editor') }}</el-button>
+        <el-button size="mini" @click="changeToYaml" class="menu-button"><i class="el-icon-document el-icon--right"></i> {{ $t('yaml-editor') }}</el-button>
+        <el-button size="mini" @click="changeToDiagram" class="menu-button"><i class="el-icon-data-line el-icon--right"></i> {{ $t('diagram-editor') }}</el-button>
       </div>
     </el-affix>
 
@@ -62,21 +62,29 @@
   <div class="yaml-editor-section" v-else-if="editMode === 'yaml'">
     <el-affix :offset="0">
       <div class="menu-buttons">
-        <el-button size="mini" @click="changeToEditor" class="menu-button">{{ $t('save-and-return') }}</el-button>
+        <el-button size="mini" @click="changeFromYamlToEditor" class="menu-button"><i class="el-icon-chat-line-square el-icon--right"></i> {{ $t('save-and-return') }}</el-button>
+        <el-button size="mini" @click="useDarkTheme" class="menu-button"><i class="el-icon-view el-icon--right"></i> {{ $t('use-dark-theme') }}</el-button>
       </div>
     </el-affix>
 
     <v-ace-editor
       v-model:value="yamlText"
       lang="yaml"
-      theme="chrome"
+      :theme="$root.settings.dark ? 'ambiance' : 'chrome'"
       class="yaml-conversation yaml-editor"
       :printMargin="false"
       :wrap="true"
+      @change="textUpdate"
     />
   </div>
 
   <div class="yaml-editor-section" v-else-if="editMode === 'diagram'">
+    <el-affix :offset="0">
+      <div class="menu-buttons">
+        <el-button size="mini" @click="changeFromDiagramToEditor" class="menu-button"><i class="el-icon-chat-line-square el-icon--right"></i> {{ $t('save-and-return') }}</el-button>
+      </div>
+    </el-affix>
+
     <diagramEdit :init-data="modelValue" />
   </div>
 
@@ -89,6 +97,7 @@ import langField from "../components/langField.vue"
 import langHeader from "../components/langHeader.vue";
 import tagComplete from "../components/tagComplete.vue"
 import yaml from  'js-yaml'
+import yamlEditor from "../views/yamlSection.vue";
 
 import ace from 'ace-builds';
 ace.config.set("basePath", "https://cdn.jsdelivr.net/npm/ace-builds/src-noconflict/")
@@ -102,6 +111,7 @@ export default {
     langHeader,
     tagComplete,
     VAceEditor,
+    yamlEditor,
   },
   props: ['modelValue', 'projectData', 'dialogSectionName', 'subSectionName'],
   data() {
@@ -130,9 +140,22 @@ export default {
       this.yamlText = yaml.dump(this.dialogSectionInfo, {lineWidth: -1})
       this.editMode = 'yaml'
     },
-    changeToEditor() {
-      this.dialogSectionInfo = yaml.load(this.yamlText)
-      this.yamlText = null
+    changeFromYamlToEditor() {
+      this.editMode = null
+    },
+    textUpdate(event, text) {
+      try {
+        this.dialogSectionInfo = yaml.load(this.yamlText)
+      } catch (e) {
+        console.error('Yaml error:', e.message)
+        this.$message({ type: 'error', message: `'Yaml error: ${e.message}` })
+      }
+    },
+    useDarkTheme() {
+      this.$root.settings.dark = !this.$root.settings.dark
+      this.$root.settings = this.$root.settings
+    },
+    changeFromDiagramToEditor() {
       this.editMode = null
     },
     addDialogOption(dialogType) {

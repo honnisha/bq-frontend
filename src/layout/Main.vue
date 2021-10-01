@@ -165,13 +165,30 @@ export default {
       inclideDialogExample: false,
       inclideMenuExample: false,
       openSettingsVisible: false,
-      settings: {
+      init_settings: {
         language: 'ru',
+        dark: false,
       },
+      _settings: {},
       avaliableLanguages: {
         en: enFlag,
         ru: ruFlag,
       },
+      jsonOptions: {
+        lineWidth: -1,
+        schema: yaml.DEFAULT_SCHEMA,
+      },
+    }
+  },
+  computed: {
+    settings: {
+      get: function () {
+        return this._settings
+      },
+      set: function (newSettings) {
+        this._settings = newSettings
+        this.saveSettings(this._settings)
+      }
     }
   },
   created() {
@@ -203,19 +220,22 @@ export default {
     },
     changeLang(langSlug) {
       this.settings.language = langSlug
-      this.saveSettings()
       document.location.reload()
     },
     closeAndSaveSettings() {
       this.openSettingsVisible = false
-      this.saveSettings()
+      this.saveSettings(this.settings)
     },
-    saveSettings() {
-      localStorage.setItem('settings', JSON.stringify(this.settings));
+    saveSettings(newSettings) {
+      localStorage.setItem('settings', JSON.stringify(newSettings));
     },
     readSettings() {
       const settings = JSON.parse(localStorage.getItem('settings'))
-      if (settings) this.settings = settings
+      if (settings) {
+        this._settings = settings
+      } else {
+        this._settings = this.init_settings
+      }
     },
     addTab() {
       if (this.newTabName.length <= 0) {
