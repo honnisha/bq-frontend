@@ -133,24 +133,18 @@
     custom-class="template-dialog"
     :close-on-click-modal="false"
   >
-    <el-tabs tab-position="left" v-if="templateDialogVisible" v-model="templateTabSelected" class="template-tabs">
-      <el-tab-pane :label="templateInfo.label" :name="templateInfo.label" :key="templateInfo.label" v-for="templateInfo in templates">
-        <component :is="templateInfo.template" v-model="projectData" :sub-section-name="subSectionName" @close="closeTemplate" :project-data="projectData" />
-      </el-tab-pane>
-    </el-tabs>
+    <templateView v-model="projectData" :sub-section-name="subSectionName" @close="closeTemplate"/>
   </el-dialog>
 </template>
 
 <script>
-import { shallowRef,  ref, computed } from 'vue'
 import yaml from 'js-yaml'
 import conversation from "../views/conversation.vue";
 import simpleSection from "../views/simpleSection.vue";
 import yamlEditor from "../views/yamlSection.vue";
+import templateView from "../views/templateView.vue";
 
-import objective from "../components/templates/objective.vue";
-import bringItem from "../components/templates/bringItem.vue";
-import moveTo from "../components/templates/moveTo.vue";
+import moveTo from '../assets/templates-data/moveTo.yml?raw'
 
 import defaultConversation from '../assets/defaultConversation.yml?raw'
 
@@ -159,6 +153,7 @@ export default {
     conversation,
     simpleSection,
     yamlEditor,
+    templateView,
   },
   props: ['modelValue', 'projectData', 'subSectionName'],
   data() {
@@ -173,13 +168,7 @@ export default {
       newMode: null,
       sectionSelected: 'dialogs',
       templateDialogVisible: false,
-      templates: [
-        { label: this.$t('template-objective'), template: shallowRef(objective) },
-        { label: this.$t('template-bring-item'), template: shallowRef(bringItem) },
-        { label: this.$t('template-move-to'), template: shallowRef(moveTo) },
-      ],
       loadedDialogsections: {},
-      templateTabSelected: null,
     }
   },
   computed: {

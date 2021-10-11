@@ -1,78 +1,179 @@
 conversations:
   from:
     NPC_options:
-      message_{questName}_start:
+      message_QUESTNAME_start:
         text:
-          {langSlug}: '{questNPCOption1}\n\n&6Необходимый уровень {requiedLevel}\n\n&2Награда:\n✦ ${questName}_exp$ опыта\n■ ${questName}_money$ монет&0---'
-        pointers: option_{questName}_yes, option_no
-      message_{questName}_yes:
+          LANGSLUG: 'QUESTNPCOPTION1\n\n&6Необходимый уровень REQUIEDLEVEL\n\n&2Награда:\n✦ $QUESTNAME_exp$ опыта\n■ $QUESTNAME_money$ монет&0---'
+        pointers: option_QUESTNAME_yes, option_no
+      message_QUESTNAME_yes:
         text: 
-          {langSlug}: '{questNPCOption2}'
-        event: event_{questName}_start
+          LANGSLUG: 'QUESTNPCOPTION2'
+        event: event_QUESTNAME_start
         pointers: option_ok
 
     player_options:
-      option_{questName}_start:
+      option_QUESTNAME_start:
         text: 
-          {langSlug}: '{questPlayerOption1}'
-        conditions: '!cond_{questName}_started'
-        pointers: message_{questName}_start
-      option_{questName}_yes:
+          LANGSLUG: 'QUESTPLAYEROPTION1'
+        conditions: '!cond_QUESTNAME_started'
+        pointers: message_QUESTNAME_start
+      option_QUESTNAME_yes:
         text: 
-          {langSlug}: '{questPlayerOption2}'
-        conditions: 'default.cond_level_{requiedLevel}'
-        pointers: message_{questName}_yes
+          LANGSLUG: 'QUESTPLAYEROPTION2'
+        conditions: 'default.cond_level_REQUIEDLEVEL'
+        pointers: message_QUESTNAME_yes
 
   to:
     NPC_options:
-      message_{questName}_done:
+      message_QUESTNAME_done:
         text:
-          {langSlug}: '{questNPCOption3}'
-        event: {sectionQuesterFrom}.event_{questName}_paid
+          LANGSLUG: 'QUESTNPCOPTION3'
+        event: SECTIONQUESTERFROM.event_QUESTNAME_paid
         pointers: option_ok
 
     player_options:
-      option_{questName}_done:
+      option_QUESTNAME_done:
         text:
-          {langSlug}: '{questPlayerOption3}'
-        conditions: '{sectionQuesterFrom}.cond_{questName}_started,!{sectionQuesterFrom}.cond_{questName}_paid'
-        pointers: message_{questName}_done
+          LANGSLUG: 'QUESTPLAYEROPTION3'
+        conditions: 'SECTIONQUESTERFROM.cond_QUESTNAME_started,!SECTIONQUESTERFROM.cond_QUESTNAME_paid'
+        pointers: message_QUESTNAME_done
 
 events:
-  event_{questName}_start: folder event_{questName}_s1,event_{questName}_s2,event_{questName}_s3,event_{questName}_s4
-  event_{questName}_s1: journal add j_{questName}_started
-  event_{questName}_s2: tag add tag_{questName}_started
-  event_{questName}_s3: notify &2Вы начали квест &a${questName}_name$ category:default.start_quest
-  event_{questName}_s4: compass add compass_{questName}
+  event_QUESTNAME_start: |
+    run
+    ^ journal add j_QUESTNAME_started
+    ^ tag add tag_QUESTNAME_started
+    ^ notify &2Вы начали квест &a$QUESTNAME_name$ category:default.start_quest
+    ^ compass add compass_QUESTNAME
 
-  event_{questName}_paid: folder event_{questName}_p1,event_{questName}_p2,event_{questName}_p3,event_{questName}_p4,event_{questName}_p5,event_{questName}_p6
-  event_{questName}_p1: journal delete j_{questName}_started
-  event_{questName}_p2: tag add tag_{questName}_paid
-  event_{questName}_p3: run ^command mmocore admin exp give %player% main ${questName}_exp$ ^notify &eВы получили &6${questName}_exp$ &eопыта category:default.reward
-  event_{questName}_p4: money ${questName}_money$ notify
-  event_{questName}_p5: notify &2Вы закончили квест &a${questName}_name$ category:default.end_quest
-  event_{questName}_p6: compass del compass_{questName}
+  event_QUESTNAME_paid: |
+    run
+    ^ journal delete j_QUESTNAME_started
+    ^ tag add tag_QUESTNAME_paid
+    ^ run ^command mmocore admin exp give %player% main $QUESTNAME_exp$ ^notify &eВы получили &6$QUESTNAME_exp$ &eопыта category:default.reward
+    ^ money $QUESTNAME_money$ notify
+    ^ notify &2Вы закончили квест &a$QUESTNAME_name$ category:default.end_quest
+    ^ compass del compass_QUESTNAME
 
 conditions:
-  cond_{questName}_icon1: and default.cond_level_{requiedLevel},!cond_{questName}_started
-  cond_{questName}_icon2: and cond_{questName}_started,!cond_{questName}_paid
-  cond_{questName}_icon3: and cond_{questName}_icon2
+  cond_QUESTNAME_icon1: and default.cond_level_REQUIEDLEVEL,!cond_QUESTNAME_started
+  cond_QUESTNAME_icon2: and cond_QUESTNAME_started,!cond_QUESTNAME_paid
+  cond_QUESTNAME_icon3: and cond_QUESTNAME_icon2
 
-  cond_{questName}_started: tag tag_{questName}_started
-  cond_{questName}_paid: tag tag_{questName}_paid
+  cond_QUESTNAME_started: tag tag_QUESTNAME_started
+  cond_QUESTNAME_paid: tag tag_QUESTNAME_paid
 
 journal:
-  j_{questName}_started:
-    {langSlug}: '{journalStart}'
+  j_QUESTNAME_started:
+    LANGSLUG: 'JOURNALSTART'
 
 main:
   variables:
-    {questName}_name: '{questReadableName}'
-    {questName}_exp: {expReward}
-    {questName}_money: {moneyReward}
+    QUESTNAME_name: 'QUESTREADABLENAME'
+    QUESTNAME_exp: EXPREWARD
+    QUESTNAME_money: MONEYREWARD
   compass:
-    compass_{questName}:
+    compass_QUESTNAME:
       name:
-        ru: {compassName}
-      location: {compassLocation}
+        ru: COMPASSNAME
+      location: COMPASSLOCATION
       item: compass_button
+
+template_info:
+  title:
+    en: Move from npc to npc
+    ru: Переходный квест между npc
+
+  settings:
+    secondNpc: true
+
+  variables:
+    LANGSLUG:
+      title:
+        en: Language
+        ru: Язык
+      default: en
+
+    QUESTNAME:
+      title:
+        en: Quest name for system
+        ru: Название квеста для системы
+      default: example
+        
+    QUESTREADABLENAME:
+      title:
+        en: Readable Quest name
+        ru: Читаемое название квеста
+      default: Example quest
+        
+    EXPREWARD:
+      title:
+        en: Exp reward
+        ru: Размер опыта за выполнение
+      default: 200
+
+    MONEYREWARD:
+      title:
+        en: Money reward
+        ru: Монеты за выполнение
+      default: 1000
+
+    REQUIEDLEVEL:
+      title:
+        en: Required level
+        ru: Необходимый лвл для выполнения
+      default: 10
+
+    QUESTPLAYEROPTION1:
+      title:
+        en: Player message
+        ru: Вопрос к NPC
+      default: '$default.quest_prefix$Hi!'
+
+    QUESTNPCOPTION1:
+      title:
+        en: Quest text
+        ru: Текст просмотра квеста
+      default: 'Hello, do the quest for the glory of example!'
+
+    QUESTPLAYEROPTION2:
+      title:
+        en: Agreement from player
+        ru: Соглашение выполнить квест
+      default: '$default.quest_yes_prefix$Okay, I will.'
+
+    QUESTNPCOPTION2:
+      title:
+        en: Text after player confirm
+        ru: Текст после подтверждения
+      default: 'Go and do it!'
+
+    QUESTPLAYEROPTION3:
+      title:
+        en: Message about quest complete
+        ru: Сообщение об выполненном квесте
+      default: '$default.quest_done_prefix$I did what you told'
+
+    QUESTNPCOPTION3:
+      title:
+        en: NPC thanks
+        ru: Благодарность от NPC
+      default: 'Thank you!'
+
+    JOURNALSTART:
+      title:
+        en: Journal note about quest start
+        ru: Запись в журнале о задаче квеста
+      default: 'Started.'
+
+    COMPASSNAME:
+      title:
+        en: Compass name
+        ru: Название компаса
+      default: Target
+
+    COMPASSLOCATION:
+      title:
+        en: Compass location
+        ru: Локация компаса
+      default: '100;66;100;world_rpg'

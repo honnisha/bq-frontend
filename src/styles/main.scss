@@ -19,6 +19,9 @@ h4 {
     background-image: url("./blacktwill.png");
     border-bottom: 1px solid black;
 }
+.el-dialog__header {
+    padding: 10px 20px;
+}
 .dialog > .el-dialog__body {
     padding: 15px;
 }
@@ -396,6 +399,7 @@ h4 {
 .template-dialog {
     min-height: 400px;
     margin-top: 10px!important;
+    margin-bottom: 0px!important;
     .el-dialog__body {
         padding: 10px;
     }

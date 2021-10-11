@@ -62,35 +62,21 @@ save-zip: Export as zip
 data-is-empty: Data is empty
 template-create: Create with template
 template-dialog: Creation with template
-template-objective: Objective template
 delete-dialog-section: Delete dialog section
 dialog-section-deleted: Dialog section <b>{section}</b> deleted
 diagram-editor: Diagram editor
 
-template-quest-name: Quest name for system
-template-quest-readable-name: Readable quest name
-template-quest-NPC-option-1: Quest text
-template-quest-NPC-option-2: Text after player confirm
-template-quest-NPC-option-3: NPC thanks
-template-quest-player-option-1: Player message
-template-quest-player-option-2: Agreement from player
-template-quest-player-option-3: Message about quest complete
-template-quest-journal-start: Journal note about quest start
-template-quest-journal-done: Journal note about quest end
-template-quest-exp-reward: Exp reward
-template-quest-money-reward: Money reward
-template-quest-level: Required level
 template-quest-select: Quester
 preview: Preview
 return-to-edit: Return to editor
 apply: Apply
-mmobkill: Mythic mob kill
+objective-mmobkill: Mythic mob kill
+objective-custom: Custom objective
 mmomob-name: Mythicmob name
 amount: amount
-no-quester: Quester not selected
+no-quester: Quester is not selected
+no-quester-to: Second quester is not selected
 template-applyed: Template applyed
-template-quest-compass-name: Compass name
-template-quest-compass-location: Compass location
 
 enter-new-name: Enter new name
 rename: Rename
@@ -103,13 +89,10 @@ select-option: Select option
 stop-option: Lock player in dialog
 bq-mcmodels-tutorials: BetonQuest Tutorials on mcmodels.net
 
-template-bring-item: Quest bring item
-template-quest-item-setting: Item setting
 template-quest-item-objective: Item recieve objective
 
 dialog-quester-npc-id: Enter id of npc (optional)
 
-template-move-to: Move from npc to npc
 template-quest-select-from: Quest giver NPC
 template-quest-select-to: Quest target NPC
 template-add-to-first-message: Add dialog option to first message?

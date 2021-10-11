@@ -62,35 +62,21 @@ save-zip: Экспорт в zip архив
 data-is-empty: Нет данных для сохранения
 template-create: Создать по шаблону
 template-dialog: Создание по шаблону
-template-objective: Шаблон простого задания
 delete-dialog-section: Удаление раздела диалогов
 dialog-section-deleted: Раздел диалогов <b>{section}</b> удалён
 diagram-editor: Редактор диаграм
 
-template-quest-name: Название квеста для системы
-template-quest-readable-name: Читаемое название квеста
-template-quest-NPC-option-1: Текст просмотра квеста
-template-quest-NPC-option-2: Текст после подтверждения
-template-quest-NPC-option-3: Благодарность от NPC
-template-quest-player-option-1: Вопрос к NPC
-template-quest-player-option-2: Соглашение выполнить квест
-template-quest-player-option-3: Сообщение об выполненном квесте
-template-quest-journal-start: Запись в журнале о задаче квеста
-template-quest-journal-done: Запись в журнале о завешении квеста
-template-quest-exp-reward: Размер опыта за выполнение
-template-quest-money-reward: Монеты за выполнение
-template-quest-level: Необходимый лвл для выполнения
 template-quest-select: NPC
 preview: Предпросмотр
 return-to-edit: Вернуться к редактированию
 apply: Применить
-mmobkill: Убийство моба
+objective-mmobkill: Убийство mythic моба
+objective-custom: Своё задание
 mmomob-name: Название Mythic-моба
 amount: кол-во
 no-quester: Квестодатель не выбран
+no-quester-to: Второй квестодатель не выбран
 template-applyed: Шаблон применён
-template-quest-compass-name: Название компаса
-template-quest-compass-location: Локация компаса
 
 enter-new-name: Введите новое имя
 rename: Переименование
@@ -103,13 +89,8 @@ select-option: Выберите вариант
 stop-option: Закрытие диалога только при завершении
 bq-mcmodels-tutorials: Туториалы BetonQuest на mcmodels.net
 
-template-bring-item: Задание принести предмет
-template-quest-item-setting: Настройка предмета
-template-quest-item-objective: Задание получения предмета
-
 dialog-quester-npc-id: Введите id npc квестера (не обязательно)
 
-template-move-to: Переходный квест между npc
 template-quest-select-from: Квестодатель NPC
 template-quest-select-to: NPC, которому сдавать квест
 template-add-to-first-message: Добавить ответы в первый вариант диалога?

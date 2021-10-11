@@ -6,52 +6,29 @@
     </div>
   </el-affix>
 
-  <v-ace-editor
-    v-model:value="text"
-    lang="yaml"
-    :theme="$root.settings.dark ? 'ambiance' : 'chrome'"
-    :class="customClass"
-    :printMargin="false"
-    :wrap="true"
-    @change="textUpdate"
-  />
+  <aceEditor v-model="text" :class="class"/>
 
 </template>
 
 <script>
-import yaml from 'js-yaml'
-import ace from 'ace-builds';
-ace.config.set("basePath", "https://cdn.jsdelivr.net/npm/ace-builds/src-noconflict/")
-import { VAceEditor } from 'vue3-ace-editor'
+import aceEditor from "../components/aceEditor.vue"
 
 export default {
   props: ['modelValue', 'class'],
   components: {
-    VAceEditor,
+    aceEditor,
   },
-  data() {
-    return {
-      text: '',
-      customClass: this.class || 'yaml-editor'
-    }
-  },
-  created() {
-    try {
-      this.text = yaml.dump(this.modelValue, this.$root.jsonOptions)
-    } catch (e) {
-      console.error('Yaml error:', e.message)
-      this.$message({ type: 'error', message: `'Yaml error: ${e.message}` })
-    }
-  },
-  methods: {
-    textUpdate(event, text) {
-      try {
-        this.$emit('update:modelValue', yaml.load(this.text, this.$root.jsonOptions))
-      } catch (e) {
-        console.error('Yaml error:', e.message)
-        this.$message({ type: 'error', message: `'Yaml error: ${e.message}` })
+  computed: {
+    text: {
+      get() {
+        return this.modelValue
+      },
+      set(value) {
+        this.$emit('update:modelValue', value)
       }
     },
+  },
+  methods: {
     useDarkTheme() {
       this.$root.settings.dark = !this.$root.settings.dark
       this.$root.settings = this.$root.settings

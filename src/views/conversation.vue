@@ -67,15 +67,7 @@
       </div>
     </el-affix>
 
-    <v-ace-editor
-      v-model:value="yamlText"
-      lang="yaml"
-      :theme="$root.settings.dark ? 'ambiance' : 'chrome'"
-      class="yaml-conversation yaml-editor"
-      :printMargin="false"
-      :wrap="true"
-      @change="textUpdate"
-    />
+    <aceEditor v-model="this.dialogSectionInfo" class="yaml-conversation yaml-editor"/>
   </div>
 
   <div class="yaml-editor-section" v-else-if="editMode === 'diagram'">
@@ -96,12 +88,8 @@ import diagramEdit from "./diagramView.vue"
 import langField from "../components/langField.vue"
 import langHeader from "../components/langHeader.vue";
 import tagComplete from "../components/tagComplete.vue"
-import yaml from  'js-yaml'
-import yamlEditor from "../views/yamlSection.vue";
+import aceEditor from "../components/aceEditor.vue"
 
-import ace from 'ace-builds';
-ace.config.set("basePath", "https://cdn.jsdelivr.net/npm/ace-builds/src-noconflict/")
-import { VAceEditor } from 'vue3-ace-editor'
 
 export default {
   components: {
@@ -110,14 +98,12 @@ export default {
     langField,
     langHeader,
     tagComplete,
-    VAceEditor,
-    yamlEditor,
+    aceEditor,
   },
   props: ['modelValue', 'projectData', 'dialogSectionName', 'subSectionName'],
   data() {
     return {
       editMode: null,
-      yamlText: null,
       diagramData: null,
     }
   },
@@ -137,19 +123,10 @@ export default {
       this.editMode = 'diagram'
     },
     changeToYaml() {
-      this.yamlText = yaml.dump(this.dialogSectionInfo, {lineWidth: -1})
       this.editMode = 'yaml'
     },
     changeFromYamlToEditor() {
       this.editMode = null
-    },
-    textUpdate(event, text) {
-      try {
-        this.dialogSectionInfo = yaml.load(this.yamlText)
-      } catch (e) {
-        console.error('Yaml error:', e.message)
-        this.$message({ type: 'error', message: `'Yaml error: ${e.message}` })
-      }
     },
     useDarkTheme() {
       this.$root.settings.dark = !this.$root.settings.dark

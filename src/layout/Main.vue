@@ -107,7 +107,7 @@
       </template>
     </el-dialog>
 
-    <el-tabs class="sections-tabs" v-model="sectionSelected" type="border-card" closable @tab-remove="removeTab">
+    <el-tabs class="sections-tabs" v-model="sectionSelected" type="border-card" closable @tab-remove="removeTab" v-if="Object.keys(projectData).length > 0">
       <el-tab-pane
         v-for="(sectionInfo, name) in projectData"
         :key="name"
@@ -311,6 +311,12 @@ export default {
     openJson() {
       this.$refs.jsonFileInput.click()
     },
+    postLoadEvent() {
+      if (!this.sectionSelected) {
+        const lastKey = Object.keys(this.projectData)[0]
+        this.sectionSelected = lastKey
+      }
+    },
     async onFileJsonPicked(event) {
       const files = event.target.files
       this.projectData = {}
@@ -321,6 +327,7 @@ export default {
         self.projectData = JSON.parse(fileReader.result)
       }
       fileReader.readAsText(files[0])
+      this.postLoadEvent()
     },
     saveAsJson() {
       if (Object.keys(this.projectData).length === 0) {
@@ -370,6 +377,7 @@ export default {
           type: 'success'
         })
       }
+      this.postLoadEvent()
     },
     saveLocalStorage(index) {
       if (Object.keys(this.projectData).length === 0) {
