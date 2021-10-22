@@ -139,10 +139,10 @@
 
 <script>
 import yaml from 'js-yaml'
-import conversation from "../views/conversation.vue";
-import simpleSection from "../views/simpleSection.vue";
-import yamlEditor from "../views/yamlSection.vue";
-import templateView from "../views/templateView.vue";
+import conversation from "./conversation.vue"
+import simpleSection from "./simpleSection.vue"
+import yamlEditor from "./yamlSection.vue"
+import templateView from "./template.vue"
 
 import moveTo from '../assets/templates-data/moveTo.yml?raw'
 

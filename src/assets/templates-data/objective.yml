@@ -34,7 +34,7 @@ conversations:
         pointers: message_QUESTNAME_done
 
 events:
-  event_QUESTNAME_start: |
+  event_QUESTNAME_start: |-
     run
     ^ journal add j_QUESTNAME_started
     ^ tag add tag_QUESTNAME_started
@@ -42,13 +42,13 @@ events:
     ^ compass add compass_QUESTNAME
     ^ objective start obj_QUESTNAME
 
-  event_QUESTNAME_done: |
+  event_QUESTNAME_done: |-
     run
     ^ journal delete j_QUESTNAME_started
     ^ journal add j_QUESTNAME_done
     ^ tag add tag_QUESTNAME_done
 
-  event_QUESTNAME_paid: |
+  event_QUESTNAME_paid: |-
     run
     ^ journal delete j_QUESTNAME_done
     ^ tag add tag_QUESTNAME_paid

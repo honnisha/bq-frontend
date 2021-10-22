@@ -84,7 +84,7 @@
 
 <script>
 import dialogOption from "../components/dialogOption.vue"
-import diagramEdit from "./diagramView.vue"
+import diagramEdit from "./diagram.vue"
 import langField from "../components/langField.vue"
 import langHeader from "../components/langHeader.vue";
 import tagComplete from "../components/tagComplete.vue"

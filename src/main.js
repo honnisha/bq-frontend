@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
-import Main from './layout/Main.vue'
+import Main from './Main.vue'
 import i18n from "./i18n";
 
 const app = createApp(Main)

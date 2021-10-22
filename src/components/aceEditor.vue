@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import yaml from 'js-yaml'
+import { dumpYaml, loadYaml } from '../utils/yamlUtils.js'
 import ace from 'ace-builds';
 ace.config.set("basePath", "https://cdn.jsdelivr.net/npm/ace-builds/src-noconflict/")
 import { VAceEditor } from 'vue3-ace-editor'
@@ -33,7 +33,7 @@ export default {
   created() {
     if (!this.raw) {
       try {
-        this.text = yaml.dump(this.modelValue, this.$root.jsonOptions)
+        this.text = dumpYaml(this.modelValue, this.$root.jsonDumpOptions)
       } catch (e) {
         console.error('Yaml error:', e.message)
         this.$message({ type: 'error', message: `'Yaml error: ${e.message}` })
@@ -46,7 +46,7 @@ export default {
     textUpdate(event, text) {
       if (!this.raw) {
         try {
-          this.$emit('update:modelValue', yaml.load(this.text, this.$root.jsonOptions))
+          this.$emit('update:modelValue', loadYaml(this.text, this.$root.jsonLoadOptions))
         } catch (e) {
           console.error('Yaml error:', e.message)
           this.$message({ type: 'error', message: `'Yaml error: ${e.message}` })

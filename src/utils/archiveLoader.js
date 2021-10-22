@@ -1,5 +1,5 @@
-import yaml from  'js-yaml'
 import JSZip from 'jszip'
+import { loadYaml } from './yamlUtils.js'
 
 async function loadConversationsConfig(ymlData) {
   return ymlData
@@ -20,7 +20,7 @@ function loadModule(sectionName, content) {
 
   if (content) {
     try {
-      const yamlConfig = yaml.load(content)
+      const yamlConfig = loadYaml(content)
       sectionData.data = yamlConfig
     } catch (e) {
       console.error(`Section "${sectionName}" error: ${e}`)

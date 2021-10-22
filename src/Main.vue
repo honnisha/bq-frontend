@@ -136,18 +136,18 @@
 </style>
 
 <script>
-import yaml from 'js-yaml'
-import { loadArchive } from '../utils/archiveLoader.js'
-import { saveArchive } from '../utils/archiveSaver.js'
-import subSection from "../layout/subSection.vue"
-import { useI18n } from "vue3-i18n"
+import { loadYaml } from './utils/yamlUtils.js'
+import { loadArchive } from './utils/archiveLoader.js'
+import { saveArchive } from './utils/archiveSaver.js'
+import subSection from "./views/subSection.vue"
+import { useI18n } from 'vue3-i18n'
 import moment from 'moment'
 
-import dialogExample from '../assets/dialogExample.yml?raw'
-import menuExample from '../assets/menuExample.yml?raw'
+import dialogExample from './assets/dialogExample.yml?raw'
+import menuExample from './assets/menuExample.yml?raw'
 
-import ruFlag from "../assets/lang-icons/ru.svg"
-import enFlag from "../assets/lang-icons/en.svg"
+import ruFlag from './assets/lang-icons/ru.svg'
+import enFlag from './assets/lang-icons/en.svg'
 
 export default {
   components: {
@@ -173,10 +173,6 @@ export default {
       avaliableLanguages: {
         en: enFlag,
         ru: ruFlag,
-      },
-      jsonOptions: {
-        lineWidth: -1,
-        schema: yaml.DEFAULT_SCHEMA,
       },
     }
   },
@@ -254,7 +250,7 @@ export default {
       }
 
       if (this.inclideDialogExample) {
-        const dialogExampleData = yaml.load(dialogExample)
+        const dialogExampleData = loadYaml(dialogExample)
         this.projectData[this.newTabName]['conversations'] = dialogExampleData.conversations
         this.projectData[this.newTabName]['conditions'] = dialogExampleData.conditions
         this.projectData[this.newTabName]['custom'] = dialogExampleData.custom
@@ -267,7 +263,7 @@ export default {
       this.inclideDialogExample = false
 
       if (this.inclideMenuExample) {
-        const menuExampleData = yaml.load(menuExample)
+        const menuExampleData = loadYaml(menuExample)
         this.projectData[this.newTabName]['menus'] = menuExampleData
       }
       this.inclideMenuExample = false
