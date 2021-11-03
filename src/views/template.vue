@@ -24,9 +24,9 @@ export default {
     return {
       templateTabSelected: null,
       templatesYamls: [
+        objective,
         bringItem,
         moveTo,
-        objective,
       ],
       templates: [],
     }

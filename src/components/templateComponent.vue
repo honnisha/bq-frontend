@@ -57,6 +57,10 @@
       <el-checkbox v-model="addToFirst">{{ $t('template-add-to-first-message') }}</el-checkbox>
     </el-row>
 
+    <el-row class="template-setting">
+      <el-checkbox v-model="addCompass">{{ $t('template-add-compass') }}</el-checkbox>
+    </el-row>
+
     <div class="right-section">
       <el-button type="success" @click="apply">{{ $t('apply') }}</el-button>
     </div>
@@ -94,6 +98,7 @@ export default {
       questers: [],
       addToHologram: true,
       addToFirst: true,
+      addCompass: true,
     }
   },
   computed: {
@@ -162,6 +167,7 @@ export default {
         )
 
         fromSectionInfo.events = Object.assign({}, fromSectionInfo.events, objData.events)
+        fromSectionInfo.objectives = Object.assign({}, fromSectionInfo.events, objData.objectives)
         fromSectionInfo.conditions = Object.assign({}, fromSectionInfo.conditions, objData.conditions)
         fromSectionInfo.journal = Object.assign({}, fromSectionInfo.journal, objData.journal)
 
@@ -173,7 +179,7 @@ export default {
           const firstFrom = fromSectionInfo.conversations[questerFrom].first
           if (firstFrom) {
             let pointers = fromSectionInfo.conversations[questerFrom].NPC_options[firstFrom].pointers
-            fromSectionInfo.conversations[questerFrom].NPC_options[firstFrom].pointers = `option_${this.templateData.questName}_start,${pointers}`
+            fromSectionInfo.conversations[questerFrom].NPC_options[firstFrom].pointers = `option_${this.templateData.questName}_done,option_${this.templateData.questName}_start,${pointers}`
           }
         }
 
@@ -212,9 +218,14 @@ export default {
           
           if (this.addToHologram) {
             let progress = toSectionInfo.conditions[`cond_quest_progress_${questerTo}`]
-            toSectionInfo.conditions[`cond_quest_progress_${questerTo}`] = `${progress},{sectionQuesterFrom}.cond_${this.templateData.questName}_icon2`
+            if (progress) {
+              toSectionInfo.conditions[`cond_quest_progress_${questerTo}`] = `${progress},{sectionQuesterFrom}.cond_${this.templateData.questName}_icon2`
+            }
+
             let done = toSectionInfo.conditions[`cond_quest_done_${questerTo}`]
-            toSectionInfo.conditions[`cond_quest_done_${questerTo}`] = `${done},{sectionQuesterFrom}.cond_${this.templateData.questName}_icon3`
+            if (done) {
+              toSectionInfo.conditions[`cond_quest_done_${questerTo}`] = `${done},{sectionQuesterFrom}.cond_${this.templateData.questName}_icon3`
+            }
           }
         }
 

@@ -102,3 +102,4 @@ add-configs-hologram-and-conditions-for-npc: Add configs for holograms and condi
 id-only-numbers: ID can contain onlt digits
 
 use-dark-theme: Use dark theme
+template-add-compass: Add compass target

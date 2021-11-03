@@ -100,3 +100,4 @@ add-configs-hologram-and-conditions-for-npc: Добавить настройки
 id-only-numbers: ID может состоять только из чисел
 
 use-dark-theme: Использовать тёмную тему
+template-add-compass: Добавить направление для компаса

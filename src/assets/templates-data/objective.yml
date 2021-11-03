@@ -47,12 +47,15 @@ events:
     ^ journal delete j_QUESTNAME_started
     ^ journal add j_QUESTNAME_done
     ^ tag add tag_QUESTNAME_done
+    ^ folder default.event_task_done
+    ^ folder default.totem_task_completed
 
   event_QUESTNAME_paid: |-
     run
     ^ journal delete j_QUESTNAME_done
     ^ tag add tag_QUESTNAME_paid
-    ^ run ^command mmocore admin exp give %player% main $QUESTNAME_exp$ ^notify &eВы получили &6$QUESTNAME_exp$ &eопыта category:reward
+    ^ command mmocore admin exp give %player% main $QUESTNAME_exp$
+    ^ notify &eВы получили &6$QUESTNAME_exp$ &eопыта category:reward
     ^ money $QUESTNAME_money$ notify
     ^ notify &2Вы закончили квест &A$QUESTNAME_name$ category:end_quest
     ^ take QUESTNAME_item notify
