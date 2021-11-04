@@ -77,7 +77,7 @@
       <template #label>
         <span>{{ $t('items') }} <i class="el-icon-shopping-bag-2"></i></span>
       </template>
-      <yamlEditor v-model="sectionInfo.items" v-if="sectionSelected === 'items'" />
+      <itemsEditor v-model="sectionInfo.items" v-if="sectionSelected === 'items'" />
     </el-tab-pane>
 
     <el-tab-pane name="journal">
@@ -121,7 +121,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="addVisible = false">{{ $t('cancel') }}</el-button>
-        <el-button type="primary" @click="addDialoge">{{ $t('create') }}</el-button>
+        <el-button type="primary" @click="addDialog">{{ $t('create') }}</el-button>
       </span>
     </template>
   </el-dialog>
@@ -138,15 +138,14 @@
 </template>
 
 <script>
-import yaml from 'js-yaml'
 import conversation from "./conversation.vue"
 import simpleSection from "./simpleSection.vue"
 import yamlEditor from "./yamlSection.vue"
+import itemsEditor from "./itemsEditor.vue"
 import templateView from "./template.vue"
+import { createNewNpcSection } from "../utils/createNewNpcSection.js"
 
 import moveTo from '../assets/templates-data/moveTo.yml?raw'
-
-import defaultConversation from '../assets/defaultConversation.yml?raw'
 
 export default {
   components: {
@@ -154,6 +153,7 @@ export default {
     simpleSection,
     yamlEditor,
     templateView,
+    itemsEditor,
   },
   props: ['modelValue', 'projectData', 'subSectionName'],
   data() {
@@ -202,7 +202,7 @@ export default {
         });
       })
     },
-    addDialoge() {
+    addDialog() {
       if (this.newName.length <= 0) {
         this.newNameError = this.$t('empty-title')
         return
@@ -211,8 +211,6 @@ export default {
       if (!this.sectionInfo.conversations) this.sectionInfo.conversations = {}
 
       if (this.newMode === 'dialog') {
-        if (!this.sectionInfo.conversations) this.sectionInfo.conversations = {}
-
         if (this.sectionInfo.conversations[this.newName]) {
           this.newNameError = this.$t('dialog-exists').replace('{newName}', this.newName)
           return
@@ -228,55 +226,31 @@ export default {
           }
         }
 
-        let defaultConversationText = defaultConversation
-        defaultConversationText = defaultConversationText.replaceAll(
-          '{npcName}', this.newName
-        ).replaceAll(
-          '{npcID}', this.newNPCID
-        ).replaceAll(
-          '{langSlug}', this.$root.settings.language
+        createNewNpcSection(
+          this.sectionInfo, this.newName, this.newNPCID, this.newNPCholograms, this.$root.settings.language
         )
-        const defaultConversation = yaml.load(newConfigHologramText)
-
-        this.sectionInfo.conversations[this.newName] = defaultConversation.conversations
-
-        if (this.newNPCID) {
-          this.sectionInfo.main.npcs[this.newNPCID] = this.newName
-
-          if (!this.sectionInfo.custom) this.sectionInfo.custom = { npc_holograms: { check_interval: 100 } }
-          if (this.newNPCholograms) {
-            this.sectionInfo.custom.npc_holograms = Object.assign(
-              {}, this.sectionInfo.custom.npc_holograms, defaultConversation.npc_holograms
-            )
-          }
-          if (this.newNPCholograms) {
-            this.sectionInfo.conditions = Object.assign(
-              {}, this.sectionInfo.conditions, defaultConversation.conditions
-            )
-          }
-          this.newNPCholograms = false
-
-        }
-        this.newNPCID = null
 
         this.dialogSelected = this.newName
+        this.newNPCID = null
+        this.newNPCholograms = false
+        
         this.$message({
           type: 'success',
           dangerouslyUseHTMLString: true,
           message: this.$t('dialog-section-created').replace('{newName}', this.newName)
         })
+      }
+      else if (this.newMode === 'menu') {
+        if (!this.sectionInfo.menus) sectionInfo.menus = {}
 
-      } else if (this.newMode === 'menu') {
-        if (!this.sectionInfo.menus) this.sectionInfo.menus = {}
-
-        if (this.sectionInfo.menus[this.newName]) {
+        if (sectionInfo.menus[this.newName]) {
           this.newNameError = this.$t('menu-section-exists').replace('{newName}', this.newName)
           return
         }
 
-        if (!this.sectionInfo.menus) this.sectionInfo.menus = {}
-        this.sectionInfo.menus[this.newName] = {}
-        
+        if (!sectionInfo.menus) sectionInfo.menus = {}
+        sectionInfo.menus[this.newName] = {}
+
         this.$message({
           type: 'success',
           dangerouslyUseHTMLString: true,
@@ -284,7 +258,6 @@ export default {
         })
       }
 
-      this.dialogSelected = this.newName
       this.newName = null
       this.includeExample = false
       this.addVisible = false

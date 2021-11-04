@@ -17,7 +17,7 @@ create: Создать
 language: Язык
 error-title-name-empty: Заголовок раздела не может быть пустым
 create-section: Создание раздела
-add-dialog-section: Добавить раздел диалога
+add-dialog-section: Добавить секцию квестов
 dialogs: Диалоги
 add-menu: Добавить меню
 menus: Меню
@@ -28,8 +28,8 @@ items: Предметы
 main: Основное
 journal: Журнал
 custom: Разное
-create-subsection: Создание раздела
-dialog-section-name: Введите название раздела
+create-subsection: Создание секции квестов
+dialog-section-name: Введите название квестера
 provide-name: Введите название
 empty-title: Заголовок не может быть пустым
 delete-section: Удалить раздел {tab}?
@@ -101,3 +101,13 @@ id-only-numbers: ID может состоять только из чисел
 
 use-dark-theme: Использовать тёмную тему
 template-add-compass: Добавить направление для компаса
+add-dialog-to-first-option: Добавить вариант ответа в первый диалог
+create-item: Создать предмет через меню
+create-item-dialog: Меню создания предметов
+newitem-material: Материал
+newitem-cmd: Custom model data
+newitem-name: Название
+newitem-lore: Описание
+newitem-settingName: Название настройки
+newitem-quest-items-unbreakable: Нельзя уничтожить
+newitem-already-exists: Предмет {settingName} уже существует

@@ -1,11 +1,5 @@
 <template>
 
-  <el-affix :offset="0">
-    <div class="menu-buttons">
-      <el-button size="mini" @click="useDarkTheme" class="menu-button"><i class="el-icon-view el-icon--right"></i> {{ $t('use-dark-theme') }}</el-button>
-    </div>
-  </el-affix>
-
   <aceEditor v-model="text" :class="class"/>
 
 </template>
@@ -29,10 +23,6 @@ export default {
     },
   },
   methods: {
-    useDarkTheme() {
-      this.$root.settings.dark = !this.$root.settings.dark
-      this.$root.settings = this.$root.settings
-    },
   }
 }
 </script>

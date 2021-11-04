@@ -81,7 +81,6 @@ h4 {
 }
 
 .setting-header,.setting-value, .field-editor > .el-input > .el-input__inner, .dialogs-section {
-    font-family: 'Courier New', monospace;
     color: black!important;
     line-height: 14px;
     font-size: 12px;
@@ -154,7 +153,11 @@ h4 {
     height: 20px;
     margin-right: 10px;
     .section-lang {
+        width: 300px;
         margin-right: 10px;
+        .small-editor {
+            width: 260px;
+        }
     }
 }
 .conversation-settings {

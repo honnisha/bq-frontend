@@ -22,9 +22,9 @@ npc_holograms:
     conditions: cond_quest_done_{npcName}
 
 conditions:
-  cond_quest_avalible_{npcName}: example
-  cond_quest_progress_{npcName}: example
-  cond_quest_done_{npcName}: example
+  cond_quest_avalible_{npcName}: and cond_false
+  cond_quest_progress_{npcName}: and cond_false
+  cond_quest_done_{npcName}: and cond_false
 
 conversations:
   quester:

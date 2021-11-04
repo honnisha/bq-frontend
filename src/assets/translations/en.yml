@@ -103,3 +103,13 @@ id-only-numbers: ID can contain onlt digits
 
 use-dark-theme: Use dark theme
 template-add-compass: Add compass target
+add-dialog-to-first-option: Add dialog to first option
+create-item: Create item with menu
+create-item-dialog: Create item menu
+newitem-material: Material
+newitem-cmd: Custom model data
+newitem-name: Name
+newitem-lore: Lore
+newitem-settingName: Setting name
+newitem-quest-items-unbreakable: Quest items unbreakable
+newitem-already-exists: Item {settingName} already exists

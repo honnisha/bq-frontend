@@ -113,8 +113,10 @@ export default {
   },
   created() {
     for (const [sectionKey, sectionData] of Object.entries(this.projectData)) {
-      for (const [quester, _] of Object.entries(sectionData.conversations)) {
-        this.questers.push({quester: quester , sectionKey: sectionKey})
+      if (sectionData.conversations) {
+        for (const [quester, _] of Object.entries(sectionData.conversations)) {
+          this.questers.push({quester: quester , sectionKey: sectionKey})
+        }
       }
     }
 
@@ -170,6 +172,10 @@ export default {
         fromSectionInfo.objectives = Object.assign({}, fromSectionInfo.events, objData.objectives)
         fromSectionInfo.conditions = Object.assign({}, fromSectionInfo.conditions, objData.conditions)
         fromSectionInfo.journal = Object.assign({}, fromSectionInfo.journal, objData.journal)
+
+        if (objData.items) {
+          fromSectionInfo.items = Object.assign({}, fromSectionInfo.journal, objData.items)
+        }
 
         if (!fromSectionInfo.main) fromSectionInfo.main = { variables: {}, npcs: {}, compass: {} }
         fromSectionInfo.main.variables = Object.assign({}, fromSectionInfo.main.variables, objData.main.variables)
