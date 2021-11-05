@@ -152,6 +152,8 @@ export default {
           return
         }
 
+        const questName = this.templateData.QUESTNAME
+
         let objData = yaml.load(this.getFormattedYaml())
 
         let questerFrom = this.questerFrom.split('.')[1]
@@ -188,13 +190,25 @@ export default {
           const firstFrom = fromSectionInfo.conversations[questerFrom].first
           if (firstFrom) {
             let pointers = fromSectionInfo.conversations[questerFrom].NPC_options[firstFrom].pointers
-            fromSectionInfo.conversations[questerFrom].NPC_options[firstFrom].pointers = `option_${this.templateData.questName}_done,option_${this.templateData.questName}_start,${pointers}`
+            fromSectionInfo.conversations[questerFrom].NPC_options[firstFrom].pointers = `option_${questName}_done,option_${questName}_start,${pointers}`
           }
         }
 
         if (this.addToHologram) {
           let avalible = fromSectionInfo.conditions[`cond_quest_avalible_${questerFrom}`]
-          fromSectionInfo.conditions[`cond_quest_avalible_${questerFrom}`] = `${avalible},cond_${this.templateData.questName}_icon1`
+          if (avalible) {
+            fromSectionInfo.conditions[`cond_quest_avalible_${questerFrom}`] = `${avalible},cond_${questName}_icon1`
+          }
+
+          let progress = fromSectionInfo.conditions[`cond_quest_progress_${questerFrom}`]
+          if (progress) {
+            fromSectionInfo.conditions[`cond_quest_progress_${questerFrom}`] = `${progress},cond_${questName}_icon1`
+          }
+          
+          let done = fromSectionInfo.conditions[`cond_quest_done_${questerFrom}`]
+          if (done) {
+            fromSectionInfo.conditions[`cond_quest_done_${questerFrom}`] = `${done},cond_${questName}_icon1`
+          }
         }
 
         if (this.templateInfo.settings.secondNpc) {
@@ -221,19 +235,19 @@ export default {
             const firstTo = toSectionInfo.conversations[questerTo].first
             if (firstTo) {
               let pointers = toSectionInfo.conversations[questerTo].NPC_options[firstTo].pointers
-              toSectionInfo.conversations[questerTo].NPC_options[firstTo].pointers = `option_${this.templateData.questName}_done,${pointers}`
+              toSectionInfo.conversations[questerTo].NPC_options[firstTo].pointers = `option_${questName}_done,${pointers}`
             }
           }
           
           if (this.addToHologram) {
             let progress = toSectionInfo.conditions[`cond_quest_progress_${questerTo}`]
             if (progress) {
-              toSectionInfo.conditions[`cond_quest_progress_${questerTo}`] = `${progress},{sectionQuesterFrom}.cond_${this.templateData.questName}_icon2`
+              toSectionInfo.conditions[`cond_quest_progress_${questerTo}`] = `${progress},{sectionQuesterFrom}.cond_${questName}_icon2`
             }
 
             let done = toSectionInfo.conditions[`cond_quest_done_${questerTo}`]
             if (done) {
-              toSectionInfo.conditions[`cond_quest_done_${questerTo}`] = `${done},{sectionQuesterFrom}.cond_${this.templateData.questName}_icon3`
+              toSectionInfo.conditions[`cond_quest_done_${questerTo}`] = `${done},{sectionQuesterFrom}.cond_${questName}_icon3`
             }
           }
         }
@@ -241,7 +255,7 @@ export default {
         this.$message({
           type: 'success',
           dangerouslyUseHTMLString: true,
-          message: this.$t('template-applyed'),
+          message: this.$t('template-applyed').replace('{questName}', questName),
         })
         this.$emit('close')
       } catch (e) {

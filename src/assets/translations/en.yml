@@ -76,7 +76,7 @@ mmomob-name: Mythicmob name
 amount: amount
 no-quester: Quester is not selected
 no-quester-to: Second quester is not selected
-template-applyed: Template applyed
+template-applyed: Template quest {questName} applyed
 
 enter-new-name: Enter new name
 rename: Rename

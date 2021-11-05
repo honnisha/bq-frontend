@@ -76,7 +76,7 @@ mmomob-name: Название Mythic-моба
 amount: кол-во
 no-quester: Квестодатель не выбран
 no-quester-to: Второй квестодатель не выбран
-template-applyed: Шаблон применён
+template-applyed: Шаблон квеста "{questName}" применён
 
 enter-new-name: Введите новое имя
 rename: Переименование
