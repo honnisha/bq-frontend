@@ -181,7 +181,7 @@ export default {
         }
 
         if (objData.items) {
-          fromSectionInfo.items = Object.assign({}, fromSectionInfo.journal, objData.items)
+          fromSectionInfo.items = Object.assign({}, fromSectionInfo.items, objData.items)
         }
 
         if (!fromSectionInfo.main) fromSectionInfo.main = { variables: {}, npcs: {}, compass: {} }
