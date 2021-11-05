@@ -60,8 +60,8 @@ quester-name: Имя квестодателя
 new-setting-key: Введите название
 save-zip: Экспорт в zip архив
 data-is-empty: Нет данных для сохранения
-template-create: Создать по шаблону
-template-dialog: Создание по шаблону
+template-create: Создать квест по шаблону
+template-dialog: Создание квест по шаблону
 delete-dialog-section: Удаление раздела диалогов
 dialog-section-deleted: Раздел диалогов <b>{section}</b> удалён
 diagram-editor: Редактор диаграм

@@ -1,7 +1,7 @@
 <template>
   <el-tabs tab-position="left" v-model="templateTabSelected" class="template-tabs">
     <el-tab-pane :label="templateInfo.label" :name="templateInfo.label" :key="templateInfo.label" v-for="templateInfo in templates">
-      <templateComponent v-model="projectData" :source-yaml="templateInfo.yaml" :sub-section-name="subSectionName" />
+      <templateComponent v-model="projectData" :source-yaml="templateInfo.yaml" :sub-section-name="subSectionName" @close="closeTemplate"/>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -58,6 +58,11 @@ export default {
       }
     }
     this.templateTabSelected = this.templates[0].label
+  },
+  methods: {
+    closeTemplate() {
+      this.$emit('close')
+    },
   }
 }
 </script>

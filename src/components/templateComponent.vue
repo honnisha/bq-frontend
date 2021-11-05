@@ -169,17 +169,20 @@ export default {
         )
 
         fromSectionInfo.events = Object.assign({}, fromSectionInfo.events, objData.events)
-        fromSectionInfo.objectives = Object.assign({}, fromSectionInfo.events, objData.objectives)
+        fromSectionInfo.objectives = Object.assign({}, fromSectionInfo.objectives, objData.objectives)
         fromSectionInfo.conditions = Object.assign({}, fromSectionInfo.conditions, objData.conditions)
         fromSectionInfo.journal = Object.assign({}, fromSectionInfo.journal, objData.journal)
+        fromSectionInfo.main.variables = Object.assign({}, fromSectionInfo.main.variables, objData.main.variables)
+
+        if (objData.main.compass) {
+          fromSectionInfo.main.compass = Object.assign({}, fromSectionInfo.main.compass, objData.main.compass)
+        }
 
         if (objData.items) {
           fromSectionInfo.items = Object.assign({}, fromSectionInfo.journal, objData.items)
         }
 
         if (!fromSectionInfo.main) fromSectionInfo.main = { variables: {}, npcs: {}, compass: {} }
-        fromSectionInfo.main.variables = Object.assign({}, fromSectionInfo.main.variables, objData.main.variables)
-        fromSectionInfo.main.compass = Object.assign({}, fromSectionInfo.main.compass, objData.main.compass)
 
         if (this.addToFirst) {
           const firstFrom = fromSectionInfo.conversations[questerFrom].first
