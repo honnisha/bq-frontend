@@ -13,6 +13,7 @@
     "file-saver": "^2.0.5",
     "js-yaml": "^4.1.0",
     "jszip": "^3.7.0",
+    "uuid": "^8.3.2",
     "vue": "^3.0.5",
     "vue-click-outside": "^1.1.0",
     "vue-i18n": "^8.25.0",

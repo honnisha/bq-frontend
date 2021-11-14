@@ -235,7 +235,6 @@ export default {
       for (const [dialogkey, dialogOption] of Object.entries(dialogSection.NPC_options)) {
         this.tagOptions.pointers.player_options.push({value: dialogkey, label: dialogkey})
       }
-      console.log('tagOptions', this.tagOptions)
     },
   }
 }

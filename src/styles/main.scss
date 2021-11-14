@@ -390,12 +390,22 @@ h4 {
 }
 
 .template-tabs {
+    margin: 0px!important;
     .el-tabs__item {
         height: 20px;
         line-height: 20px;   
     }
     .menu-buttons {
         margin-bottom: 10px;
+    }
+    .el-tabs__item:last-child {
+        padding-right: 1px!important;
+    }
+    .el-tabs__new-tab {
+        margin: 5px;
+    }
+    .el-tabs__content {
+        padding: 0px!important;
     }
 }
 
@@ -483,7 +493,7 @@ h4 {
 }
 
 .dialog-subsection {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     .el-input {
         height: 30px;
     }
@@ -504,5 +514,8 @@ h4 {
 .el-divider.el-divider--horizontal {
     margin: 15px 0;
 }
-
-
+.hotkey {
+    padding: 2px;
+    line-height: 15px;
+    height: 20px;
+}

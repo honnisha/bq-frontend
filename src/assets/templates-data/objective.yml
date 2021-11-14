@@ -3,7 +3,7 @@ conversations:
     NPC_options:
       message_QUESTNAME_start:
         text:
-          LANGSLUG: 'QUESTNPCOPTION1\n\n&6Необходимый уровень REQUIEDLEVEL\n\n&2Награда:\n✦ $QUESTNAME_exp$ опыта\n■ $QUESTNAME_money$ монет&0---'
+          LANGSLUG: 'QUESTNPCOPTION1\n\n&6Необходимый уровень REQUIEDLEVEL\n\n&2Награда:\n✦ $QUESTNAME_exp$ опыта\n■ $QUESTNAME_money$ монет'
         pointers: option_QUESTNAME_yes, option_no
       message_QUESTNAME_yes:
         text: 
@@ -38,7 +38,7 @@ events:
     run
     ^ journal add j_QUESTNAME_started
     ^ tag add tag_QUESTNAME_started
-    ^ notify &2Вы начали квест &A$QUESTNAME_name$ category:start_quest
+    ^ notify &2Вы начали квест &A$QUESTNAME_name$ category:default.start_quest
     ^ compass add compass_QUESTNAME
     ^ objective start obj_QUESTNAME
 
@@ -55,10 +55,9 @@ events:
     ^ journal delete j_QUESTNAME_done
     ^ tag add tag_QUESTNAME_paid
     ^ command mmocore admin exp give %player% main $QUESTNAME_exp$
-    ^ notify &eВы получили &6$QUESTNAME_exp$ &eопыта category:reward
+    ^ notify &eВы получили &6$QUESTNAME_exp$ &eопыта category:default.reward
     ^ money $QUESTNAME_money$ notify
-    ^ notify &2Вы закончили квест &A$QUESTNAME_name$ category:end_quest
-    ^ take QUESTNAME_item notify
+    ^ notify &2Вы закончили квест &A$QUESTNAME_name$ category:default.end_quest
     ^ compass del compass_QUESTNAME
 
 conditions:

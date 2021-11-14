@@ -23,10 +23,10 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="openArchive">{{ $t('open-zip') }} (ctrl-o)</el-dropdown-item>
+            <el-dropdown-item @click="openArchive">{{ $t('open-zip') }} <el-tag class="hotkey">ctrl-o</el-tag></el-dropdown-item>
             <el-dropdown-item @click="openJson">{{ $t('open-json') }}</el-dropdown-item>
             
-            <el-dropdown-item @click="openLocalStorage(0)" divided>{{ $t('open-slot') }} (ctrl-l){{ lastTimeUsedSlot(0) }}</el-dropdown-item>
+            <el-dropdown-item @click="openLocalStorage(0)" divided>{{ $t('open-slot') }} {{ lastTimeUsedSlot(0) }} <el-tag class="hotkey">ctrl-l</el-tag></el-dropdown-item>
             <el-dropdown-item @click="openLocalStorage(index)" v-for="index in 5" :key="index">{{ $t('open-slot') }} {{ index }}{{ lastTimeUsedSlot(index) }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -38,16 +38,27 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="saveAsZip">{{ $t('save-zip') }} (ctrl-e)</el-dropdown-item>
+            <el-dropdown-item @click="saveAsZip">{{ $t('save-zip') }} <el-tag class="hotkey">ctrl-e</el-tag></el-dropdown-item>
             <el-dropdown-item @click="saveAsJson">{{ $t('save-json') }}</el-dropdown-item>
 
-            <el-dropdown-item @click="saveLocalStorage(0)" divided>{{ $t('save-slot') }} (ctrl-s){{ lastTimeUsedSlot(0) }}</el-dropdown-item>
+            <el-dropdown-item @click="saveLocalStorage(0)" divided>{{ $t('save-slot') }}{{ lastTimeUsedSlot(0) }} <el-tag class="hotkey">ctrl-s</el-tag></el-dropdown-item>
             <el-dropdown-item @click="saveLocalStorage(index)" v-for="index in 5" :key="index">{{ $t('save-slot') }} {{ index }}{{ lastTimeUsedSlot(index) }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
 
-      <el-button size="mini" @click="openNewTabDialog" class="header-buttons" icon="el-icon-folder-add">{{ $t('new-section') }}</el-button>
+      <el-dropdown size="small">
+        <el-button size="mini" @click="openNewTabDialog" class="header-buttons" icon="el-icon-plus">
+          {{ $t('add-dropdown') }}<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="openNewTabDialog">{{ $t('new-section') }} <el-tag class="hotkey">ctrl-b</el-tag></el-dropdown-item>
+            <el-dropdown-item @click="openTemplates">{{ $t('template-create') }} <el-tag class="hotkey">ctrl-m</el-tag></el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+
       <!-- <el-button size="mini" @click="openSettingsVisible = true" class="header-buttons" icon="el-icon-setting">{{ $t('settings') }}</el-button> -->
       <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://docs.betonquest.org/" class="header-buttons">{{ $t('bq-doc') }}</el-link>
       <el-link type="primary" target="_blank" rel="noopener noreferrer" href="https://github.com/BetonQuest/RPGMenu/wiki/" class="header-buttons">{{ $t('rpgmenu-doc') }}</el-link>
@@ -125,10 +136,15 @@
     </el-tabs>
   </section>
 
-  <el-backtop target=".el-header" :bottom="50">
-    <div class="to-top">UP</div>
-  </el-backtop>
-
+  <el-dialog
+    :title="$t('template-dialog')"
+    v-model="templateDialogVisible"
+    width="80%"
+    custom-class="template-dialog"
+    :close-on-click-modal="false"
+  >
+    <templateView v-model="projectData" @close="closeTemplate"/>
+  </el-dialog>
 </template>
 
 <style lang="scss">
@@ -142,6 +158,7 @@ import { saveArchive } from './utils/archiveSaver.js'
 import subSection from "./views/subSection.vue"
 import { useI18n } from 'vue3-i18n'
 import moment from 'moment'
+import templateView from "./views/template.vue"
 
 import dialogExample from './assets/dialogExample.yml?raw'
 import menuExample from './assets/menuExample.yml?raw'
@@ -153,7 +170,8 @@ export default {
   components: {
     subSection,
     ruFlag,
-    enFlag
+    enFlag,
+    templateView,
   },
   data() {
     return {
@@ -174,6 +192,7 @@ export default {
         en: enFlag,
         ru: ruFlag,
       },
+      templateDialogVisible: false,
     }
   },
   computed: {
@@ -213,6 +232,20 @@ export default {
         this.openArchive()
         e.preventDefault()
       }
+      else if (e.keyCode === 66 && e.ctrlKey) {
+        this.openNewTabDialog()
+        e.preventDefault()
+      }
+      else if (e.keyCode === 77 && e.ctrlKey) {
+        this.openTemplates()
+        e.preventDefault()
+      }
+    },
+    openTemplates() {
+      this.templateDialogVisible = true
+    },
+    closeTemplate() {
+      this.templateDialogVisible = false
     },
     changeLang(langSlug) {
       this.settings.language = langSlug

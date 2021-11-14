@@ -60,8 +60,8 @@ quester-name: Имя квестодателя
 new-setting-key: Введите название
 save-zip: Экспорт в zip архив
 data-is-empty: Нет данных для сохранения
-template-create: Создать квест по шаблону
-template-dialog: Создание квест по шаблону
+template-create: Меню шаблонов
+template-dialog: Создание квеста по шаблону
 delete-dialog-section: Удаление раздела диалогов
 dialog-section-deleted: Раздел диалогов <b>{section}</b> удалён
 diagram-editor: Редактор диаграм
@@ -111,3 +111,17 @@ newitem-lore: Описание
 newitem-settingName: Название настройки
 newitem-quest-items-unbreakable: Нельзя уничтожить
 newitem-already-exists: Предмет {settingName} уже существует
+
+add-new-template: Добавить новый темплейт
+template-main-tab: Создание
+template-preview-tab: Предпросмотр
+template-source-tab: Исходный код шаблона
+template-create-new: Создать новый шаблон
+template-create-button: Создать шаблон
+add-dropdown: Добавить
+new-template-title: Название
+template-removed: Шаблон <b>{template}</b> удалён
+template-created: Шаблон <b>{template}</b> создан
+template-bad-name: Название не подходит (используйте a-z 0-9 и _)
+template-save-source: Сохранить настройку шаблона
+template-saved: Шаблон сохранён

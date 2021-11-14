@@ -1,34 +1,31 @@
 <template>
   <el-tabs tab-position="left" v-model="sectionSelected" class="section-tabs" @tab-remove="removeDialogSection">
 
-    <el-tab-pane name="dialogs">
+    <el-tab-pane name="dialogs" lazy>
       <template #label>
         <span>{{ $t('dialogs') }} <i class="el-icon-chat-line-round"></i></span>
       </template>
       <div class="menu-buttons">
         <el-button size="mini" @click="openNew('dialog')" class="menu-button" icon="el-icon-plus">{{ $t('add-dialog-section') }}</el-button>
-        <el-button size="mini" @click="templateOpen" class="menu-button" icon="el-icon-document-add" type="primary" plain>{{ $t('template-create') }}</el-button>
       </div>
 
       <div class="dialogs-tabs">
         <el-tabs tab-position="left" v-model="dialogSelected" :closable="true" @tab-remove="removeDialogSection" @tab-click="dialogSectionSelect">
-          <el-tab-pane :label="dialogSectionName" :name="dialogSectionName" v-for="(_, dialogSectionName) in sectionInfo.conversations" :key="dialogSectionName">
-            <template v-if="loadedDialogsections[dialogSectionName]">
+          <el-tab-pane :label="dialogSectionName" :name="dialogSectionName" v-for="(_, dialogSectionName) in sectionInfo.conversations" :key="dialogSectionName" lazy>
 
-              <conversation
-                v-model="sectionInfo.conversations[dialogSectionName]"
-                :dialog-section-name="dialogSectionName"
-                :project-data="projectData"
-                :sub-section-name="subSectionName"
-              />
+            <conversation
+              v-model="sectionInfo.conversations[dialogSectionName]"
+              :dialog-section-name="dialogSectionName"
+              :project-data="projectData"
+              :sub-section-name="subSectionName"
+            />
 
-            </template>
           </el-tab-pane>
         </el-tabs>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane>
+    <el-tab-pane lazy>
       <template #label>
         <span>{{ $t('menus') }} <i class="el-icon-s-grid"></i></span>
       </template>
@@ -38,60 +35,60 @@
 
       <div class="dialogs-tabs">
         <el-tabs tab-position="left" v-model="menuSelected">
-          <el-tab-pane :label="name" :name="name" v-for="(menuInfo, name) in sectionInfo.menus" :key="name">
+          <el-tab-pane lazy :label="name" :name="name" v-for="(menuInfo, name) in sectionInfo.menus" :key="name">
             <yamlEditor v-model="sectionInfo.menus[name]"/>
           </el-tab-pane>
         </el-tabs>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane name="main">
+    <el-tab-pane lazy name="main">
       <template #label>
         <span>{{ $t('main') }} <i class="el-icon-setting"></i></span>
       </template>
-      <yamlEditor v-model="sectionInfo.main" v-if="sectionSelected === 'main'" />
+      <yamlEditor v-model="sectionInfo.main"/>
     </el-tab-pane>
 
-    <el-tab-pane name="events">
+    <el-tab-pane lazy name="events">
       <template #label>
         <span>{{ $t('events') }} <i class="el-icon-magic-stick"></i></span>
       </template>
-      <yamlEditor v-model="sectionInfo.events" v-if="sectionSelected === 'events'" />
+      <yamlEditor v-model="sectionInfo.events"/>
     </el-tab-pane>
 
-    <el-tab-pane name="conditions">
+    <el-tab-pane lazy name="conditions">
       <template #label>
         <span>{{ $t('conditions') }} <i class="el-icon-lock"></i></span>
       </template>
-      <yamlEditor v-model="sectionInfo.conditions" v-if="sectionSelected === 'conditions'" />
+      <yamlEditor v-model="sectionInfo.conditions"/>
     </el-tab-pane>
 
-    <el-tab-pane name="objectives">
+    <el-tab-pane lazy name="objectives">
       <template #label>
         <span>{{ $t('objectives') }} <i class="el-icon-document-checked"></i></span>
       </template>
-      <yamlEditor v-model="sectionInfo.objectives" v-if="sectionSelected === 'objectives'" />
+      <yamlEditor v-model="sectionInfo.objectives"/>
     </el-tab-pane>
 
-    <el-tab-pane name="items">
+    <el-tab-pane lazy name="items">
       <template #label>
         <span>{{ $t('items') }} <i class="el-icon-shopping-bag-2"></i></span>
       </template>
-      <itemsEditor v-model="sectionInfo.items" v-if="sectionSelected === 'items'" />
+      <itemsEditor v-model="sectionInfo.items"/>
     </el-tab-pane>
 
-    <el-tab-pane name="journal">
+    <el-tab-pane lazy name="journal">
       <template #label>
         <span>{{ $t('journal') }} <i class="el-icon-tickets"></i></span>
       </template>
-      <yamlEditor v-model="sectionInfo.journal" v-if="sectionSelected === 'journal'" />
+      <yamlEditor v-model="sectionInfo.journal"/>
     </el-tab-pane>
 
-    <el-tab-pane name="custom">
+    <el-tab-pane lazy name="custom">
       <template #label>
         <span>{{ $t('custom') }} <i class="el-icon-more-outline"></i></span>
       </template>
-      <yamlEditor v-model="sectionInfo.custom" v-if="sectionSelected === 'custom'" />
+      <yamlEditor v-model="sectionInfo.custom"/>
     </el-tab-pane>
   </el-tabs>
 
@@ -125,16 +122,6 @@
       </span>
     </template>
   </el-dialog>
-
-  <el-dialog
-    :title="$t('template-dialog')"
-    v-model="templateDialogVisible"
-    width="80%"
-    custom-class="template-dialog"
-    :close-on-click-modal="false"
-  >
-    <templateView v-model="projectData" :sub-section-name="subSectionName" @close="closeTemplate"/>
-  </el-dialog>
 </template>
 
 <script>
@@ -142,7 +129,6 @@ import conversation from "./conversation.vue"
 import simpleSection from "./simpleSection.vue"
 import yamlEditor from "./yamlSection.vue"
 import itemsEditor from "./itemsEditor.vue"
-import templateView from "./template.vue"
 import { createNewNpcSection } from "../utils/createNewNpcSection.js"
 
 import moveTo from '../assets/templates-data/moveTo.yml?raw'
@@ -152,7 +138,6 @@ export default {
     conversation,
     simpleSection,
     yamlEditor,
-    templateView,
     itemsEditor,
   },
   props: ['modelValue', 'projectData', 'subSectionName'],
@@ -167,7 +152,6 @@ export default {
       menuSelected: null,
       newMode: null,
       sectionSelected: 'dialogs',
-      templateDialogVisible: false,
       loadedDialogsections: {},
     }
   },
@@ -182,12 +166,6 @@ export default {
     },
   },
   methods: {
-    templateOpen() {
-      this.templateDialogVisible = true
-    },
-    createTemplate() {
-      this.templateDialogVisible = false
-    },
     removeDialogSection(tab) {
       this.$confirm(this.$t('delete-section').replace('{tab}', tab), this.$t('confirm'), {
         confirmButtonText: this.$t('delete'),
@@ -282,9 +260,6 @@ export default {
       this.newMode = mode
       this.newName = ''
       this.addVisible = true
-    },
-    closeTemplate() {
-      this.templateDialogVisible = false
     },
     dialogSectionSelect(tab, event) {
       this.loadedDialogsections[tab.paneName] = true

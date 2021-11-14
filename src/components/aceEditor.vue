@@ -1,7 +1,7 @@
 <template>
   
   <v-ace-editor
-    v-model:value="text"
+    v-model:value="textData"
     lang="yaml"
     :theme="$root.settings.dark ? 'ambiance' : 'chrome'"
     :class="customClass"
@@ -20,39 +20,39 @@ ace.config.set("basePath", "https://cdn.jsdelivr.net/npm/ace-builds/src-noconfli
 import { VAceEditor } from 'vue3-ace-editor'
 
 export default {
-  props: ['modelValue', 'class', 'raw', 'readonly'],
+  props: ['modelValue', 'class', 'raw', 'readonly', 'text'],
   components: {
     VAceEditor,
   },
   data() {
     return {
-      text: '',
+      textData: '',
       customClass: this.class || 'yaml-editor'
     }
   },
   created() {
     if (!this.raw) {
       try {
-        this.text = dumpYaml(this.modelValue, this.$root.jsonDumpOptions)
+        this.textData = dumpYaml(this.modelValue, this.$root.jsonDumpOptions)
       } catch (e) {
         console.error('Yaml error:', e.message)
         this.$message({ type: 'error', message: `'Yaml error: ${e.message}` })
       }
     } else {
-      this.text = this.modelValue
+      this.textData = this.modelValue || this.text
     }
   },
   methods: {
-    textUpdate(event, text) {
+    textUpdate(event, newText) {
       if (!this.raw) {
         try {
-          this.$emit('update:modelValue', loadYaml(this.text, this.$root.jsonLoadOptions))
+          this.$emit('update:modelValue', loadYaml(this.textData, this.$root.jsonLoadOptions))
         } catch (e) {
           console.error('Yaml error:', e.message)
           this.$message({ type: 'error', message: `'Yaml error: ${e.message}` })
         }
       } else {
-        this.$emit('update:modelValue', this.text)
+        this.$emit('update:modelValue', this.textData)
       }
     },
     useDarkTheme() {

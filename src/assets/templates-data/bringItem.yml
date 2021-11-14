@@ -46,7 +46,8 @@ events:
     run
     ^ journal delete j_QUESTNAME_started
     ^ tag add tag_QUESTNAME_paid
-    ^ run ^command mmocore admin exp give %player% main $QUESTNAME_exp$ ^notify &eВы получили &6$QUESTNAME_exp$ &eопыта category:reward
+    ^ command mmocore admin exp give %player% main $QUESTNAME_exp$
+    ^ notify &eВы получили &6$QUESTNAME_exp$ &eопыта category:reward
     ^ money $QUESTNAME_money$ notify
     ^ notify &2Вы закончили квест &a$QUESTNAME_name$ category:end_quest
     ^ take item_QUESTNAME notify

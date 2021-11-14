@@ -1,0 +1,98 @@
+template_info:
+  title:
+    en: Objective template
+    ru: Шаблон простого задания
+
+  settings:
+    secondNpc: false
+
+  variables:
+    LANGSLUG:
+      title:
+        en: Language
+        ru: Язык
+      default: en
+
+    OBJECTIVE:
+      title:
+        en: Objective
+        ru: Задание
+      default: 'mmobkill MobName amount:1 notify events:event_QUESTNAME_done'
+
+    QUESTNAME:
+      title:
+        en: Quest name for system
+        ru: Название квеста для системы
+      default: example
+        
+    QUESTREADABLENAME:
+      title:
+        en: Readable Quest name
+        ru: Читаемое название квеста
+      default: Example quest
+        
+    EXPREWARD:
+      title:
+        en: Exp reward
+        ru: Размер опыта за выполнение
+      default: 200
+
+    MONEYREWARD:
+      title:
+        en: Money reward
+        ru: Монеты за выполнение
+      default: 1000
+
+    REQUIEDLEVEL:
+      title:
+        en: Required level
+        ru: Необходимый лвл для выполнения
+      default: 10
+
+    QUESTPLAYEROPTION1:
+      title:
+        en: Player message
+        ru: Вопрос к NPC
+      default: '$default.quest_prefix$Hi!'
+
+    QUESTNPCOPTION1:
+      title:
+        en: Quest text
+        ru: Текст просмотра квеста
+      default: 'Hello, do the quest for the glory of example!'
+
+    QUESTPLAYEROPTION2:
+      title:
+        en: Agreement from player
+        ru: Соглашение выполнить квест
+      default: '$default.quest_yes_prefix$Okay, I will.'
+
+    QUESTNPCOPTION2:
+      title:
+        en: Text after player confirm
+        ru: Текст после подтверждения
+      default: 'Go and do it!'
+
+    QUESTPLAYEROPTION3:
+      title:
+        en: Message about quest complete
+        ru: Сообщение об выполненном квесте
+      default: '$default.quest_done_prefix$I did what you told'
+
+    QUESTNPCOPTION3:
+      title:
+        en: NPC thanks
+        ru: Благодарность от NPC
+      default: 'Thank you!'
+
+    JOURNALSTART:
+      title:
+        en: Journal note about quest start
+        ru: Запись в журнале о задаче квеста
+      default: 'Started.'
+
+    JOURNALDONE:
+      title:
+        en: Journal note about quest end
+        ru: Запись в журнале о завешении квеста
+      default: 'Done.'

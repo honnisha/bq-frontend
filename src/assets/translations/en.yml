@@ -113,3 +113,17 @@ newitem-lore: Lore
 newitem-settingName: Setting name
 newitem-quest-items-unbreakable: Quest items unbreakable
 newitem-already-exists: Item {settingName} already exists
+
+add-new-template: Add new template
+template-main-tab: Creation
+template-preview-tab: Preview
+template-source-tab: Source of template
+template-create-new: Create new template
+template-create-button: Create template
+add-dropdown: Add
+new-template-title: Template name
+template-removed: Template <b>{template}</b> removed
+template-created: Template <b>{template}</b> created
+template-bad-name: Bad template name (use only a-z 0-9 and _)
+template-save-source: Save template source
+template-saved: Template saved

@@ -1,79 +1,84 @@
 <template>
-  <div v-if="!preview">
-    <div class="menu-buttons">
-      <el-button size="mini" class="menu-button" @click="togglePreview">{{ $t('preview') }}</el-button>
-    </div>
+  <el-tabs v-model="templateTab">
+    <el-tab-pane :label="$t('template-main-tab')">
+      
+      <el-alert v-if="error" :title="error" class="template-error" type="error"/>
 
-    <el-alert v-if="error" :title="error" class="template-error" type="error"/>
-
-    <el-row class="template-setting">
-      <el-col :span="6" class="field-name">{{ $t('template-quest-select-from') }}:</el-col>
-      <el-col :span="18" class="field-editor">
-        <el-select v-model="questerFrom" placeholder=" ">
-          <el-option
-            v-for="data in questers"
-            :key="`from_${data.quester}`"
-            :label="`${data.sectionKey}.${data.quester}`"
-            :value="`${data.sectionKey}.${data.quester}`"
-          />
-        </el-select>
-      </el-col>
-    </el-row>
-
-    <el-row class="template-setting" v-if="templateInfo.settings.secondNpc">
-      <el-col :span="6" class="field-name">{{ $t('template-quest-select-to') }}:</el-col>
-      <el-col :span="18" class="field-editor">
-        <el-select v-model="questerTo" placeholder=" ">
-          <el-option
-            v-for="data in questers"
-            :key="`to_${data.quester}`"
-            :label="`${data.sectionKey}.${data.quester}`"
-            :value="`${data.sectionKey}.${data.quester}`"
-          />
-        </el-select>
-      </el-col>
-    </el-row>
-
-    <el-divider/>
-
-    <template v-for="(settingInfo, settingKey) in templateInfo.variables">
       <el-row class="template-setting">
-        <el-tooltip effect="light" placement="left" :content="settingKey">
-          <el-col :span="6" class="field-name">{{ settingInfo.title[$root.settings.language] }}:</el-col>
-        </el-tooltip>
-        <el-col :span="18">
-          <el-input class="small-editor" type="textarea" :autosize="{ minRows: 1, maxRows: 20}" v-model="templateData[settingKey]"/>
+        <el-col :span="6" class="field-name">{{ $t('template-quest-select-from') }}:</el-col>
+        <el-col :span="18" class="field-editor">
+          <el-select v-model="questerFrom" placeholder=" ">
+            <el-option
+              v-for="data in questers"
+              :key="`from_${data.quester}`"
+              :label="`${data.sectionKey}.${data.quester}`"
+              :value="`${data.sectionKey}.${data.quester}`"
+            />
+          </el-select>
         </el-col>
       </el-row>
-    </template>
 
-    <el-divider/>
+      <el-row class="template-setting" v-if="templateInfo.settings.secondNpc">
+        <el-col :span="6" class="field-name">{{ $t('template-quest-select-to') }}:</el-col>
+        <el-col :span="18" class="field-editor">
+          <el-select v-model="questerTo" placeholder=" ">
+            <el-option
+              v-for="data in questers"
+              :key="`to_${data.quester}`"
+              :label="`${data.sectionKey}.${data.quester}`"
+              :value="`${data.sectionKey}.${data.quester}`"
+            />
+          </el-select>
+        </el-col>
+      </el-row>
 
-    <el-row class="template-setting">
-      <el-checkbox v-model="addToHologram">{{ $t('template-add-to-hologram-conditions') }}</el-checkbox>
-    </el-row>
+      <el-divider/>
 
-    <el-row class="template-setting">
-      <el-checkbox v-model="addToFirst">{{ $t('template-add-to-first-message') }}</el-checkbox>
-    </el-row>
+      <template v-for="(settingInfo, settingKey) in templateInfo.variables">
+        <el-row class="template-setting">
+          <el-tooltip effect="light" placement="left" :content="settingKey">
+            <el-col :span="6" class="field-name">{{ settingInfo.title[$root.settings.language] }}:</el-col>
+          </el-tooltip>
+          <el-col :span="18">
+            <el-input class="small-editor" type="textarea" :autosize="{ minRows: 1, maxRows: 20}" v-model="templateData[settingKey]"/>
+          </el-col>
+        </el-row>
+      </template>
 
-    <el-row class="template-setting">
-      <el-checkbox v-model="addCompass">{{ $t('template-add-compass') }}</el-checkbox>
-    </el-row>
+      <el-divider/>
 
-    <div class="right-section">
-      <el-button type="success" @click="apply">{{ $t('apply') }}</el-button>
-    </div>
-  </div>
+      <el-row class="template-setting">
+        <el-checkbox v-model="addToHologram">{{ $t('template-add-to-hologram-conditions') }}</el-checkbox>
+      </el-row>
 
-  <div v-else>
-    <div class="menu-buttons">
-      <el-button size="mini" class="menu-button" @click="toggleEdit">{{ $t('return-to-edit') }}</el-button>
-    </div>
+      <el-row class="template-setting">
+        <el-checkbox v-model="addToFirst">{{ $t('template-add-to-first-message') }}</el-checkbox>
+      </el-row>
 
-    <aceEditor :readonly="true" :raw="true" v-model="previewText" class="yaml-conversation yaml-editor"/>
-  </div>
+      <el-row class="template-setting">
+        <el-checkbox v-model="addCompass">{{ $t('template-add-compass') }}</el-checkbox>
+      </el-row>
 
+      <div class="right-section">
+        <el-button type="success" @click="apply">{{ $t('apply') }}</el-button>
+      </div>
+    </el-tab-pane>
+
+    <el-tab-pane :label="$t('template-preview-tab')" name="preview" lazy>
+      <aceEditor :readonly="true" :raw="true" :text="getFormattedYaml()" class="yaml-conversation yaml-editor"/>
+    </el-tab-pane>
+
+    <el-tab-pane :label="$t('template-source-tab')" name="source" lazy>
+      <el-affix :offset="0">
+        <div class="menu-buttons">
+          <el-button size="mini" @click="updateSource" type="primary" class="menu-button"><i class="el-icon-document el-icon--right"></i> {{ $t('template-save-source') }}</el-button>
+        </div>
+      </el-affix>
+
+      <aceEditor :raw="true" v-model="localSourceYaml" class="yaml-conversation yaml-editor"/>
+    </el-tab-pane>
+
+  </el-tabs>
 </template>
 
 <script>
@@ -84,13 +89,13 @@ export default {
   components: {
     aceEditor,
   },
-  props: ['modelValue', 'subSectionName', 'sourceYaml'],
+  props: ['modelValue', 'sourceYaml'],
   data() {
     return {
+      templateTab: null,
       sectionInfo: null,
       templateData: {},
-      preview: false,
-      previewText: null,
+      previewText: '',
       error: null,
       templateInfo: {},
       questerFrom: null,
@@ -99,6 +104,7 @@ export default {
       addToHologram: true,
       addToFirst: true,
       addCompass: true,
+      localSourceYaml: null,
     }
   },
   computed: {
@@ -112,32 +118,33 @@ export default {
     },
   },
   created() {
-    for (const [sectionKey, sectionData] of Object.entries(this.projectData)) {
-      if (sectionData.conversations) {
-        for (const [quester, _] of Object.entries(sectionData.conversations)) {
-          this.questers.push({quester: quester , sectionKey: sectionKey})
-        }
-      }
-    }
-
-    this.sectionInfo = this.projectData[this.subSectionName]
-    this.templateInfo = yaml.load(this.sourceYaml)['template_info']
-
-    for (const [settingKey, settingInfo] of Object.entries(this.templateInfo.variables)) {
-      this.templateData[settingKey] = settingInfo.default
-    }
+    this.localSourceYaml = this.sourceYaml
+    this.prepareFields()
   },
   methods: {
-    togglePreview() {
-      this.previewText = this.getFormattedYaml()
-      this.preview = true
+    prepareFields() {
+      this.templateData = {}
+
+      for (const [sectionKey, sectionData] of Object.entries(this.projectData)) {
+        if (sectionData.conversations) {
+          for (const [quester, _] of Object.entries(sectionData.conversations)) {
+            this.questers.push({quester: quester , sectionKey: sectionKey})
+          }
+        }
+      }
+
+      this.templateInfo = yaml.load(this.localSourceYaml)['template_info']
+
+      for (const [settingKey, settingInfo] of Object.entries(this.templateInfo.variables)) {
+        this.templateData[settingKey] = settingInfo.default
+      }
     },
-    toggleEdit() {
-      this.previewText = null
-      this.preview = false
+    updateSource() {
+      this.prepareFields()
+      this.$emit('changeSource', this.localSourceYaml)
     },
     getFormattedYaml() {
-      let result = this.sourceYaml
+      let result = this.localSourceYaml
       for (const [key, value] of Object.entries(this.templateData)) {
         result = result.replaceAll(key, value || '')
       }
