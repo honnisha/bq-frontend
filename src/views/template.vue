@@ -33,6 +33,7 @@ import templateComponent from "../components/templateComponent.vue";
 import bringItem from '../assets/templates-data/bringItem.yml?raw'
 import moveTo from '../assets/templates-data/moveTo.yml?raw'
 import objective from '../assets/templates-data/objective.yml?raw'
+import dailyObjective from '../assets/templates-data/daily-objective.yml?raw'
 
 export default {
   components: {
@@ -47,6 +48,7 @@ export default {
         'objective': objective,
         'bringItem': bringItem,
         'moveTo': moveTo,
+        'dailyObjective': dailyObjective,
       },
       templates: {},
       templateDialogVisible: false,

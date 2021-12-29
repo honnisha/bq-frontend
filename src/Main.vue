@@ -48,7 +48,7 @@
       </el-dropdown>
 
       <el-dropdown size="small">
-        <el-button size="mini" @click="openNewTabDialog" class="header-buttons" icon="el-icon-plus">
+        <el-button size="mini" class="header-buttons" icon="el-icon-plus">
           {{ $t('add-dropdown') }}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <template #dropdown>

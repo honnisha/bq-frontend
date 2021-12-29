@@ -1,0 +1,194 @@
+conversations:
+  from:
+    NPC_options:
+      message_QUESTNAME_start:
+        text:
+          LANGSLUG: 'QUESTNPCOPTION1\n\n&6Необходимый уровень REQUIEDLEVEL\n\n&2Награда:\n✦ $QUESTNAME_exp$ опыта\n■ $QUESTNAME_money$ монет\n&e⇄ Ежедневное задание'
+        pointers: option_QUESTNAME_yes, option_no
+      message_QUESTNAME_yes:
+        text: 
+          LANGSLUG: 'QUESTNPCOPTION2'
+        event: event_QUESTNAME_start
+        pointers: option_ok
+      message_QUESTNAME_done:
+        text: 
+          LANGSLUG: 'QUESTNPCOPTION3'
+        event: event_QUESTNAME_paid
+        pointers: option_ok
+
+    player_options:
+      option_QUESTNAME_start:
+        text: 
+          LANGSLUG: 'QUESTPLAYEROPTION1'
+        conditions: '!cond_QUESTNAME_started'
+        pointers: message_QUESTNAME_start
+      option_QUESTNAME_yes:
+        text: 
+          LANGSLUG: 'QUESTPLAYEROPTION2'
+        conditions: 'default.cond_level_REQUIEDLEVEL'
+        pointers: message_QUESTNAME_yes
+      option_QUESTNAME_done:
+        text:
+          LANGSLUG: 'QUESTPLAYEROPTION3'
+        conditions: 'cond_QUESTNAME_done,!cond_QUESTNAME_paid'
+        pointers: message_QUESTNAME_done
+
+events:
+  event_QUESTNAME_start: |-
+    run
+    ^ journal add j_QUESTNAME_started
+    ^ tag add tag_QUESTNAME_started
+    ^ notify &2Вы начали квест &A$QUESTNAME_name$ category:default.start_quest
+    ^ compass add compass_QUESTNAME
+    ^ objective start obj_QUESTNAME
+
+  event_QUESTNAME_done: |-
+    run
+    ^ journal delete j_QUESTNAME_started
+    ^ journal add j_QUESTNAME_done
+    ^ tag add tag_QUESTNAME_done
+    ^ folder default.event_task_done
+    ^ folder default.totem_task_completed
+
+  event_QUESTNAME_paid: |-
+    run
+    ^ journal delete j_QUESTNAME_done
+    ^ tag add tag_QUESTNAME_paid
+    ^ command mmocore admin exp give %player% main $QUESTNAME_exp$
+    ^ notify &eВы получили &6$QUESTNAME_exp$ &eопыта category:default.reward
+    ^ money $QUESTNAME_money$ notify
+    ^ notify &2Вы закончили квест &A$QUESTNAME_name$ category:default.end_quest
+    ^ compass del compass_QUESTNAME
+    ^ objective start obj_QUESTNAME_restart
+    
+  event_QUESTNAME_restart: run ^tag del tag_QUESTNAME_started ^tag del tag_QUESTNAME_done ^tag del tag_QUESTNAME_paid ^notify &eКвест &6$QUESTNAME_name$ &eдоступен для прохождения category:default.renew
+
+conditions:
+  cond_QUESTNAME_icon1: and !cond_QUESTNAME_started
+  cond_QUESTNAME_icon2: and cond_QUESTNAME_started,!cond_QUESTNAME_done
+  cond_QUESTNAME_icon3: and cond_QUESTNAME_done,!cond_QUESTNAME_paid
+
+  cond_QUESTNAME_started: tag tag_QUESTNAME_started
+  cond_QUESTNAME_done: tag tag_QUESTNAME_done
+  cond_QUESTNAME_paid: tag tag_QUESTNAME_paid
+
+journal:
+  j_QUESTNAME_started:
+    LANGSLUG: 'JOURNALSTART'
+  j_QUESTNAME_done:
+    LANGSLUG: 'JOURNALDONE'
+
+main:
+  variables:
+    QUESTNAME_name: 'QUESTREADABLENAME'
+    QUESTNAME_exp: EXPREWARD
+    QUESTNAME_money: MONEYREWARD
+  compass:
+    compass_QUESTNAME:
+      name:
+        ru: COMPASSNAME
+      location: COMPASSLOCATION
+      item: compass_button
+
+objectives:
+  obj_QUESTNAME: OBJECTIVE
+  obj_QUESTNAME_restart: delay 1200 interval:1200 events:event_wheat_restart
+
+template_info:
+  title:
+    en: Daily objective template
+    ru: Шаблон ежедневного задания
+
+  settings:
+    secondNpc: false
+
+  variables:
+    LANGSLUG:
+      title:
+        en: Language
+        ru: Язык
+      default: ru
+
+    OBJECTIVE:
+      title:
+        en: Objective
+        ru: Задание
+      default: 'mmobkill MobName amount:1 notify events:event_QUESTNAME_done'
+
+    QUESTNAME:
+      title:
+        en: Quest name for system
+        ru: Название квеста для системы
+      default: example
+        
+    QUESTREADABLENAME:
+      title:
+        en: Readable Quest name
+        ru: Читаемое название квеста
+      default: Example quest
+        
+    EXPREWARD:
+      title:
+        en: Exp reward
+        ru: Размер опыта за выполнение
+      default: 200
+
+    MONEYREWARD:
+      title:
+        en: Money reward
+        ru: Монеты за выполнение
+      default: 1000
+
+    REQUIEDLEVEL:
+      title:
+        en: Required level
+        ru: Необходимый лвл для выполнения
+      default: 10
+
+    QUESTPLAYEROPTION1:
+      title:
+        en: Player message
+        ru: Вопрос к NPC
+      default: '$default.quest_prefix$Hi!'
+
+    QUESTNPCOPTION1:
+      title:
+        en: Quest text
+        ru: Текст просмотра квеста
+      default: 'Hello, do the quest for the glory of example!'
+
+    QUESTPLAYEROPTION2:
+      title:
+        en: Agreement from player
+        ru: Соглашение выполнить квест
+      default: '$default.quest_yes_prefix$Okay, I will.'
+
+    QUESTNPCOPTION2:
+      title:
+        en: Text after player confirm
+        ru: Текст после подтверждения
+      default: 'Go and do it!'
+
+    QUESTPLAYEROPTION3:
+      title:
+        en: Message about quest complete
+        ru: Сообщение об выполненном квесте
+      default: '$default.quest_done_prefix$I did what you told'
+
+    QUESTNPCOPTION3:
+      title:
+        en: NPC thanks
+        ru: Благодарность от NPC
+      default: 'Thank you!'
+
+    JOURNALSTART:
+      title:
+        en: Journal note about quest start
+        ru: Запись в журнале о задаче квеста
+      default: 'Started.'
+
+    JOURNALDONE:
+      title:
+        en: Journal note about quest end
+        ru: Запись в журнале о завешении квеста
+      default: 'Done.'
