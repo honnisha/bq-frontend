@@ -1,4 +1,6 @@
-BetonQuest interface
+BetonQuest WebEditor
+
+<a href="https://www.codefactor.io/repository/github/honnisha/bq-frontend"><img src="https://www.codefactor.io/repository/github/honnisha/bq-frontend/badge" alt="CodeFactor" /></a>
 =======
 Online interface for manage BetonQuest settings running on vue.
 
